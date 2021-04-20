@@ -27,6 +27,7 @@
             :disabled="disabled"
             :editable="editable"
             :clearable="clearable"
+            :validate-even="false"
             :format="dateObj.format"
             :picker-options="getPickerOptions"
             :default-time="dateObj.defaultTime"
@@ -158,6 +159,9 @@ export default {
               return code == "start" && disabledDate ? time.getTime() > date : code == "end" ? time.getTime() < date : false;
             }
           })
+          if (code) {
+            this.changeDate(defaultDate);
+          }
         }
       },
       deep: true,
@@ -211,13 +215,13 @@ export default {
   methods: {
     // 鼠标移入
     mouseOver() {
-      if (this.dateObj.defaultDate && !this.disabled) {
+      if (this.dateObj.defaultDate && !this.disabled && this.clearable) {
         this.suffixIconShow = false
       }
     },
     // 鼠标移出
     mouseLeave() {
-      if (this.dateObj.defaultDate && !this.disabled) {
+      if (this.dateObj.defaultDate && !this.disabled && this.clearable) {
         this.suffixIconShow = true
       }
     },

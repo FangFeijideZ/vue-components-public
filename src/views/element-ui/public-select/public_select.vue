@@ -220,6 +220,11 @@ export default {
           width: 100%;
           .el-select {
             width: 100%;
+            .el-select__tags {
+              .el-tag {
+                padding: 0 7px;
+              }
+            }
           }
         }
       }

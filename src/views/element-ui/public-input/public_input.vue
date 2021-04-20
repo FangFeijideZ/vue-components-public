@@ -282,7 +282,9 @@ export default {
   methods: {
     // 鼠标移入
     mouseOver() {
-      this.inputFcus = true;
+      if (this.showSuffixButton) {
+        this.inputFcus = true;
+      }
     },
     // 鼠标移出
     mouseLeave() {
@@ -301,18 +303,22 @@ export default {
     // 获得焦点
     getFcus(val,e) {
       this.$emit("fcus", val);
-      this.inputFcus = true;
-      this.inputBlur = false;
+      if (this.showSuffixButton) {
+        this.inputFcus = true;
+        this.inputBlur = false;
+      }
     },
     // 失去焦点
     getBlur(val,e) {
       this.$emit("blur", val);
-      this.inputFcus = false;
-      this.inputBlur = true;
+      if (this.showSuffixButton) {
+        this.inputFcus = false;
+        this.inputBlur = true;
+      }
     },
     // 输入事件
     getInputValue(val) {
-      if (val) {
+      if (val && this.showSuffixButton) {
         this.inputFcus = true;
       } else {
         this.inputFcus = false;
@@ -336,7 +342,13 @@ export default {
     },
     // 输入建议列表的数据
     querySearch(queryString, cb) {
-      let restaurants = this.inputObj.typeOptions;
+      let { typeOptions } = this.inputObj;
+      if (typeOptions && typeOptions.length>0) {
+        typeOptions.forEach(item => {
+          item.value = item.label
+        });
+      }
+      let restaurants = typeOptions;
       let results = queryString
         ? restaurants.filter(this.createFilter(queryString))
         : restaurants;
@@ -347,7 +359,7 @@ export default {
     createFilter(queryString) {
       return (restaurant) => {
         return (
-          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0 || restaurant.code.toLowerCase().indexOf(queryString.toLowerCase()) === 0
         );
       };
     },
@@ -433,6 +445,9 @@ export default {
             width: 100%;
           }
           .el-input__suffix {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             .el-input__suffix-inner {
               display: block;
               height: 100%;
@@ -479,6 +494,18 @@ export default {
           .el-textarea__inner {
             font-family: 'pingFang';
           }
+          .el-textarea__inner::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+            background-color: var(--elBgColor09);
+          }
+          .el-textarea__inner::-webkit-scrollbar-track {
+            background-color: var(--elBgColor09);
+          }
+          .el-textarea__inner::-webkit-scrollbar-thumb {
+            background: var(--elInnerColor14);
+            border-radius: 3px;
+          }
         }
       }
     }
@@ -490,8 +517,8 @@ export default {
       margin: 0 5px 0 0;
     }
   }
-  .dtqwBg76 {
-    background: var(--dtqwBg76);
+  .jqIcon14 {
+    background: var(--jqIcon14);
     background-size: 100% 100%;
   }
   .dtqwBg04 {

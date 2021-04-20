@@ -6,7 +6,7 @@
 </template>
 <script>
 export default {
-	name: "public_button",	
+	name: "publicButton",	
 	props: {
 		// 按钮背景颜色
 		backgroundColor: { 
