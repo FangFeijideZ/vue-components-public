@@ -510,11 +510,11 @@ export default {
             border-radius: 3px;
           }
           .black {
-            background: url("../../../assets/img/search_hb.png");
+            background: url("../../assets/img/search_hb.png");
             background-size: 100% 100%;
           }
           .white {
-            background: url("../../../assets/img/search_bb.png");
+            background: url("../../assets/img/search_bb.png");
             background-size: 100% 100%;
           }
         }

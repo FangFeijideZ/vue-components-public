@@ -291,11 +291,11 @@ export default {
             transform: translateY(-50%);
           }
           .black {
-            background: url("../../../assets/img/riqihb.png");
+            background: url("../../assets/img/riqihb.png");
             background-size: 100% 100%;
           }
           .white {
-            background: url("../../../assets/img/riqibb.png");
+            background: url("../../assets/img/riqibb.png");
             background-size: 100% 100%;
           }
           .el-date-editor--datetimerange {

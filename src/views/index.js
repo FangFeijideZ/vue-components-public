@@ -1,12 +1,12 @@
-import publicInput from "./element-ui/public-input/index"; // 导入组件
-import publicSelect from "./element-ui/public-select/index"; // 导入组件
-import publicButton from "./element-ui/public-button/index"; // 导入组件
-import publicDate from "./element-ui/public-date/index"; // 导入组件
-import publicTable from "./element-ui/public-table/index"; // 导入组件
-import publicTitle from "./element-ui/public-title/index"; // 导入组件
-import publicTime from "./element-ui/public-time/index"; // 导入组件
-import publicPagination from "./element-ui/public-pagination/index"; // 导入组件
-// import publicInput from "./common-ui/public-input/index"; // 导入组件
+import publicInput from "./element-ui/public_input.vue"; // 导入组件
+import publicSelect from "./element-ui/public_select.vue"; // 导入组件
+import publicButton from "./element-ui/public_button.vue"; // 导入组件
+import publicDate from "./element-ui/public_date.vue"; // 导入组件
+import publicTable from "./element-ui/public_table.vue"; // 导入组件
+import publicTitle from "./element-ui/public_title.vue"; // 导入组件
+import publicTime from "./element-ui/public_time.vue"; // 导入组件
+import publicPagination from "./element-ui/public_pagination.vue"; // 导入组件
+// import publicInput from "./common-ui/public_input.vue"; // 导入组件
 // 存储组件列表
 const components = [
   publicInput,
@@ -18,6 +18,10 @@ const components = [
   publicDate,
   publicPagination,
 ];
+// 安装组件
+components.map(item => item.install = function(Vue) {
+  Vue.component(item.name, item);
+});
 // 定义 install 方法，接收 Vue 作为参数。如果使用 use 注册插件，则所有的组件都将被注册
 const install = function (Vue) { // 判断是否安装
   if (install.installed) return
