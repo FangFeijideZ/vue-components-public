@@ -2,15 +2,15 @@
   <div class="public-date">
     <el-form
       :model="dateObj"
-      :label-position="dateObj.label_position ? dateObj.label_position : 'left'"
+      :label-position="labelPosition"
       :rules="formRules"
       :ref="dateObj.ref"
-      :label-width="dateObj.label_width"
+      :label-width="labelWidth"
       :class="{'flex-align': showIcon}"
     >
       <div v-if="showIcon" :class="['icon', 'icon-margin', dateObj.icon]" :style="{ 'width': dateObj.icon_width, 'height': dateObj.icon_height, 'margin': dateObj.icon_margin }"></div>
       <el-form-item
-        :label="showTitle ? dateObj.title : ''"
+        :label="title"
         :prop="prop ? 'defaultDate' : ''"
         class="flex-align"
       >
@@ -18,21 +18,21 @@
           <div v-show="suffixIconShow || readonly" :class="['suffix-icon',skin]"></div>
           <el-date-picker
             v-model="dateObj.defaultDate"
-            :type="dateObj.type"
+            :type="type"
             :readonly="readonly"
             :disabled="disabled"
             :editable="editable"
             :clearable="clearable"
-            :validate-even="false"
-            :format="dateObj.format"
+            :validate-event="validateEvent"
+            :format="format"
             :picker-options="getPickerOptions"
-            :default-time="dateObj.defaultTime"
-            :value-format="dateObj.valueFormat"
-            :placeholder="placeholder ? dateObj.placeholder : ''"
-            :size="dateObj.size ? dateObj.size : dateObj.size != null ? '' : 'medium'"
-            :range-separator="dateObj.rangeSeparator ? dateObj.rangeSeparator : '至'"
-            :start-placeholder="dateObj.startPlaceholder ? dateObj.startPlaceholder : '开始日期'"
-            :end-placeholder="dateObj.endPlaceholder ? dateObj.endPlaceholder : '结束日期'"
+            :default-time="defaultTime"
+            :value-format="valueFormat"
+            :placeholder="placeholder"
+            :size="size"
+            :range-separator="rangeSeparator"
+            :start-placeholder="startPlaceholder"
+            :end-placeholder="endPlaceholder"
             @change="changeDate"
             @blur="getBlur(dateObj.defaultDate,$event)"
             @focus="getFcus(dateObj.defaultDate,$event)"
@@ -86,12 +86,10 @@ export default {
         return false;
       },
     },
-    // 是否显示快捷提示
+    // 显示的快捷提示
     pickerOptions: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
+      type: Object,
+      default: () => {},
     },
     // 是否禁用选择日期
     disabledDate: {
@@ -121,12 +119,10 @@ export default {
         return true;
       },
     },
-    // 是否显示提示文字
+    // 显示的占位提示文字
     placeholder: {
-      type: Boolean,
-      default: () => {
-        return true;
-      },
+      type: String,
+      default: () => {},
     },
     // 是否完全只读	
     readonly: {
@@ -142,6 +138,79 @@ export default {
         return true;
       },
     },
+    // 文本框是否可输入
+    editable: {
+      type: Boolean,
+      default: () => {
+        return true;
+      },
+    },
+    // 选择框大小
+    size: {
+      type: String,
+      default: () => {
+        return 'medium'
+      },
+    },
+    // 输入时是否触发表单的校验
+    validateEvent: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
+    // 日期时间类型
+    type: {
+      type: String,
+      default: () => {},
+    },
+    // 选择范围时的分隔符	
+    rangeSeparator: {
+      type: String,
+      default: () => {},
+    },
+    // 范围选择时开始日期的占位内容	
+    startPlaceholder: {
+      type: String,
+      default: () => {},
+    },
+    // 范围选择时结束日期的占位内容	
+    endPlaceholder: {
+      type: String,
+      default: () => {},
+    },
+    // 左侧标题
+    title: {
+      type: [Number, String],
+      default: () => {},
+    },
+    // 显示的日期时间格式
+    format: {
+      type: [String, Array],
+      default: () => {},
+    },
+    // 获取的日期时间格式
+    valueFormat: {
+      type: [String, Array],
+      default: () => {},
+    },
+    // 显示的时分秒格式
+    defaultTime: {
+      type: [String, Array],
+      default: () => {},
+    },
+    // 标题显示的位置
+    labelPosition: {
+      type: String,
+      default: () => {
+        return 'left'
+      },
+    },
+    // 标题的宽度
+    labelWidth: {
+      type: [Number, String],
+      default: () => {},
+    },
   },
   watch: {
     dateObj: {
@@ -151,13 +220,14 @@ export default {
           // console.log(newVal);
           let date = disabledDate ? new Date(disabledDate).getTime() : 0;
           this.getPickerOptions = Object.assign({}, this.getPickerOptions, {
+            shortcuts: this.pickerOptions.shortcuts,
             disabledDate: (time) => {
               return code == "start" && disabledDate ? time.getTime() > date : code == "end" ? time.getTime() < date : false;
             }
           })
-          if (code) {
-            this.changeDate(defaultDate);
-          }
+          // if (code) {
+          //   this.changeDate(defaultDate);
+          // }
         }
       },
       deep: true,
@@ -169,33 +239,33 @@ export default {
       skin: "",
       suffixIconShow: true,
       formRules: {
-        defaultDate: [{ required: true, message: this.dateObj.placeholder, trigger: "change" }],
+        defaultDate: [{ required: true, message: this.placeholder, trigger: "change" }],
       },
       getPickerOptions: {
-        shortcuts: this.pickerOptions ? [
-          {
-            text: "今天",
-            onClick(picker) {
-              picker.$emit("pick", new Date());
-            },
-          },
-          {
-            text: "昨天",
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit("pick", date);
-            },
-          },
-          {
-            text: "一周前",
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", date);
-            },
-          },
-        ] : "",
+        // shortcuts: [
+        //   {
+        //     text: "今天",
+        //     onClick(picker) {
+        //       picker.$emit("pick", new Date());
+        //     },
+        //   },
+        //   {
+        //     text: "昨天",
+        //     onClick(picker) {
+        //       const date = new Date();
+        //       date.setTime(date.getTime() - 3600 * 1000 * 24);
+        //       picker.$emit("pick", date);
+        //     },
+        //   },
+        //   {
+        //     text: "一周前",
+        //     onClick(picker) {
+        //       const date = new Date();
+        //       date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+        //       picker.$emit("pick", date);
+        //     },
+        //   },
+        // ],
       },
     };
   },

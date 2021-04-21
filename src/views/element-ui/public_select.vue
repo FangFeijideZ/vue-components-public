@@ -2,15 +2,15 @@
   <div class="public-select">
     <el-form
       :model="selectObj"
-      :label-position="selectObj.label_position ? selectObj.label_position : 'left'"
+      :label-position="labelPosition"
       :rules="formRules"
       :ref="selectObj.ref"
-      :label-width="selectObj.label_width"
+      :label-width="labelWidth"
       :class="{'flex-align': showIcon}"
     >
       <div v-if="showIcon" :class="['icon', 'icon-margin', selectObj.icon]" :style="{ 'width': selectObj.icon_width, 'height': selectObj.icon_height, 'margin': selectObj.icon_margin }"></div>
       <el-form-item
-        :label="showTitle ? selectObj.title : ''"
+        :label="title"
         :prop="prop ? 'defaultType' : ''"
         class="flex-align"
       >
@@ -22,8 +22,8 @@
             :clearable="clearable"
             :filterable="filterable"
             :collapse-tags="collapseTags"
-            :placeholder="placeholder ? selectObj.placeholder : ''"
-            :size="selectObj.size ? selectObj.size : selectObj.size != null ? '' : 'medium'"
+            :placeholder="placeholder"
+            :size="size"
             @change="getSelect"
             @clear="clearValue"
             @remove-tag="removeTag"
@@ -50,6 +50,10 @@
 export default {
   name: "publicSelect",
   props: {
+    defaultType: {
+      type: [String, Array],
+      default: () => {},
+    },
     selectObj: {
       type: Object,
       default: () => {},
@@ -89,12 +93,10 @@ export default {
         return false;
       },
     },
-    // 是否显示左侧标题
-    showTitle: {
-      type: Boolean,
-      default: () => {
-        return true;
-      },
+    // 左侧标题
+    title: {
+      type: [Number, String],
+      default: () => {},
     },
     // 是否禁用
     disabled: {
@@ -110,13 +112,33 @@ export default {
         return true;
       },
     },
-    // 是否显示提示文字
+    // 显示的占位提示文字
     placeholder: {
-      type: Boolean,
+      type: String,
+      default: () => {},
+    },
+    // 选择框大小
+    size: {
+      type: String,
       default: () => {
-        return true;
+        return 'medium'
       },
     },
+    // 标题显示的位置
+    labelPosition: {
+      type: String,
+      default: () => {
+        return 'left'
+      },
+    },
+    // 标题的宽度
+    labelWidth: {
+      type: [Number, String],
+      default: () => {},
+    },
+  },
+  model: {
+    prop: 'defaultType',
   },
   watch: {
     selectObj: {
@@ -136,7 +158,9 @@ export default {
       }
     };
   },
-  mounted() {},
+  mounted() {
+    this.selectObj.defaultType = this.defaultType;
+  },
   methods: {
     // 鼠标移入
     mouseOver() {

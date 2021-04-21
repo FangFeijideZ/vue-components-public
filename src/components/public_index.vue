@@ -9,62 +9,110 @@
         :show-icon="true"
       ></public-title>
       <public-input
-        :prop="true"
-        :clearable="true"
-        :multiple="false"
-        :collapse-tags="false"
-        :filterable="true"
-        :placeholder="true"
-        :disabled="false"
-        :show-title="true"
-        :show-icon="true"
-        :show-button="false"
-        :show-select="false"
-        :show-suffix-button="true"
-        :show-prefix-button="false"
-        :trigger-on-focus="false"
-        :show-word-limit="true"
-        :show-password="false"
-        :max-length="undefined"
-        :min-length="undefined"
-        :max-rows="undefined"
-        :min-rows="undefined"
+        v-model="gdmcObj.defaultValue"
+        placeholder="请输入岗点名称"
+        title="岗点名称"
+        prop
+        show-suffix-button
         :ref="gdmcObj.ref"
         :input-obj="gdmcObj"
         @input="getInputObj"
       ></public-input>
+      <!-- <public-input
+        v-model="gdmcObj.defaultValue"
+        placeholder="请输入岗点名称"
+        select-placeholder="请输入岗点名称"
+        prop
+        type="textarea"
+        size="medium"
+        maxlength="25"
+        minlength="2"
+        clearable
+        filterable
+        show-word-limit
+        collapse-tags
+        multiple
+        resize="none"
+        show-title
+        show-icon
+        show-suffix-button
+        show-prefix-button
+        max-rows="5"
+        min-rows="3"
+        label-position="right"
+        label-width="100px"
+        :ref="gdmcObj.ref"
+        :input-obj="gdmcObj"
+        @input="getInputObj"
+      ></public-input> -->
+      <!-- <public-select
+        v-model="ssdwObj.defaultType"
+        clearable
+        prop
+        show-icon
+        show-title
+        placeholder="请选择岗点名称"
+        title="所属单位"
+        multiple
+        filterable
+        collapse-tags
+        size="mini"
+        label-position="right"
+        label-width="100px"
+        :ref="ssdwObj.ref"
+        :select-obj="ssdwObj"
+        @change="getSelectSsdwObj"
+      ></public-select> -->
+      <!-- <public-date
+        title="开始日期"
+        placeholder="请选择开始日期"
+        prop
+        clearable
+        disabled
+        readonly
+        show-icon
+        :picker-options="getPickerOptions"
+        format="yyyy-MM-dd HH:mm:ss"
+        value-format="yyyy-MM-dd"
+        default-time="['12:00:01','23:00:01']"
+        type="datetimerange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        size="mini"
+        label-position="right"
+        label-width="100px"
+        :date-obj="ksrqObj"
+        :ref="ksrqObj.ref"
+        @change="selectDateKsrq"
+      ></public-date> -->
       <public-select
-        :clearable="true"
-        :prop="true"
-        :show-icon="true"
-        :show-title="true"
-        :placeholder="true"
-        :multiple="false"
-        :disabled="false"
-        :filterable="true"
-        :collapse-tags="false"
+        v-model="ssdwObj.defaultType"
+        placeholder="请选择岗点名称"
+        title="所属单位"
+        prop
         :ref="ssdwObj.ref"
         :select-obj="ssdwObj"
         @change="getSelectSsdwObj"
       ></public-select>
       <public-date
-        :clearable="true"
-        :showTitle="true"
-        :prop="true"
-        :picker-options="false"
-        :disabled="false"
-        :readonly="false"
-        :show-icon="true"
+        title="开始日期"
+        placeholder="请选择开始日期"
+        prop
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :picker-options="getPickerOptions"
         :date-obj="ksrqObj"
         :ref="ksrqObj.ref"
         @change="selectDateKsrq"
       ></public-date>
       <public-date
-        :clearable="true"
-        :showTitle="true"
-        :prop="true"
-        :picker-options="false"
-        :show-icon="true"
+        title="结束日期"
+        placeholder="请选择结束日期"
+        prop
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
+        :picker-options="getPickerOptions1"
         :date-obj="jsrqObj"
         :ref="jsrqObj.ref"
         @change="selectDateJsrq"
@@ -119,12 +167,12 @@
         :title="'保存'"
         @click="btnBcClick"
       ></public-button>
-      <div class="imgs">
+      <!-- <div class="imgs">
         <img style="width: 100px; height: 100px" :src="url" alt="">
         <img style="width: 100px; height: 100px" src="~img/24sdhb.png" alt="">
         <img style="width: 100px; height: 100px" :src="url3" alt="">
         <i style="width: 100px; height: 100px" class="img"></i>
-      </div>
+      </div> -->
       <!-- <public-title
         :title="'研判地点'"
         :img="'dtqwBg02'"
@@ -193,19 +241,12 @@ export default {
         layout: "prev, pager, next, sizes, jumper",
       },
       gdmcObj: {
-        inputValue: "", // 输入框绑定的值
-        title: "岗点名称", // 左侧标题
-        placeholder: "请输入岗点名称", // 输入框提示文字
+        defaultValue: "", // 输入框绑定的值
         ref: "gdmc", // 用于触发表单验证的方法
-        resize: "none",// 文本域拖拽的状态
         icon: "dtqwBg76", // 输入框外左侧标题的图标
         button_icon: "dtqwBg04", // 输入框外按钮的图标
         button_icon_left: "dtqwBg04", // 输入框内左侧图标
         button_icon_right: "dtqwBg04", // 输入框内右侧图标
-        // size: "", // 输入框大小
-        // label_position: "left", // 标题显示的位置
-        // type: "textarea", // 输入框类型
-        type: "autocomplete", // 输入框类型
         defaultType: "", // 下拉选择框绑定的值
         typeOptions: [ // 下拉选择框的每一项
           // { code: "", label: "全部" },
@@ -213,6 +254,14 @@ export default {
           { code: "rest", label: "休息日" },
           { code: "holiday", label: "节假日" },
         ],
+
+        // title: "岗点名称", // 左侧标题
+        // placeholder: "请输入岗点名称", // 输入框提示文字
+        // resize: "none",// 文本域拖拽的状态
+        // size: "", // 输入框大小
+        // label_position: "left", // 标题显示的位置
+        // type: "textarea", // 输入框类型
+        // type: "autocomplete", // 输入框类型
       },
       ssdwObj: {
         typeOptions: [
@@ -222,16 +271,11 @@ export default {
           { code: "holiday", label: "节假日" },
         ],
         defaultType: "",
-        title: "所属单位",
-        // size: "medium", // 选择框大小
         ref: "ssdw", // 用于触发表单验证的方法
         icon: "dtqwBg76", // 输入框外左侧标题的图标
-        placeholder: "请选择岗点名称", // 输入框提示文字
-        // label_position: "left", // 标题显示的位置
-        // label_width: "150px",
       },
       ksrqObj: {
-        type: "date",
+        // type: "date",
         // type: "datetimerange",
         // type: "datetime",
         // type: "dates",
@@ -239,30 +283,33 @@ export default {
         // type: "month",
         // type: "year",
         code: "start",
+        // defaultDate: "2021-03-11 01:00:00",
+        // defaultDate: ['2021-03-27 12:00:01','2021-04-27 23:00:01'],
         defaultDate: "",
         disabledDate: "",
         // defaultTime: ["12:00:01","23:00:01"],
         // format: "yyyy 第 WW 周",
         // format: "yyyy-MM-dd",
         // valueFormat: "yyyy-MM-dd HH:mm:ss", // valueFormat与format不能相同，不然会报错
-        title: "开始日期",
-        placeholder: "请选择开始日期", // 输入框提示文字
+        // title: "开始日期",
+        // placeholder: "请选择开始日期", // 输入框提示文字
         // size: "", // 选择框大小
         ref: "ksrq", // 用于触发表单验证的方法
         icon: "dtqwBg76", // 输入框外左侧标题的图标
       },
       jsrqObj: {
-        type: "date",
+        // type: "date",
         // type: "week",
         // type: "month",
         // type: "year",
         code: "end",
         defaultDate: "",
         disabledDate: "",
+        // defaultDate: "2021-04-11 01:00:00",
         // format: "yyyy-MM-dd",
         // valueFormat: "yyyy-MM-dd HH:mm:ss", // valueFormat与format不能相同，不然会报错
-        title: "结束日期",
-        placeholder: "请选择结束日期", // 输入框提示文字
+        // title: "结束日期",
+        // placeholder: "请选择结束日期", // 输入框提示文字
         // size: "", // 选择框大小
         ref: "jsrq", // 用于触发表单验证的方法
         icon: "dtqwBg76", // 输入框外左侧标题的图标
@@ -296,6 +343,61 @@ export default {
         align: "left",
         ref: "jssj", // 用于触发表单验证的方法
         icon: "dtqwBg76", // 输入框外左侧标题的图标
+      },
+      getPickerOptions: {
+        // disabledDate: (time) => {
+        //   return time.getTime() > this.jsrqObj.defaultDate;
+        // },
+        shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              picker.$emit("pick", new Date());
+            },
+          },
+          {
+            text: "昨天",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit("pick", date);
+            },
+          },
+          {
+            text: "一周前",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            },
+          },
+        ],
+      },
+      getPickerOptions1: {
+        // shortcuts: [
+        //   {
+        //     text: "今天",
+        //     onClick(picker) {
+        //       picker.$emit("pick", new Date());
+        //     },
+        //   },
+        //   {
+        //     text: "昨天",
+        //     onClick(picker) {
+        //       const date = new Date();
+        //       date.setTime(date.getTime() - 3600 * 1000 * 24);
+        //       picker.$emit("pick", date);
+        //     },
+        //   },
+        //   {
+        //     text: "一周前",
+        //     onClick(picker) {
+        //       const date = new Date();
+        //       date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+        //       picker.$emit("pick", date);
+        //     },
+        //   },
+        // ],
       },
       // publicTableHead: [
       //   { id: "1", title: "序号", name: "numbers", ellipsis: "", width: "50px", color: "var(--dyqwColor23)" },
@@ -479,9 +581,9 @@ export default {
     };
   },
   mounted() {
-    console.log(process);
-    console.log(process.env);
-    console.log(process.env.NODE_ENV)
+    // console.log(process);
+    // console.log(process.env);
+    // console.log(process.env.NODE_ENV)
     this.getPageList();
   },
   methods: {
@@ -490,22 +592,20 @@ export default {
       this.jsrqObj.defaultDate = this.$date.y_m_d_mt();
       this.ksrqObj.disabledDate = this.jsrqObj.defaultDate;
       this.jsrqObj.disabledDate = this.ksrqObj.defaultDate;
-      let { defaultTime,disabledTime,code } = this.kssjObj;
-      this.kssjObj.pickerOptions = {selectableRange: code == 'start' ? `00:00:00 - ${disabledTime ? disabledTime : '23:59:59'}` : code == 'end' ? `${disabledTime ? disabledTime : '00:00:00'} - 23:59:59` : '00:00:00 - 23:59:59'}
+      // let { defaultTime,disabledTime,code } = this.kssjObj;
+      // this.kssjObj.pickerOptions = {selectableRange: code == 'start' ? `00:00:00 - ${disabledTime ? disabledTime : '23:59:59'}` : code == 'end' ? `${disabledTime ? disabledTime : '00:00:00'} - 23:59:59` : '00:00:00 - 23:59:59'}
     },
     // 选择的开始日期
     selectDateKsrq(val) {
-      // let date = val ? val : "";
-      let date = val ? this.$date.y_m_d(val) : "";
-      this.jsrqObj.disabledDate = date;
-      console.log(date);
+      // console.log(val);
+      // this.ksrqObj.defaultDate = val;
+      this.jsrqObj.disabledDate = val;
     },
     // 选择的结束日期
     selectDateJsrq(val) {
-      // let date = val ? val : "";
-      let date = val ? this.$date.y_m_d(val) : "";
-      this.ksrqObj.disabledDate = date;
-      console.log(date);
+      // console.log(val);
+      // this.jsrqObj.defaultDate = val;
+      this.ksrqObj.disabledDate = val;
     },
     // 选择的开始时间
     selectDatekssj(val) {

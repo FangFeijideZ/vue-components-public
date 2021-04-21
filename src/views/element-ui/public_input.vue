@@ -2,37 +2,37 @@
   <div class="public-input">
     <el-form
       :model="inputObj"
-      :label-position="inputObj.label_position ? inputObj.label_position : 'left'"
+      :label-position="labelPosition"
       :rules="formRules"
       :ref="inputObj.ref"
-      :label-width="inputObj.label_width"
+      :label-width="labelWidth"
       :class="{'flex-align': showIcon}"
     >
       <div v-if="showIcon" :class="['icon', 'icon-margin', inputObj.icon]" :style="{ 'width': inputObj.icon_width, 'height': inputObj.icon_height, 'margin': inputObj.icon_margin }"></div>
       <el-form-item
-        :label="showTitle ? inputObj.title : ''"
-        :prop="prop ? 'inputValue' : ''"
+        :label="title"
+        :prop="prop ? 'defaultValue' : ''"
         class="flex-align"
       >
         <div class="input-box flex" @mouseover="mouseOver" @mouseleave="mouseLeave">
           <el-input
-            v-if="inputObj.type == undefined || inputObj.type == 'textarea'"
-            v-model="inputObj.inputValue"
+            v-if="type == undefined || type == 'textarea'"
+            v-model="inputObj.defaultValue"
             ref="inputRef"
             :disabled="disabled"
             :clearable="clearable"
-            :maxlength="maxLength"
-            :minlength="minLength"
-            :resize="inputObj.resize"
+            :maxlength="maxlength"
+            :minlength="minlength"
+            :resize="resize"
             :show-password="showPassword"
             :show-word-limit="showWordLimit"
-            :type="inputObj.type ? inputObj.type : undefined"
-            :size="inputObj.size ? inputObj.size : inputObj.size != null ? '' : 'medium'"
+            :type="type"
+            :size="size"
             :class="{'border-right-none': showButton, 'border-left-none': showSelect, 'padding-left': showPrefixButton, 'padding-right': inputFcus}"
             :autosize="{ minRows: minRows, maxRows: maxRows }"
-            :placeholder="placeholder ? inputObj.placeholder : ''"
-            @focus="getFcus(inputObj.inputValue,$event)"
-            @blur="getBlur(inputObj.inputValue,$event)"
+            :placeholder="placeholder"
+            @focus="getFcus(inputObj.defaultValue,$event)"
+            @blur="getBlur(inputObj.defaultValue,$event)"
             @input="getInputValue"
             @change="changeValue"
             @clear="clearValue"
@@ -47,7 +47,7 @@
               :collapse-tags="collapseTags"
               :clearable="clearable"
               :disabled="disabled"
-              :placeholder="inputObj.selectPlaceholder"
+              :placeholder="selectPlaceholder"
               :filterable="filterable"
               :size="size"
             >
@@ -59,35 +59,35 @@
               >
               </el-option>
             </el-select>
-            <div v-if="showPrefixButton" slot="prefix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_left, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
-            <div v-if="showSuffixButton" slot="suffix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_right, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
+            <div v-if="showPrefixButton" slot="prefix" @click="btnClick(inputObj.defaultValue)" :class="['icon', 'icon-button', inputObj.button_icon_left, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
+            <div v-if="showSuffixButton" slot="suffix" @click="btnClick(inputObj.defaultValue)" :class="['icon', 'icon-button', inputObj.button_icon_right, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
           </el-input>
           <el-autocomplete
-            v-if="inputObj.type == 'autocomplete'"
-            v-model="inputObj.inputValue"
+            v-if="type == 'autocomplete'"
+            v-model="inputObj.defaultValue"
             ref="inputRef"
             :disabled="disabled"
             :clearable="clearable"
-            :maxlength="maxLength"
-            :minlength="minLength"
+            :maxlength="maxlength"
+            :minlength="minlength"
             :show-password="showPassword"
             :show-word-limit="showWordLimit"
             :fetch-suggestions="querySearch"
             :trigger-on-focus="triggerOnFocus"
-            :size="inputObj.size ? inputObj.size : inputObj.size != null ? '' : 'medium'"
+            :size="size"
             :class="{'border-right-none': showButton, 'border-left-none': showSelect, 'padding-left': showPrefixButton, 'padding-right': inputFcus}"
-            :placeholder="placeholder ? inputObj.placeholder : ''"
+            :placeholder="placeholder"
             @clear="clearValue"
-            @blur="getBlur(inputObj.inputValue,$event)"
-            @focus="getFcus(inputObj.inputValue,$event)"
+            @blur="getBlur(inputObj.defaultValue,$event)"
+            @focus="getFcus(inputObj.defaultValue,$event)"
             @input="getInputValue"
             @select="handleSelect"
           >
-            <div v-if="showPrefixButton" slot="prefix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_left, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
-            <div v-if="showSuffixButton" slot="suffix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_right, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
+            <div v-if="showPrefixButton" slot="prefix" @click="btnClick(inputObj.defaultValue)" :class="['icon', 'icon-button', inputObj.button_icon_left, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
+            <div v-if="showSuffixButton" slot="suffix" @click="btnClick(inputObj.defaultValue)" :class="['icon', 'icon-button', inputObj.button_icon_right, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
           </el-autocomplete>
           <div v-if="showButton" class="flex-align" :style="{ 'height': `${inputHeight}px` }">
-            <el-button v-if="showButton" :size="size" :disabled="disabled" :style="{ 'height': `${inputInnerHeight}px` }" @click="btnClick(inputObj.inputValue)">
+            <el-button v-if="showButton" :size="size" :disabled="disabled" :style="{ 'height': `${inputInnerHeight}px` }" @click="btnClick(inputObj.defaultValue)">
               <div class="flex-align-center">
                 <div :class="['icon', inputObj.button_icon]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
                 <div class="btn-title" :style="{ 'color': inputObj.button_color, 'font-size': inputObj.button_font_size }">{{inputObj.button_title}}</div>
@@ -104,6 +104,10 @@
 export default {
   name: "publicInput",
   props: {
+    defaultValue: {
+      type: String,
+      default: () => {},
+    },
     inputObj: {
       type: Object,
       default: () => {},
@@ -150,15 +154,15 @@ export default {
         return true;
       },
     },
-    // 字符最长验证
-    minLength: {
+    // 字符最短验证
+    minlength: {
       type: [Number, String],
       default: () => {
         return undefined;
       },
     },
-    // 字符最短验证
-    maxLength: {
+    // 字符最长验证
+    maxlength: {
       type: [Number, String],
       default: () => {
         return undefined;
@@ -206,12 +210,10 @@ export default {
         return false;
       },
     },
-    // 是否显示左侧标题
-    showTitle: {
-      type: Boolean,
-      default: () => {
-        return true;
-      },
+    // 左侧标题
+    title: {
+      type: [Number, String],
+      default: () => {},
     },
     // 是否禁用
     disabled: {
@@ -227,12 +229,44 @@ export default {
         return true;
       },
     },
-    // 是否显示提示文字
+    // 选择框显示的占位提示文字
+    selectPlaceholder: {
+      type: String,
+      default: () => {},
+    },
+    // 显示的占位提示文字
     placeholder: {
-      type: Boolean,
+      type: String,
+      default: () => {},
+    },
+    // 输入框类型
+    type: {
+      type: String,
+      default: () => {},
+    },
+    // 输入框大小
+    size: {
+      type: String,
       default: () => {
-        return true;
+        return 'medium'
       },
+    },
+    // 文本域拖拽的状态
+    resize: {
+      type: String,
+      default: () => {},
+    },
+    // 标题显示的位置
+    labelPosition: {
+      type: String,
+      default: () => {
+        return 'left'
+      },
+    },
+    // 标题的宽度
+    labelWidth: {
+      type: [Number, String],
+      default: () => {},
     },
     // 文本域最小高
     minRows: {
@@ -248,6 +282,10 @@ export default {
         return undefined;
       },
     },
+  },
+  model: {
+    prop: 'defaultValue',
+    // event: 'returnBack'
   },
   watch: {
     inputObj: {
@@ -268,11 +306,12 @@ export default {
       inputHeight: undefined,
       inputInnerHeight: undefined,
       formRules: {
-        inputValue: [{ required: true, message: this.inputObj.placeholder, trigger: "change" }],
+        defaultValue: [{ required: true, message: this.placeholder, trigger: "change" }],
       }
     };
   },
   mounted() {
+    this.inputObj.defaultValue = this.defaultValue;
     let skin = localStorage.getItem("skin");
     this.skin = skin ? skin : "black";
     this.$nextTick(()=>{
