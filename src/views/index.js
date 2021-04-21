@@ -4,6 +4,7 @@ import publicButton from "./element-ui/public-button/index"; // 导入组件
 import publicDate from "./element-ui/public-date/index"; // 导入组件
 import publicTable from "./element-ui/public-table/index"; // 导入组件
 import publicTitle from "./element-ui/public-title/index"; // 导入组件
+import publicTime from "./element-ui/public-time/index"; // 导入组件
 import publicPagination from "./element-ui/public-pagination/index"; // 导入组件
 // import publicInput from "./common-ui/public-input/index"; // 导入组件
 // 存储组件列表
@@ -12,6 +13,7 @@ const components = [
   publicTable,
   publicSelect,
   publicTitle,
+  publicTime,
   publicButton,
   publicDate,
   publicPagination,

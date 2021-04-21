@@ -9,6 +9,11 @@ const routes = [
     name: "home",
     component: resolve => require(["../components/HelloWorld.vue"], resolve), // 路由懒加载
   },
+  {
+    path: "/public_index",
+    name: "public_index",
+    component: resolve => require(["../components/public_index.vue"], resolve), // 路由懒加载
+  },
 ];
 
 const router = new VueRouter({

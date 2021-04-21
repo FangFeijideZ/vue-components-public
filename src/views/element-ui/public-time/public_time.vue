@@ -1,42 +1,44 @@
 <template>
-  <div class="public-date">
+  <div class="public-time">
     <el-form
-      :model="dateObj"
-      :label-position="dateObj.label_position ? dateObj.label_position : 'left'"
+      :model="timeObj"
+      :label-position="timeObj.label_position ? timeObj.label_position : 'left'"
       :rules="formRules"
-      :ref="dateObj.ref"
-      :label-width="dateObj.label_width"
+      :ref="timeObj.ref"
+      :label-width="timeObj.label_width"
       :class="{'flex-align': showIcon}"
     >
-      <div v-if="showIcon" :class="['icon', 'icon-margin', dateObj.icon]" :style="{ 'width': dateObj.icon_width, 'height': dateObj.icon_height, 'margin': dateObj.icon_margin }"></div>
+      <div v-if="showIcon" :class="['icon', 'icon-margin', timeObj.icon]" :style="{ 'width': timeObj.icon_width, 'height': timeObj.icon_height, 'margin': timeObj.icon_margin }"></div>
       <el-form-item
-        :label="showTitle ? dateObj.title : ''"
-        :prop="prop ? 'defaultDate' : ''"
+        :label="showTitle ? timeObj.title : ''"
+        :prop="prop ? 'defaultTime' : ''"
         class="flex-align"
       >
-        <div class="date-box flex" @mouseover="mouseOver" @mouseleave="mouseLeave">
+        <div class="time-box flex" @mouseover="mouseOver" @mouseleave="mouseLeave">
           <div v-show="suffixIconShow || readonly" :class="['suffix-icon',skin]"></div>
-          <el-date-picker
-            v-model="dateObj.defaultDate"
-            :type="dateObj.type"
+          <el-time-picker
+            v-model="timeObj.defaultTime"
             :readonly="readonly"
             :disabled="disabled"
             :editable="editable"
             :clearable="clearable"
-            :validate-even="false"
-            :format="dateObj.format"
-            :picker-options="getPickerOptions"
-            :default-time="dateObj.defaultTime"
-            :value-format="dateObj.valueFormat"
-            :placeholder="placeholder ? dateObj.placeholder : ''"
-            :size="dateObj.size ? dateObj.size : dateObj.size != null ? '' : 'medium'"
-            :range-separator="dateObj.rangeSeparator ? dateObj.rangeSeparator : '至'"
-            :start-placeholder="dateObj.startPlaceholder ? dateObj.startPlaceholder : '开始日期'"
-            :end-placeholder="dateObj.endPlaceholder ? dateObj.endPlaceholder : '结束日期'"
-            @change="changeDate"
-            @blur="getBlur(dateObj.defaultDate,$event)"
-            @focus="getFcus(dateObj.defaultDate,$event)"
-          ></el-date-picker>
+            :format="timeObj.format"
+            :is-range="isRange"
+            :align="timeObj.align"
+            :value-format="timeObj.valueFormat"
+            :default-value="timeObj.defaultValue"
+            :picker-options="pickerOptions"
+            :placeholder="placeholder ? timeObj.placeholder : ''"
+            :size="timeObj.size ? timeObj.size : timeObj.size != null ? '' : 'medium'"
+            :range-separator="timeObj.rangeSeparator ? timeObj.rangeSeparator : '至'"
+            :start-placeholder="timeObj.startPlaceholder ? timeObj.startPlaceholder : '开始时间'"
+            :end-placeholder="timeObj.endPlaceholder ? timeObj.endPlaceholder : '结束时间'"
+            @change="changeTime"
+            @blur="getBlur(timeObj.defaultTime,$event)"
+            @focus="getFcus(timeObj.defaultTime,$event)"
+          >
+          </el-time-picker>
+          <!-- :picker-options="{selectableRange: '09:30:00 - 20:30:00'}" -->
         </div>
       </el-form-item>
     </el-form>
@@ -45,9 +47,9 @@
 
 <script>
 export default {
-  name: "publicDate",
+  name: "publicTime",
   props: {
-    dateObj: {
+    timeObj: {
       type: Object,
       default: () => {},
     },
@@ -86,15 +88,8 @@ export default {
         return false;
       },
     },
-    // 是否显示快捷提示
-    pickerOptions: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
     // 是否禁用选择日期
-    disabledDate: {
+    disabledTime: {
       type: Boolean,
       default: () => {
         return false;
@@ -142,22 +137,25 @@ export default {
         return true;
       },
     },
+    // 是否为时间范围选择
+    isRange: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
   },
   watch: {
-    dateObj: {
+    timeObj: {
       handler(newVal, onload) {
         if (newVal) {
-          let { defaultDate,disabledDate,code } = newVal;
-          // console.log(newVal);
-          let date = disabledDate ? new Date(disabledDate).getTime() : 0;
-          this.getPickerOptions = Object.assign({}, this.getPickerOptions, {
-            disabledDate: (time) => {
-              return code == "start" && disabledDate ? time.getTime() > date : code == "end" ? time.getTime() < date : false;
-            }
-          })
-          if (code) {
-            this.changeDate(defaultDate);
-          }
+          let { defaultTime,disabledTime,code } = newVal;
+          console.log(newVal);
+          let startTime = disabledTime ? disabledTime : '23:59:59';
+          let endTime = disabledTime ? disabledTime : '00:00:00';
+          // this.pickerOptions = {
+          //   selectableRange: code == "start" ? `00:00:00 - ${startTime}` : code == "end" ? `${endTime} - 23:59:59` : "00:00:00 - 23:59:59"
+          // }
         }
       },
       deep: true,
@@ -169,50 +167,40 @@ export default {
       skin: "",
       suffixIconShow: true,
       formRules: {
-        defaultDate: [{ required: true, message: this.dateObj.placeholder, trigger: "change" }],
+        defaultTime: [{ required: true, message: this.timeObj.placeholder, trigger: "change" }],
       },
-      getPickerOptions: {
-        shortcuts: this.pickerOptions ? [
-          {
-            text: "今天",
-            onClick(picker) {
-              picker.$emit("pick", new Date());
-            },
-          },
-          {
-            text: "昨天",
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit("pick", date);
-            },
-          },
-          {
-            text: "一周前",
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", date);
-            },
-          },
-        ] : "",
-      },
+      pickerOptions: {}
     };
+  },
+  computed: {
+    getPickerOptions() {
+      debugger;
+      let { defaultTime,disabledTime,code } = this.timeObj;
+      let startTime = disabledTime ? disabledTime : '23:59:59';
+      let endTime = disabledTime ? disabledTime : '00:00:00';
+      let pickerOptions = {
+        selectableRange: code == "start" ? `00:00:00 - ${startTime}` : code == "end" ? `${endTime} - 23:59:59` : "00:00:00 - 23:59:59"
+      }
+      debugger;
+      return pickerOptions
+    }
   },
   mounted() {
     let skin = localStorage.getItem("skin");
     this.skin = skin ? skin : "black";
+    let prevBtn = document.querySelector('.el-range-editor');
+    // prevBtn.children[1].style = "text-align: left;"
   },
   methods: {
     // 鼠标移入
     mouseOver() {
-      if (this.dateObj.defaultDate && !this.disabled && this.clearable) {
+      if (this.timeObj.defaultTime && !this.disabled) {
         this.suffixIconShow = false
       }
     },
     // 鼠标移出
     mouseLeave() {
-      if (this.dateObj.defaultDate && !this.disabled && this.clearable) {
+      if (this.timeObj.defaultTime && !this.disabled) {
         this.suffixIconShow = true
       }
     },
@@ -225,7 +213,7 @@ export default {
       this.$emit("blur", val);
     },
     // 改变事件
-    changeDate(val) {
+    changeTime(val) {
       this.$emit("change", val);
       if (val == null) {
         this.suffixIconShow = true
@@ -234,7 +222,7 @@ export default {
     // 触发表单验证
     getFormRules() {
       let flag = undefined;
-      this.$refs[this.dateObj.ref].validate((valid) => {
+      this.$refs[this.timeObj.ref].validate((valid) => {
         if (valid) {
           flag = true;
         } else {
@@ -245,14 +233,14 @@ export default {
     },
     // 清除表单验证
     cleanFormRule() {
-      this.$refs[this.dateObj.ref].resetFields();
+      this.$refs[this.timeObj.ref].resetFields();
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.public-date {
+.public-time {
   width: 100%;
   font-size: 13px;
   .flex {
@@ -277,7 +265,7 @@ export default {
         display: flex;
         height: 100%;
         margin-left: 0 !important;
-        .date-box {
+        .time-box {
           width: 100%;
           position: relative;
           .suffix-icon {
@@ -286,20 +274,17 @@ export default {
             top: 50%;
             width: 15px;
             height: 15px;
-            z-index: 10;
             background-repeat: no-repeat;
             transform: translateY(-50%);
+            z-index: 2;
           }
           .black {
-            background: url("../../../assets/img/riqihb.png");
+            background: url("../../../assets/img/24sdhb.png");
             background-size: 100% 100%;
           }
           .white {
-            background: url("../../../assets/img/riqibb.png");
+            background: url("../../../assets/img/24sdbb.png");
             background-size: 100% 100%;
-          }
-          .el-date-editor--datetimerange {
-            padding: 0 30px 0 15px;
           }
           .el-date-editor {
             width: 100%;
@@ -308,19 +293,17 @@ export default {
             }
             .el-range-input {
               color: var(--elInnerColor19);
-            }
-            .el-icon-time {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            .el-range-input {
-              color: var(--elInnerColor19);
+              // text-align: right;
               width: 45%;
             }
             .el-range-separator {
               width: 10%;
               padding: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .el-icon-time {
               display: flex;
               align-items: center;
               justify-content: center;
@@ -332,6 +315,9 @@ export default {
             .el-range__icon {
               display: none;
             }
+          }
+          .el-range-editor {
+            padding: 0 30px 0 15px;
           }
         }
       }

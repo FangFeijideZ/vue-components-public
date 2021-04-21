@@ -59,8 +59,8 @@
               >
               </el-option>
             </el-select>
-            <div v-if="showPrefixButton" slot="prefix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_left]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
-            <div v-if="showSuffixButton" slot="suffix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_right]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
+            <div v-if="showPrefixButton" slot="prefix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_left, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
+            <div v-if="showSuffixButton" slot="suffix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_right, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
           </el-input>
           <el-autocomplete
             v-if="inputObj.type == 'autocomplete'"
@@ -83,8 +83,8 @@
             @input="getInputValue"
             @select="handleSelect"
           >
-            <div v-if="showPrefixButton" slot="prefix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_left]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
-            <div v-if="showSuffixButton" slot="suffix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_right]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
+            <div v-if="showPrefixButton" slot="prefix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_left, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
+            <div v-if="showSuffixButton" slot="suffix" @click="btnClick(inputObj.inputValue)" :class="['icon', 'icon-button', inputObj.button_icon_right, skin]" :style="{ 'width': inputObj.button_width, 'height': inputObj.button_height, 'margin': inputObj.button_margin }"></div>
           </el-autocomplete>
           <div v-if="showButton" class="flex-align" :style="{ 'height': `${inputHeight}px` }">
             <el-button v-if="showButton" :size="size" :disabled="disabled" :style="{ 'height': `${inputInnerHeight}px` }" @click="btnClick(inputObj.inputValue)">
@@ -262,6 +262,7 @@ export default {
   },
   data() {
     return {
+      skin: "",
       inputFcus: false,
       inputBlur: false,
       inputHeight: undefined,
@@ -272,6 +273,8 @@ export default {
     };
   },
   mounted() {
+    let skin = localStorage.getItem("skin");
+    this.skin = skin ? skin : "black";
     this.$nextTick(()=>{
       if (this.$refs.inputRef) {
          this.inputHeight = this.$refs.inputRef.$el.offsetHeight;
@@ -505,6 +508,14 @@ export default {
           .el-textarea__inner::-webkit-scrollbar-thumb {
             background: var(--elInnerColor14);
             border-radius: 3px;
+          }
+          .black {
+            background: url("../../../assets/img/search_hb.png");
+            background-size: 100% 100%;
+          }
+          .white {
+            background: url("../../../assets/img/search_bb.png");
+            background-size: 100% 100%;
           }
         }
       }
