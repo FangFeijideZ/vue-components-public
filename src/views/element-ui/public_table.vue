@@ -557,7 +557,7 @@ export default {
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 23px;
+          // width: 23px;
           height: 23px;
           border-radius: 50%;
           font-size: 14px;

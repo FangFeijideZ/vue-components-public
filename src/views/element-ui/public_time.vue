@@ -2,37 +2,37 @@
   <div class="public-time">
     <el-form
       :model="timeObj"
-      :label-position="timeObj.label_position ? timeObj.label_position : 'left'"
+      :label-position="labelPosition"
       :rules="formRules"
       :ref="timeObj.ref"
-      :label-width="timeObj.label_width"
+      :label-width="labelWidth"
       :class="{'flex-align': showIcon}"
     >
       <div v-if="showIcon" :class="['icon', 'icon-margin', timeObj.icon]" :style="{ 'width': timeObj.icon_width, 'height': timeObj.icon_height, 'margin': timeObj.icon_margin }"></div>
       <el-form-item
-        :label="showTitle ? timeObj.title : ''"
+        :label="title"
         :prop="prop ? 'defaultTime' : ''"
         class="flex-align"
       >
         <div class="time-box flex" @mouseover="mouseOver" @mouseleave="mouseLeave">
-          <div v-show="suffixIconShow || readonly" :class="['suffix-icon',skin]"></div>
+          <div v-show="suffixIconShow || readonly" :class="['suffix-icon',skin]"></div>{{defaultValue}}
           <el-time-picker
             v-model="timeObj.defaultTime"
             :readonly="readonly"
             :disabled="disabled"
             :editable="editable"
             :clearable="clearable"
-            :format="timeObj.format"
+            :format="format"
             :is-range="isRange"
-            :align="timeObj.align"
-            :value-format="timeObj.valueFormat"
-            :default-value="timeObj.defaultValue"
+            :align="align"
+            :value-format="valueFormat"
+            :default-value="defaultValue"
             :picker-options="pickerOptions"
-            :placeholder="placeholder ? timeObj.placeholder : ''"
-            :size="timeObj.size ? timeObj.size : timeObj.size != null ? '' : 'medium'"
-            :range-separator="timeObj.rangeSeparator ? timeObj.rangeSeparator : '至'"
-            :start-placeholder="timeObj.startPlaceholder ? timeObj.startPlaceholder : '开始时间'"
-            :end-placeholder="timeObj.endPlaceholder ? timeObj.endPlaceholder : '结束时间'"
+            :placeholder="placeholder"
+            :size="size"
+            :range-separator="rangeSeparator"
+            :start-placeholder="startPlaceholder"
+            :end-placeholder="endPlaceholder"
             @change="changeTime"
             @blur="getBlur(timeObj.defaultTime,$event)"
             @focus="getFcus(timeObj.defaultTime,$event)"
@@ -49,6 +49,10 @@
 export default {
   name: "publicTime",
   props: {
+    defaultTime: {
+      type: [String, Array],
+      default: () => {},
+    },
     timeObj: {
       type: Object,
       default: () => {},
@@ -95,13 +99,6 @@ export default {
         return false;
       },
     },
-    // 是否显示左侧标题
-    showTitle: {
-      type: Boolean,
-      default: () => {
-        return true;
-      },
-    },
     // 是否禁用
     disabled: {
       type: Boolean,
@@ -116,12 +113,10 @@ export default {
         return true;
       },
     },
-    // 是否显示提示文字
+    // 显示的占位提示文字
     placeholder: {
-      type: Boolean,
-      default: () => {
-        return true;
-      },
+      type: String,
+      default: () => {},
     },
     // 是否完全只读	
     readonly: {
@@ -144,18 +139,82 @@ export default {
         return false;
       },
     },
+    // 时间选择框大小
+    size: {
+      type: String,
+      default: () => {
+        return 'medium'
+      },
+    },
+    // 选择框显示的位置
+    align: {
+      type: String,
+      default: () => {
+        return 'left'
+      },
+    },
+    // 显示的日期时间格式
+    format: {
+      type: [String, Array],
+      default: () => {},
+    },
+    // 获取的日期时间格式
+    valueFormat: {
+      type: [String, Array],
+      default: () => {},
+    },
+    // 左侧标题
+    title: {
+      type: [Number, String],
+      default: () => {},
+    },
+    // 标题显示的位置
+    labelPosition: {
+      type: String,
+      default: () => {
+        return 'left'
+      },
+    },
+    // 标题的宽度
+    labelWidth: {
+      type: [Number, String],
+      default: () => {},
+    },
+    // 选择范围时的分隔符	
+    rangeSeparator: {
+      type: String,
+      default: () => {},
+    },
+    // 范围选择时开始日期的占位内容	
+    startPlaceholder: {
+      type: String,
+      default: () => {},
+    },
+    // 范围选择时结束日期的占位内容	
+    endPlaceholder: {
+      type: String,
+      default: () => {},
+    },
+    // 时间选择器打开时默认显示的时间
+    defaultValue: {
+      type: [String, Array],
+      default: () => {},
+    },
+  },
+  model: {
+    prop: 'defaultTime',
   },
   watch: {
     timeObj: {
       handler(newVal, onload) {
         if (newVal) {
           let { defaultTime,disabledTime,code } = newVal;
-          console.log(newVal);
+          // console.log(newVal);
           let startTime = disabledTime ? disabledTime : '23:59:59';
           let endTime = disabledTime ? disabledTime : '00:00:00';
-          // this.pickerOptions = {
-          //   selectableRange: code == "start" ? `00:00:00 - ${startTime}` : code == "end" ? `${endTime} - 23:59:59` : "00:00:00 - 23:59:59"
-          // }
+          this.pickerOptions = {
+            selectableRange: code == "start" ? `00:00:00 - ${startTime}` : code == "end" ? `${endTime} - 23:59:59` : "00:00:00 - 23:59:59"
+          }
         }
       },
       deep: true,
@@ -167,28 +226,16 @@ export default {
       skin: "",
       suffixIconShow: true,
       formRules: {
-        defaultTime: [{ required: true, message: this.timeObj.placeholder, trigger: "change" }],
+        defaultTime: [{ required: true, message: this.placeholder, trigger: "change" }],
       },
       pickerOptions: {}
     };
   },
-  computed: {
-    getPickerOptions() {
-      debugger;
-      let { defaultTime,disabledTime,code } = this.timeObj;
-      let startTime = disabledTime ? disabledTime : '23:59:59';
-      let endTime = disabledTime ? disabledTime : '00:00:00';
-      let pickerOptions = {
-        selectableRange: code == "start" ? `00:00:00 - ${startTime}` : code == "end" ? `${endTime} - 23:59:59` : "00:00:00 - 23:59:59"
-      }
-      debugger;
-      return pickerOptions
-    }
-  },
   mounted() {
+    this.timeObj.defaultTime = this.defaultTime;
     let skin = localStorage.getItem("skin");
     this.skin = skin ? skin : "black";
-    let prevBtn = document.querySelector('.el-range-editor');
+    // let prevBtn = document.querySelector('.el-range-editor');
     // prevBtn.children[1].style = "text-align: left;"
   },
   methods: {

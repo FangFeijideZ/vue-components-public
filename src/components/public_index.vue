@@ -1,23 +1,17 @@
 <template>
   <div class="public-index">
     <div class="box-left">
-      <public-title
-        :title="'研判地点'"
-        :img="'dtqwBg02'"
-        :icon="'dtqwBg76'"
-        :height="'5%'"
-        :show-icon="true"
-      ></public-title>
-      <public-input
-        v-model="gdmcObj.defaultValue"
-        placeholder="请输入岗点名称"
-        title="岗点名称"
-        prop
-        show-suffix-button
-        :ref="gdmcObj.ref"
-        :input-obj="gdmcObj"
-        @input="getInputObj"
-      ></public-input>
+      <!-- <public-title
+        title="研判地点"
+        img="dtqwBg02"
+        icon="dtqwBg76"
+        height="5%"
+        icon-width="100px"
+        icon-margin="10px"
+        font-size="20px"
+        color="#666"
+        show-icon
+      ></public-title> -->
       <!-- <public-input
         v-model="gdmcObj.defaultValue"
         placeholder="请输入岗点名称"
@@ -86,6 +80,63 @@
         :ref="ksrqObj.ref"
         @change="selectDateKsrq"
       ></public-date> -->
+      <!-- <public-time
+        title="开始时间"
+        placeholder="请选择开始时间"
+        prop
+        clearable
+        disabled
+        readonly
+        show-icon
+        format="HH:mm:ss"
+        value-format="HH:mm:ss"
+        :default-value="kssjObj.defaultValue"
+        range-separator="至"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间"
+        size="mini"
+        label-position="right"
+        label-width="100px"
+        :date-obj="kssjObj"
+        :ref="kssjObj.ref"
+        @change="selectDateKssj"
+      ></public-time> -->
+      <!-- <public-button
+        show-icon
+        icon="dtqwBg76"
+        title="保存"
+        type="warning"
+        disabled
+        icon-width="100px"
+        icon-margin="10px"
+        font-size="20px"
+        background-color="#ccc"
+        @click="btnBcClick"
+      ></public-button> -->
+      
+      <!-- <div class="imgs">
+        <img style="width: 100px; height: 100px" :src="url" alt="">
+        <img style="width: 100px; height: 100px" src="~img/24sdhb.png" alt="">
+        <img style="width: 100px; height: 100px" :src="url3" alt="">
+        <i style="width: 100px; height: 100px" class="img"></i>
+      </div> -->
+
+      <public-title
+        title="研判地点"
+        img="dtqwBg02"
+        icon="dtqwBg76"
+        height="5%"
+      ></public-title>
+      <public-input
+        v-model="gdmcObj.defaultValue"
+        placeholder="请输入岗点名称"
+        title="岗点名称"
+        prop
+        show-suffix-button
+        :ref="gdmcObj.ref"
+        :input-obj="gdmcObj"
+        @input="getInputObj"
+      ></public-input>
       <public-select
         v-model="ssdwObj.defaultType"
         placeholder="请选择岗点名称"
@@ -98,10 +149,11 @@
       <public-date
         title="开始日期"
         placeholder="请选择开始日期"
+        v-model="ksrqObj.defaultDate"
         prop
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-        :picker-options="getPickerOptions"
+        :picker-options="getPickerOptionsStart"
         :date-obj="ksrqObj"
         :ref="ksrqObj.ref"
         @change="selectDateKsrq"
@@ -109,99 +161,44 @@
       <public-date
         title="结束日期"
         placeholder="请选择结束日期"
+        v-model="jsrqObj.defaultDate"
         prop
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-        :picker-options="getPickerOptions1"
+        :picker-options="getPickerOptionsEnd"
         :date-obj="jsrqObj"
         :ref="jsrqObj.ref"
         @change="selectDateJsrq"
       ></public-date>
       <public-time
-        :clearable="true"
-        :showTitle="true"
-        :prop="true"
-        :is-range="false"
-        :readonly="false"
-        :show-icon="true"
+        title="开始时间"
+        placeholder="请选择开始时间"
+        v-model="kssjObj.defaultTime"
+        prop
+        format="HH:mm:ss"
+        value-format="HH:mm:ss"
         :time-obj="kssjObj"
         :ref="kssjObj.ref"
         @change="selectDatekssj"
       ></public-time>
       <public-time
-        :clearable="true"
-        :showTitle="true"
-        :prop="true"
-        :is-range="true"
-        :readonly="false"
-        :show-icon="true"
+        title="结束时间"
+        placeholder="请选择结束时间"
+        v-model="jssjObj.defaultTime"
+        prop
+        format="HH:mm:ss"
+        value-format="HH:mm:ss"
         :time-obj="jssjObj"
         :ref="jssjObj.ref"
         @change="selectDateJssj"
       ></public-time>
-      <!-- <el-time-picker
-        v-model="kssjObj.defaultTime"
-        size="medium"
-        @change="selectDatekssj"
-        :picker-options="{'selectableRange': 
-          kssjObj.code == 'start' ? `00:00:00 - ${kssjObj.disabledTime ? kssjObj.disabledTime : '23:59:59'}` : 
-          kssjObj.code == 'end' ? `${kssjObj.disabledTime ? kssjObj.disabledTime : '00:00:00'} - 23:59:59` : 
-          '00:00:00 - 23:59:59'
-        }"
-        placeholder="开始时间">
-      </el-time-picker>
-      <el-time-picker
-        v-model="jssjObj.defaultTime"
-        size="medium"
-        @change="selectDateJssj"
-        :picker-options="{'selectableRange': 
-          jssjObj.code == 'start' ? `00:00:00 - ${jssjObj.disabledTime ? jssjObj.disabledTime : '23:59:59'}` : 
-          jssjObj.code == 'end' ? `${jssjObj.disabledTime ? jssjObj.disabledTime : '00:00:00'} - 23:59:59` : 
-          '00:00:00 - 23:59:59'
-        }"
-        placeholder="结束时间">
-      </el-time-picker> -->
       <public-button
-        :show-icon="true"
-        :icon="'dtqwBg76'"
-        :title="'保存'"
+        icon="dtqwBg76"
+        title="保存"
         @click="btnBcClick"
       ></public-button>
-      <!-- <div class="imgs">
-        <img style="width: 100px; height: 100px" :src="url" alt="">
-        <img style="width: 100px; height: 100px" src="~img/24sdhb.png" alt="">
-        <img style="width: 100px; height: 100px" :src="url3" alt="">
-        <i style="width: 100px; height: 100px" class="img"></i>
-      </div> -->
-      <!-- <public-title
-        :title="'研判地点'"
-        :img="'dtqwBg02'"
-        :icon="'dtqwBg76'"
-        :color="'var(--fontColor01)'"
-        :height="'5%'"
-        :width="'100%'"
-        :font-size="'14px'"
-        :margin="'0 0 0 14px'"
-        :padding="'0 0 0 14px'"
-        :icon-margin="'0 14px 0 0'"
-        :icon-padding="'0 0 0 0'"
-        :icon-width="'14px'"
-        :icon-height="'14px'"
-        :show-icon="true"
-      ></public-title> -->
     </div>
     <div class="box-right">
-      <!-- <div class="head-box flex">
-        <div class="left flex-align-center">单位</div>
-        <div class="right">
-          <div class="right-top flex-align-center">2021年4月各派出所交通类110警情管控</div>
-          <div class="right-bottom">
-            <ul class="flex">
-              <li class="flex-align-center" v-for="(item,index) in 4" :key="index">{{item}}</li>
-            </ul>
-          </div>
-        </div>
-      </div> -->
       <public-table
         :head-data="publicTableHead"
         :head-style="headStyleObj"
@@ -210,10 +207,13 @@
         :body-tr-style="bodyTrStyleObj"
         :body-td-style="bodyTdStyleObj"
         :page-info="pageInfo"
-        :checkbox="false"
+        :checkbox="true"
         @iconClick="iconClick"
       ></public-table>
-      <public-pagination :pagination-obj="pageInfo" @change="handlePageChange"></public-pagination>
+      <public-pagination 
+        :pagination-obj="pageInfo" 
+        @change="handlePageChange"
+      ></public-pagination>
     </div>
   </div>
 </template>
@@ -316,10 +316,10 @@ export default {
       },
       kssjObj: {
         code: "start",
-        defaultTime: '2021-03-27 14:03:45',
+        defaultTime: '14:03:45',
         // disabledTime: '',
         disabledTime: '21:03:45',
-        // defaultValue: '2021-03-27 14:03:45', // 时间选择器打开时默认显示的时间
+        // defaultValue: '2021-04-25 14:03:45', // 时间选择器打开时默认显示的时间
         placeholder: "请选择开始时间", // 输入框提示文字
         title: "开始时间",
         // format: "yyyy-MM-dd HH:mm:ss",
@@ -331,20 +331,20 @@ export default {
       },
       jssjObj: {
         code: "end",
-        defaultTime: "2021-03-27 21:03:45",
+        defaultTime: "21:03:45",
         // defaultTime: ["2021-03-27 14:03:45","2021-03-27 21:03:45"],
         // disabledTime: "",
         disabledTime: "14:03:45",
-        defaultValue: "", // 时间选择器打开时默认显示的时间
-        placeholder: "请选择结束时间", // 输入框提示文字
-        title: "结束时间",
-        format: "HH:mm:ss",
+        // defaultValue: "", // 时间选择器打开时默认显示的时间
+        // placeholder: "请选择结束时间", // 输入框提示文字
+        // title: "结束时间",
+        // format: "HH:mm:ss",
         // valueFormat: "HH:mm:ss", // valueFormat与format不能相同，不然会报错
-        align: "left",
+        // align: "left",
         ref: "jssj", // 用于触发表单验证的方法
         icon: "dtqwBg76", // 输入框外左侧标题的图标
       },
-      getPickerOptions: {
+      getPickerOptionsStart: {
         // disabledDate: (time) => {
         //   return time.getTime() > this.jsrqObj.defaultDate;
         // },
@@ -373,7 +373,7 @@ export default {
           },
         ],
       },
-      getPickerOptions1: {
+      getPickerOptionsEnd: {
         // shortcuts: [
         //   {
         //     text: "今天",
@@ -592,8 +592,6 @@ export default {
       this.jsrqObj.defaultDate = this.$date.y_m_d_mt();
       this.ksrqObj.disabledDate = this.jsrqObj.defaultDate;
       this.jsrqObj.disabledDate = this.ksrqObj.defaultDate;
-      // let { defaultTime,disabledTime,code } = this.kssjObj;
-      // this.kssjObj.pickerOptions = {selectableRange: code == 'start' ? `00:00:00 - ${disabledTime ? disabledTime : '23:59:59'}` : code == 'end' ? `${disabledTime ? disabledTime : '00:00:00'} - 23:59:59` : '00:00:00 - 23:59:59'}
     },
     // 选择的开始日期
     selectDateKsrq(val) {
@@ -609,14 +607,11 @@ export default {
     },
     // 选择的开始时间
     selectDatekssj(val) {
-      let date = val ? this.$date.h_m_s(val) : "";
-      this.jssjObj.disabledTime = date;
+      this.jssjObj.disabledTime = val;
     },
     // 选择的结束时间
     selectDateJssj(val) {
-      console.log(val);
-      let date = val ? this.$date.h_m_s(val) : "";
-      this.kssjObj.disabledTime = date;
+      this.kssjObj.disabledTime = val;
     },
     // 列表按钮点击
     iconClick(val,icon) {

@@ -16,8 +16,8 @@
       @current-change="handleCurrentChange"
     ></el-pagination>
     <div v-if="paginationObj.showRight" class="right-data">
-      <span>{{`每页${paginationObj.limitSizes ? paginationObj.limitSizes : 20}条`}}</span>&nbsp;
-      <span>{{`共${paginationObj.total ? paginationObj.total : 20}条`}}</span>
+      <span>{{`每页${paginationObj.pageSize ? paginationObj.pageSize : 0}条`}}</span>&nbsp;
+      <span>{{`共${paginationObj.total ? paginationObj.total : 0}条`}}</span>
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      this.paginationObj.limitSizes = val;
+      this.paginationObj.pageSize = val;
       this.$emit("change", this.paginationObj);
       // if (this.autoScroll) {
       //   scrollTo(0, 800);

@@ -47,6 +47,10 @@
 export default {
   name: "publicDate",
   props: {
+    defaultDate: {
+      type: [String, Array],
+      default: () => {},
+    },
     dateObj: {
       type: Object,
       default: () => {},
@@ -212,6 +216,9 @@ export default {
       default: () => {},
     },
   },
+  model: {
+    prop: 'defaultDate',
+  },
   watch: {
     dateObj: {
       handler(newVal, onload) {
@@ -270,6 +277,7 @@ export default {
     };
   },
   mounted() {
+    this.dateObj.defaultDate = this.defaultDate;
     let skin = localStorage.getItem("skin");
     this.skin = skin ? skin : "black";
   },

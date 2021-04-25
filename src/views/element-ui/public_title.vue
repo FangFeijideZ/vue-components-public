@@ -47,7 +47,7 @@ export default {
     showIcon: {
       type: Boolean,
       default: () => {
-        return true;
+        return false;
       },
     },
     // 背景图
