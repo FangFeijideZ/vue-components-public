@@ -227,7 +227,7 @@ export default {
           // console.log(newVal);
           let date = disabledDate ? new Date(disabledDate).getTime() : 0;
           this.getPickerOptions = Object.assign({}, this.getPickerOptions, {
-            shortcuts: this.pickerOptions.shortcuts,
+            hortcuts: this.pickerOptions ? this.pickerOptions.shortcuts : false,
             disabledDate: (time) => {
               return code == "start" && disabledDate ? time.getTime() > date : code == "end" ? time.getTime() < date : false;
             }
@@ -369,11 +369,11 @@ export default {
             transform: translateY(-50%);
           }
           .black {
-            background: url("../../assets/img/riqihb.png");
+            background: url("./img/riqihb.png");
             background-size: 100% 100%;
           }
           .white {
-            background: url("../../assets/img/riqibb.png");
+            background: url("./img/riqibb.png");
             background-size: 100% 100%;
           }
           .el-date-editor--datetimerange {

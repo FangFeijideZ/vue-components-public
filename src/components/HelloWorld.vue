@@ -19,7 +19,6 @@
     <public-date
       :clearable="true"
       :showTitle="true"
-      :picker-options="false"
       :disabled="false"
       :readonly="false"
       :show-icon="true"

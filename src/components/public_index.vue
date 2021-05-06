@@ -139,7 +139,7 @@
       ></public-input>
       <public-select
         v-model="ssdwObj.defaultType"
-        placeholder="请选择岗点名称"
+        placeholder="请选择所属单位"
         title="所属单位"
         prop
         :ref="ssdwObj.ref"
@@ -225,8 +225,8 @@ export default {
   },
   data() {
     return {
-      url: require("../assets/img/riqibb.png"),
-      url3: require("../assets/img/4e10662af608.png"),
+      url: require("../views/element-ui/img/riqibb.png"),
+      url3: require("../views/element-ui/img/4e10662af608.png"),
       pageInfo: {
         pageSize: 20,
         pageSizes: [20, 30, 50, 100],
@@ -623,7 +623,7 @@ export default {
     },
     // 获取岗点名称
     getInputObj(val) {
-      // this.gdmcObj.inputValue = val.replace(/[^\d]/g, "");
+      // this.gdmcObj.defaultValue = val.replace(/[^\d]/g, "");
       console.log(val)
     },
     // 分页信息
@@ -717,7 +717,7 @@ export default {
     }
   }
   .img {
-    background: url("../assets/img/4e10662af608.png");
+    background: url("../views/element-ui/img/4e10662af608.png");
     background-size: 100% 100%;
   }
 </style>

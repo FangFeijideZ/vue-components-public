@@ -114,7 +114,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.public-button {
-		padding: 10px 6.5%;
+		// padding: 10px 6.5%;
 		i {
 			display: inline-block;
 			margin-right: 5px;

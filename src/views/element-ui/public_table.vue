@@ -222,13 +222,16 @@
               @mouseover="mouseOverText($event)"
               @mouseleave="mouseLeaveText($event)"
             >
-              <span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span>
+              <el-tooltip placement="top" v-if="ellipsis">
+                <template #content><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></template>
+                <div class="ellipsis"><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
+              </el-tooltip>
+              <div class="ellipsis" v-if="!ellipsis"><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
             </div>
           </td>
         </tr>
         <p v-if="bodyDatas.length == 0">暂无数据</p>
       </tbody>
-      <div ref="ellipsisRef" v-show="ellipsis" class="ellipsis-text" @mouseleave="mouseLeaveEllipsis">{{ellipsisText}}</div>
     </table>
   </div>
 </template>
@@ -376,41 +379,22 @@ export default {
     // 鼠标移入
     mouseOverText(e) {
       // console.log(e);
-      // console.log(e.target.className,'-------------');
-      let tbodyRef = this.$refs.tbodyRef;
       let tdWidth = e.target.offsetParent.offsetWidth;
-      let tdHeight = e.target.offsetParent.offsetHeight;
       let offsetWidth = e.target.offsetWidth;
       if (offsetWidth > tdWidth) {
-        let top = e.target.offsetParent.offsetTop - tbodyRef.scrollTop;
-        let left = e.target.offsetParent.offsetLeft - tbodyRef.scrollLeft;
         this.ellipsis = true;
         this.ellipsisText = e.target.innerText;
-        this.$nextTick(()=>{
-          let ellipsisWidth = this.$refs.ellipsisRef.offsetWidth;
-          let m = (ellipsisWidth - tdWidth) / 2;
-          let color = e.target.style.color ? e.target.style.color : e.fromElement.style.color;
-          this.$refs.ellipsisRef.style = `top: ${top - tdHeight - 8}px; left: ${left - m}px;`
-        })
       } else {
         this.ellipsis = false;
         this.ellipsisText = ""
+        // console.log(this.ellipsisText);
       }
     },
     // 鼠标移出
     mouseLeaveText(e) {
+      // this.ellipsis = false;
+      // this.ellipsisText = ""
       // console.log(e.target.className,'===============');
-      if (e.target.className != 'ellipsis') {
-        this.ellipsis = false;
-        this.ellipsisText = ""
-      }
-    },
-    // 提示框鼠标移出
-    mouseLeaveEllipsis() {
-      this.ellipsis = false;
-      this.ellipsisText = "";
-      window.getSelection().removeAllRanges();
-      // window.getSelection().removeRange(ellipsisRef);
     },
     // 监听thead横向滚动条滚动事件
     handleScrollHeadX() {
@@ -659,42 +643,6 @@ export default {
     th {
       box-sizing: border-box;
     }
-    // 设置Tooltip 文字提示样式
-    .ellipsis-text {
-      position: absolute;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      top: 0;
-      white-space: nowrap;
-      color: var(--elInnerColor12);
-      background-color: var(--elBgColor20);
-      border: 1px solid var(--elBorderColor06);
-      animation: fadenum 1s ease; // 设置动画淡入淡出
-    }
-    // 设置Tooltip 文字提示三角形样式
-    .ellipsis-text::before,
-    .ellipsis-text::after {
-      content: "";
-      position: absolute;
-      width: 0px;
-      height: 0px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    // 设置Tooltip 文字提示三角形样式
-    .ellipsis-text::before {
-      z-index: 3;
-      border: 6px solid transparent;
-      border-top: 6px solid var(--elBgColor20);
-      bottom: -11px;
-    }
-    // 设置Tooltip 文字提示三角形样式
-    .ellipsis-text::after {
-      border: 7px solid transparent;
-      border-top: 7px solid var(--elBorderColor06);
-      bottom: -14px;
-    }
     // 设置表头背景图片
     .bg-img {
       position: absolute;
@@ -760,15 +708,15 @@ export default {
     // // 设置字体
     // @font-face {
     //   font-family: "shuma";
-    //   src: url("../../assets/font/accidental_presidency.ttf");
+    //   src: url("./font/accidental_presidency.ttf");
     // }
     // @font-face {
     //   font-family: "shuma1";
-    //   src: url("../../assets/font/digital-7.ttf");
+    //   src: url("./font/digital-7.ttf");
     // }
     // @font-face {
     //   font-family: "shuma2";
-    //   src: url("../../assets/font/LESLIE.ttf");
+    //   src: url("./font/LESLIE.ttf");
     // }
   }
 }

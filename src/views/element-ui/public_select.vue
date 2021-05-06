@@ -154,7 +154,7 @@ export default {
   data() {
     return {
       formRules: {
-        defaultType: [{ required: true, message: this.selectObj.placeholder, trigger: "change" }],
+        defaultType: [{ required: true, message: this.placeholder, trigger: "change" }],
       }
     };
   },
@@ -192,7 +192,10 @@ export default {
     },
     // 改变事件
     getSelect(val) {
-      this.$emit("change", val);
+      let item = this.selectObj.typeOptions.find(item=>{
+        return item.code === val;
+      })
+      this.$emit("change", val, item);
     },
     // 触发表单验证
     getFormRules() {

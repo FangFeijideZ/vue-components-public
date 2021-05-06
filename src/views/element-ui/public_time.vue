@@ -326,11 +326,11 @@ export default {
             z-index: 2;
           }
           .black {
-            background: url("../../assets/img/24sdhb.png");
+            background: url("./img/24sdhb.png");
             background-size: 100% 100%;
           }
           .white {
-            background: url("../../assets/img/24sdbb.png");
+            background: url("./img/24sdbb.png");
             background-size: 100% 100%;
           }
           .el-date-editor {
