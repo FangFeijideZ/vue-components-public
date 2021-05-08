@@ -1,6 +1,6 @@
 {
   "name": "vue-components-public",
-  "version": "0.3.19",
+  "version": "0.3.20",
   "private": false,
   "main": "lib/vue-components-public.umd.min.js",
   "keyword": "二次封装",
