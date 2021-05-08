@@ -227,7 +227,7 @@ export default {
           // console.log(newVal);
           let date = disabledDate ? new Date(disabledDate).getTime() : 0;
           this.getPickerOptions = Object.assign({}, this.getPickerOptions, {
-            hortcuts: this.pickerOptions ? this.pickerOptions.shortcuts : false,
+            hortcuts: this.pickerOptions && this.pickerOptions.shortcuts ? this.pickerOptions.shortcuts : false,
             disabledDate: (time) => {
               return code == "start" && disabledDate ? time.getTime() > date : code == "end" ? time.getTime() < date : false;
             }
