@@ -64,7 +64,7 @@ var date = {
     }
     let start_date = `${start_year}-${startMonth}-01`;
     let end_date = `${start_year}-${startMonth}-${end_day}`;
-    return { start_date, end_date, start_year, month, day }
+    return { start_date, end_date, end_day, start_year, month, day }
   },
 
 	// 年月日时分秒 2021-03-12 03:25:11
