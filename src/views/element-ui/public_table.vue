@@ -160,6 +160,7 @@
                     'cursor': icon.cursor,
                     'width': icon.div_width,
                     'margin': icon.div_margin,
+                    'justify-content': icon.justify_content,
                   }"
                 >
                   <!-- 文本在左侧，图标在右侧 -->
