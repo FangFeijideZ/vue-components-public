@@ -197,7 +197,10 @@
         title="保存"
         @click="btnBcClick"
       ></public-button>
+      <public-bar-charts :bar-charts="barObj"></public-bar-charts>
+      <public-line-charts :line-charts="lineObj"></public-line-charts>
     </div>
+    <public-pei-charts :pei-charts="peiObj"></public-pei-charts>
     <div class="box-right">
       <public-table
         :head-data="publicTableHead"
@@ -453,7 +456,7 @@ export default {
       //     // justify_content: 'space-between',
       //     // justify_content: 'space-around',
       //     justify_content: 'center',
-      //     array: [
+      //     operation: [
       //       {
       //         // div_width: "100%", // 文本分散对齐
       //         cursor: "pointer",
@@ -571,6 +574,7 @@ export default {
         // border: '1px solid var(--elBorderColor13)',
       },
       bodyStyleObj: {
+
       },
       bodyTrStyleObj: {
         
@@ -578,6 +582,219 @@ export default {
       bodyTdStyleObj: {
         border: '1px solid var(--elBorderColor16)',
       },
+
+
+      barObj: {
+        // 柱状图数据
+        legendData: [
+          {
+            name: this.$date.y_m_d(new Date()),
+            color: "#25da81",
+            icon: "circle", // 标志类型
+            textStyle: {
+              fontSize: 14, // 文字的大小
+              inactiveColor: "#ccc", // 图例关闭的颜色
+              color: "#25da81", // 文字的颜色
+            },
+          },
+          {
+            name: "同比上月",
+            color: "#fdca00",
+            icon: "circle", // 标志类型
+            textStyle: {
+              fontSize: 14, // 文字的大小
+              inactiveColor: "#ccc", // 图例关闭的颜色
+              color: "#fdca00", // 文字的颜色
+            },
+          },
+        ],
+        axisData: [],
+        seriesData: [],
+        gridStyle: {
+          top: "20%",
+          // bottom: '-10px',
+        },
+        legendStyle: {
+          // left: 0,
+          // bottom: 10,
+          right: 10,
+          // itemWidth: 12, // 图例的宽度
+          itemHeight: 12, // 图例的高度
+          color: "#666666", // 文字颜色
+        },
+        dataZoomStyle: {
+          yScroll: false, // 开启Y轴滑动条
+          xScroll: false, // 开启X轴滑动条
+        },
+        yAxisStyle: {
+          // yAxisType: "category", // y轴显示的类别
+          axisLineColor: "#246979", // 坐标轴线的颜色
+          axisLabelColor: "#246979", // 坐标轴文字的颜色
+          splitLineType: "dashed", // 分隔线的线型
+          splitLineColor: "#014757", // 分隔线的颜色
+          formatter: "条",
+        },
+        xAxisStyle: {
+          // axisLineShow: true, // 是否显示坐标轴线
+          // axisLabelShow: true, // 是否显示坐标轴文字
+          // axisTickShow: false, // 是否显示刻度线
+          // splitLineShow: false, // 是否显示分隔线
+          // axisLineType: "solid", // 坐标轴线的线型
+          // axisTickType: "solid", // 刻度线的线型
+          // splitLineType: "solid", // 分隔线的线型
+          // axisLineColor: "#999999", // 坐标轴线的颜色
+          axisLineColor: "#246979", // 坐标轴线的颜色
+          axisLabelColor: "#246979", // 坐标轴文字的颜色
+          // splitLineColor: "#d5d5d5", // 分隔线的颜色
+          // axisLineWidth: "1", // 坐标轴线的宽度
+          // axisLabelFontSize: "12", // 坐标轴文字的大小
+          // axisTickWidth: "1", // 刻度线的宽度
+          // splitLineWidth: "1", // 分隔线的宽度
+          // xAxisType: "value", // x轴显示的类别
+          axisLabelInterval: 1, // 坐标轴文字间隔展示的数量
+          // axisLabelRrotate: 0, // 坐标轴文字逆时针旋转角度
+          dislocation: false, // 是否错位显示X轴文字
+        },
+        itemStyle: [
+          {
+            showBackground: false, // 是否打开背景颜色
+            barBorderRadius: [50, 50, 0, 0], // 设置柱状图圆角 [上，右，下，左]
+            // linearGradient: true, // 是否设置渐变色
+            color: ["#25da81"], // 图形颜色
+            barWidth: 12, // 图形宽度
+          },
+          {
+            showBackground: false, // 是否打开背景颜色
+            barBorderRadius: [50, 50, 0, 0], // 设置柱状图圆角 [上，右，下，左]
+            // linearGradient: true, // 是否设置渐变色
+            color: ["#fdca00"], // 图形颜色
+            barWidth: 12, // 图形宽度
+          },
+        ],
+      },
+      lineObj: {
+        // 折线图数据
+        axisData: [],
+        seriesData: [],
+        legendStyle: {
+          // left: 0,
+          // bottom: 20,
+          right: 10,
+          top: 0,
+          itemWidth: 12, // 图例的宽度
+          itemHeight: 12, // 图例的高度
+          color: "#666666", // 文字颜色
+        },
+        gridStyle: {
+          top: "23%",
+          // bottom: 0,
+        },
+        yAxisStyle: {
+          axisLineColor: "#246979", // 坐标轴线的颜色
+          axisLabelColor: "#246979", // 坐标轴文字的颜色
+          splitLineType: "dashed", // 分隔线的线型
+          splitLineColor: "#014757", // 分隔线的颜色
+        },
+        legendData: [
+          {
+            name: this.$date.y_m_d(new Date()),
+            color: "#25da81", // 图例的颜色
+            icon: "circle", // 标志类型
+            textStyle: {
+              fontSize: 14, // 文字的大小
+              inactiveColor: "#ccc", // 图例关闭的颜色
+              color: "#25da81", // 文字的颜色
+            },
+          },
+          {
+            name: "同比上月",
+            color: "#fdca00", // 图例的颜色
+            icon: "circle", // 标志类型 'circle' | 'rectangle' | 'triangle' | 'diamond' |'emptyCircle' | 'emptyRectangle' | 'emptyTriangle' | 'emptyDiamond'
+            textStyle: {
+              fontSize: 14, // 文字的大小
+              inactiveColor: "#ccc", // 图例关闭的颜色
+              color: "#fdca00", // 文字的颜色
+            },
+          },
+        ],
+        xAxisStyle: {
+          // axisLineShow: true, // 是否显示坐标轴线
+          // axisLabelShow: true, // 是否显示坐标轴文字
+          // axisTickShow: false, // 是否显示刻度线
+          // splitLineShow: false, // 是否显示分隔线
+          // axisLineType: "solid", // 坐标轴线的线型
+          // axisTickType: "solid", // 刻度线的线型
+          // splitLineType: "dashed", // 分隔线的线型
+          axisLineColor: "#246979", // 坐标轴线的颜色
+          axisLabelColor: "#246979", // 坐标轴文字的颜色
+          // axisTickColor: "#999999", // 刻度线的颜色
+          // splitLineColor: "#d5d5d5", // 分隔线的颜色
+          // axisLineWidth: "1", // 坐标轴线的宽度
+          // axisLabelFontSize: "12", // 坐标轴文字的大小
+          // axisTickWidth: "1", // 刻度线的宽度
+          // splitLineWidth: "1", // 分隔线的宽度
+          axisLabelInterval: 2, // 坐标轴文字间隔展示的数量
+          axisLabelRrotate: 0, // 坐标轴文字逆时针旋转
+        },
+        itemStyle: [
+          {
+            linearGradient: false, // 是否设置渐变色
+            // symbolSize: 0, // 图形拐点圆的大小
+            symbol: "none",
+            color: ["#25da81"], // 图形颜色
+            width: 2, // 图形粗细
+            smooth: true, // 图形是否圆滑过渡
+          },
+          {
+            linearGradient: false, // 是否设置渐变色
+            // symbolSize: 0, // 图形拐点圆的大小
+            symbol: "none",
+            color: ["#fdca00"], // 图形颜色
+            width: 2, // 图形粗细
+            smooth: true, // 图形是否圆滑过渡
+          },
+        ],
+      },
+      peiObj: {
+        // 饼图数据
+        seriesData: [],
+        seriesColor: [
+          "#e02b2b",
+          "#0099e2",
+          "#00fa80",
+          "#fdca00",
+        ],
+        seriesStyle: {
+          center: ['50%', '35%'], // 饼图的位置 第一个左右,第二个上下距离
+          labelNormalShow: false,
+          labelEmphasisShow: false,
+          radius: ["48%","65%"], // 饼图内外圈的半径 第一个内圈,第二个外圈
+          // roseType: "radius", // 饼图的模式 radius--半径模式 area--面积模式
+          seriesHoverAnimation: true, // 是否取消掉环形图鼠标移上去时自动放大
+          hoverOffset: 2.5, // 设置鼠标放上去图放大的比例
+        },
+        titleStyle: {
+          titleShow: true,
+          titleTop: "20%",
+          titleFontSize: 20,
+          titleColor: "#fff"
+        },
+        legendStyle: {
+          bottom: "2%",
+          left: "center",
+          // fontSize: 12,
+          itemWidth: 18, // 图例的宽度
+          itemHeight: 12, // 图例的高度
+          selectedMode: false, // 是否取消图例上的点击事件
+          color: []
+        },
+        graphicStyle: {
+          graphicText: "今日总警情",
+          graphicTop: "40%",
+          graphicColor: "#00dcf5",
+          graphicFontSize: 12,
+        },
+      }
     };
   },
   mounted() {
@@ -585,8 +802,58 @@ export default {
     // console.log(process.env);
     // console.log(process.env.NODE_ENV)
     this.getPageList();
+    this.getBarCharts();
+    this.getLineCharts();
+    this.getPieCharts();
   },
   methods: {
+    // 柱状图数据
+    getBarCharts() {
+      let seriesData = [];
+      let seriesData1 = [];
+      let axisData = [];
+      for (let i = 0; i < 23; i++) {
+        axisData.push(i);
+        let n = Math.random()*200;
+        let s = Math.random()*50;
+        if (n < 60) {
+          seriesData.push(n.toFixed(1))
+        } else {
+          seriesData.push(0)
+        }
+        if (s < 20) {
+          seriesData1.push(s.toFixed(0))
+        } else {
+          seriesData1.push(0)
+        }
+      }
+      this.barObj.axisData = axisData;
+      this.barObj.seriesData = [seriesData,seriesData1.reverse()];
+    },
+    // 折线图数据
+    getLineCharts() {
+      let seriesData = [];
+      let seriesData1 = [];
+      let axisData = [];
+      for (let i = 0; i < 23; i++) {
+        axisData.push(i);
+        seriesData.push(i);
+        seriesData1.push(i);
+      }
+      this.lineObj.axisData = axisData;
+      this.lineObj.seriesData = [seriesData,seriesData1.reverse()];
+    },
+    // 饼图数据
+    getPieCharts() {
+      let seriesData = [];
+      for (let i = 1; i < 5; i++) {
+        seriesData.push({
+          label: i, name: `${i}${i}`, value: i,
+          // {label: item.label, name: `${item.label}${item.value}`, value: item.value}
+        });
+      }
+      this.peiObj.seriesData = seriesData;
+    },
     getPageList() {
       this.ksrqObj.defaultDate = this.$date.y_m_d_zt();
       this.jsrqObj.defaultDate = this.$date.y_m_d_mt();
@@ -658,6 +925,15 @@ export default {
       width: 30%;
       .el-button {
         margin-top: 5%;
+      }
+      .public-bar-charts {
+        height: 30%;
+      }
+      .public-line-charts {
+        height: 30%;
+      }
+      .public-pei-charts {
+        height: 30%;
       }
     }
     .box-right {

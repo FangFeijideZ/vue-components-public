@@ -152,7 +152,7 @@
               <div class="operation-box" :style="[{ 'justify-content': item.justify_content }]">
                 <!-- 值为operation时代表每条数据的图标都一样，为operations时代表每条数据的图标都不一样-->
                 <div
-                  v-for="icon in item.name == 'operation' ? item.array: value.operations"
+                  v-for="icon in item.name == 'operation' ? item.operation: value.operations"
                   :key="icon.code"
                   class="operation-item"
                   @click="iconClick(value, icon)"
@@ -188,12 +188,20 @@
               <div class="operation-box" :style="[{ 'justify-content': item.justify_content }]">
                 <!-- 值为buttom时代表每条数据的按钮都一样，为buttoms时代表每条数据的按钮都不一样-->
                 <el-button
-                  v-for="buttom in item.name == 'buttom' ? item.array : value.buttoms"
+                  v-for="buttom in item.name == 'buttom' ? item.buttom : value.buttoms"
+                  @click="iconClick(value, buttom)"
                   class="operation-item"
                   :key="buttom.code"
                   :type="buttom.button_type"
                   :size="buttom.button_size ? icon.button_size : 'mini'"
-                  @click="iconClick(value, buttom)"
+                  :style="{
+                    'cursor': buttom.buttom_cursor,
+                    'width': buttom.buttom_width,
+                    'height': buttom.buttom_height,
+                    'margin': buttom.buttom_margin,
+                    'padding': buttom.buttom_padding,
+                    'justify-content': buttom.justify_content
+                  }"
                 >
                   <div class="buttom-box">
                     <!-- 文本在左侧，图标在右侧 -->
@@ -219,7 +227,7 @@
             
             <!-- 普通文本 -->
             <div v-else :class="{'ellipsis': item.ellipsis == 'tooltip'}" 
-              :style="{ 'color': item.color == true ? value.color : '' }"
+              :style="{ 'color': item.colors == true ? value.color : '' }"
               @mouseover="mouseOverText($event)"
               @mouseleave="mouseLeaveText($event)"
             >

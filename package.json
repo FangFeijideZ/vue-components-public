@@ -1,6 +1,6 @@
 {
   "name": "vue-components-public",
-  "version": "0.3.20",
+  "version": "0.3.21",
   "private": false,
   "main": "lib/vue-components-public.umd.min.js",
   "keyword": "二次封装",
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "echarts": "^5.1.1",
     "element-ui": "^2.15.1",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1"
