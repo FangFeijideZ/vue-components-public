@@ -197,6 +197,12 @@
         title="保存"
         @click="btnBcClick"
       ></public-button>
+      <public-button
+        v-del="['zd']"
+        icon="dtqwBg76"
+        title="防抖和节流"
+        @click="btnBcClick"
+      ></public-button>
       <public-bar-charts :bar-charts="barObj"></public-bar-charts>
       <public-line-charts :line-charts="lineObj"></public-line-charts>
     </div>

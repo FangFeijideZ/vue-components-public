@@ -1,3 +1,4 @@
+import Vue from 'vue'
 var date = {
 	// 格式化日期时间
 	dateFormat(value) {
@@ -227,4 +228,6 @@ var date = {
 		return `${MM}/${d}`
   },
 }
+
+Vue.prototype.$date = date; // 注册时间戳转日期
 export default date
