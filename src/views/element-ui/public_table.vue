@@ -388,7 +388,9 @@ export default {
     // 鼠标移入
     mouseOverText(e) {
       // console.log(e);
-      let tdWidth = e.target.offsetParent.offsetWidth;
+      let paddingLeft = window.getComputedStyle(e.target.offsetParent).paddingLeft.split("px")[0];
+      let paddingRight = window.getComputedStyle(e.target.offsetParent).paddingRight.split("px")[0];
+      let tdWidth = e.target.offsetParent.offsetWidth - paddingLeft - paddingRight;
       let offsetWidth = e.target.offsetWidth;
       if (offsetWidth > tdWidth) {
         this.ellipsis = true;

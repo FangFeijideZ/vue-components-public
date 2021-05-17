@@ -285,7 +285,7 @@ export default {
   },
   model: {
     prop: 'defaultValue',
-    // event: 'returnBack'
+    event: 'change'
   },
   watch: {
     inputObj: {

@@ -1,26 +1,16 @@
 <template>
   <div class="public-input">
-    <el-input 
+    <slot name="left" class="left"></slot>
+    <slot name="item" v-for="scope in inputObj.typeOptions" :row="scope"></slot>
+    <el-input
       v-model="input" 
       :placeholder="placeholder" 
       :type="type" 
       :size="size" 
-      :show-password="showPassword" 
-      :show-word-limit="showWordLimit" 
       :disabled="disabled" 
-      :maxlength="maxlength"
       :clearable="clearable" 
       @input="getInputValue"
     ></el-input>
-    <!-- {{inputValue}} -->
-    <!-- {{placeholder}} -->
-    {{clearable}}
-    {{disabled}}
-    {{showPassword}}
-    {{type}}
-    {{size}}
-    {{maxlength}}
-    {{showWordLimit}}
   </div>
 </template>
 
@@ -28,6 +18,10 @@
 export default {
   name: "publicInput",
   props: {
+    inputObj: {
+      type: Object,
+      default: () => {},
+    },
     inputValue: {
       type: String,
       default: () => {},
@@ -52,22 +46,10 @@ export default {
       type: Boolean,
       default: () => {},
     },
-    showPassword: {
-      type: Boolean,
-      default: () => {},
-    },
-    showWordLimit: {
-      type: Boolean,
-      default: () => {},
-    },
-    maxlength: {
-      type: [String,Number],
-      default: () => {},
-    },
   },
   model: {
     prop: 'inputValue',
-    // event: 'returnBack'
+    event: 'change'
   },
   watch: {
     inputObj: {

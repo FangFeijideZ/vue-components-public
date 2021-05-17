@@ -207,7 +207,7 @@
       <public-line-charts :line-charts="lineObj"></public-line-charts>
     </div>
     <public-pei-charts :pei-charts="peiObj"></public-pei-charts>
-    <div class="box-right">
+    <div class="box-right flex-column">
       <public-table
         :head-data="publicTableHead"
         :head-style="headStyleObj"
@@ -219,7 +219,19 @@
         :checkbox="true"
         @iconClick="iconClick"
       ></public-table>
-      <public-pagination 
+      <el-public-input :input-obj="gdmcObj">
+        <!-- 具名插槽 -->
+        <div class="iconfont" slot="left">
+          <span>1232</span>
+        </div>
+        <!-- 作用域插槽，核心理念就是用父组件来渲染子组件 -->
+        <template slot="item" scope="scope">
+          <ul>
+            <li><b>{{scope.row.code}}</b></li>
+          </ul>
+        </template>
+      </el-public-input>
+      <public-pagination
         :pagination-obj="pageInfo" 
         @change="handlePageChange"
       ></public-pagination>
@@ -227,10 +239,11 @@
   </div>
 </template>
 <script>
+import elPublicInput from "../views/common-ui/public_input";
 export default {
   name: "public_index",
   components: {
-    // dateLinkageForm
+    elPublicInput
   },
   data() {
     return {
@@ -991,7 +1004,8 @@ export default {
         }
       }
       .public-table {
-        height: 95%;
+        flex: 1;
+        // height: 95%;
       }
       .public-pagination {
         height: 5%;
