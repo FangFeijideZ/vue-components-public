@@ -74,7 +74,7 @@ export default {
           // formatter: '{a} <br/>{b} : {c}个 ({d}%)',
           // type: 'cross',//默认值，可选值：'line' | 'cross' | 'shadow' | 'none'(无)，指定type后对应style生效（如下）
           formatter: function(value) {
-            return `${value.marker}${value.data.label}：${value.data.value}`
+            return `${value.marker}${value.data ? value.data.label : ''}：${value.data.value}`
             // return `${value.marker}${value.data.label}：${value.data.value} 占比${value.percent}%`
           },
         },
@@ -150,7 +150,7 @@ export default {
         item.hoverAnimation = obj.seriesStyle && obj.seriesStyle.seriesHoverAnimation == false ? false : true; // 是否取消掉环形图鼠标移上去时自动放大
         item.center = obj.seriesStyle && obj.seriesStyle.center  ? obj.seriesStyle.center : ['50%', '50%'], // 饼图的位置 第一个左右,第二个上下距离
         item.radius = obj.seriesStyle && obj.seriesStyle.radius  ? obj.seriesStyle.radius : [50, 80], // 饼图内外圈的半径 第一个内圈,第二个外圈
-        item.hoverOffset = obj.seriesStyle && obj.seriesStyle.hoverOffset  ? obj.seriesStyle.hoverOffset : 6, // 设置鼠标放上去图放大的比例
+        // item.hoverOffset = obj.seriesStyle && obj.seriesStyle.hoverOffset  ? obj.seriesStyle.hoverOffset : 6, // 设置鼠标放上去图放大的比例
         item.itemStyle = {
           borderRadius: obj.seriesStyle && obj.seriesStyle.borderRadius  ? obj.seriesStyle.borderRadius : 0, // 每一项的圆角
         };
@@ -190,6 +190,9 @@ export default {
         }
         if (obj.seriesStyle && obj.seriesStyle.roseType) {
           item.roseType = obj.seriesStyle && obj.seriesStyle.roseType  ? obj.seriesStyle.roseType : "radius" // 饼图的模式 radius--半径模式 area--面积模式
+        }
+        if (obj.seriesStyle && obj.seriesStyle.hoverOffset) {
+          item.hoverOffset = obj.seriesStyle && obj.seriesStyle.hoverOffset  ? obj.seriesStyle.hoverOffset : 6 // 设置鼠标放上去图放大的比例
         }
       })
       // let total = 0; // 总和

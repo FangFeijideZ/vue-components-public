@@ -1,16 +1,17 @@
 <template>
   <div class="public-input">
-    <slot name="left" class="left"></slot>
-    <slot name="item" v-for="scope in inputObj.typeOptions" :row="scope"></slot>
-    <el-input
-      v-model="input" 
-      :placeholder="placeholder" 
-      :type="type" 
-      :size="size" 
-      :disabled="disabled" 
-      :clearable="clearable" 
-      @input="getInputValue"
-    ></el-input>
+    <slot name="left" class="left">
+      <el-input
+        v-model="input" 
+        :placeholder="placeholder" 
+        :type="type" 
+        :size="size" 
+        :disabled="disabled" 
+        :clearable="clearable" 
+        @input="getInputValue"
+      ></el-input>
+    </slot>
+    <slot name="item" :row="inputObj.typeOptions"></slot>
   </div>
 </template>
 
@@ -64,11 +65,12 @@ export default {
   },
   data() {
     return {
-      input: ""
+      input: "",
     };
   },
-  mounted() {
-    
+  created() {
+    // console.log(this.$slots);
+    // console.log(this.$scopedSlots);
   },
   methods: {
     // 输入事件
@@ -87,5 +89,8 @@ export default {
 .public-input {
   width: 100%;
   font-size: 13px;
+  .left {
+    background-color: pink;
+  }
 }
 </style>

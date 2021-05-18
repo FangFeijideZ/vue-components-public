@@ -222,12 +222,12 @@
       <el-public-input :input-obj="gdmcObj">
         <!-- 具名插槽 -->
         <div class="iconfont" slot="left">
-          <span>1232</span>
+          <span class="left">1232</span>
         </div>
-        <!-- 作用域插槽，核心理念就是用父组件来渲染子组件 -->
-        <template slot="item" scope="scope">
+        <!-- 作用域插槽，核心理念就是在父组件拿到子组件数据来在父组件渲染 -->
+        <template slot="item" slot-scope="scope">
           <ul>
-            <li><b>{{scope.row.code}}</b></li>
+            <li><b>{{scope.row}}</b></li>
           </ul>
         </template>
       </el-public-input>
@@ -787,10 +787,10 @@ export default {
           center: ['50%', '35%'], // 饼图的位置 第一个左右,第二个上下距离
           labelNormalShow: false,
           labelEmphasisShow: false,
-          radius: ["48%","65%"], // 饼图内外圈的半径 第一个内圈,第二个外圈
+          radius: ["38%","55%"], // 饼图内外圈的半径 第一个内圈,第二个外圈
           // roseType: "radius", // 饼图的模式 radius--半径模式 area--面积模式
           seriesHoverAnimation: true, // 是否取消掉环形图鼠标移上去时自动放大
-          hoverOffset: 2.5, // 设置鼠标放上去图放大的比例
+          // hoverOffset: 2.5, // 设置鼠标放上去图放大的比例
         },
         titleStyle: {
           titleShow: true,
@@ -804,7 +804,7 @@ export default {
           // fontSize: 12,
           itemWidth: 18, // 图例的宽度
           itemHeight: 12, // 图例的高度
-          selectedMode: false, // 是否取消图例上的点击事件
+          selectedMode: true, // 是否取消图例上的点击事件
           color: []
         },
         graphicStyle: {
@@ -951,9 +951,10 @@ export default {
       .public-line-charts {
         height: 30%;
       }
-      .public-pei-charts {
-        height: 30%;
-      }
+    }
+    .public-pei-charts {
+      // width: 30%;
+      // height: 30%;
     }
     .box-right {
       padding: 2%;
