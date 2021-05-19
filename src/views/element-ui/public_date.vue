@@ -19,6 +19,7 @@
           <el-date-picker
             v-model="dateObj.defaultDate"
             :type="type"
+            :key="type"
             :readonly="readonly"
             :disabled="disabled"
             :editable="editable"

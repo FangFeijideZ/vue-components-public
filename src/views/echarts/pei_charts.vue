@@ -114,6 +114,9 @@ export default {
           },
         ]
       };
+      if (obj.legendStyle && obj.legendStyle.orient) {
+        option.legend.orient = obj.legendStyle.orient; // 图例显示的位置
+      }
       let total = 0; // 总和
       obj.seriesData.forEach((val,j)=>{
         total += (val.value-0);

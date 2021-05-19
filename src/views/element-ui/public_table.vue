@@ -37,8 +37,8 @@
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
           </th>
           <th
-            v-for="item in headDatas"
-            :key="item.id"
+            v-for="(item,index) in headDatas"
+            :key="index+Math.random()"
             :style="[
               { 'width': item.width || headStyle.width },
               { 'padding': item.padding || headStyle.padding },
@@ -61,7 +61,7 @@
         <tr
           v-for="(value, index) in bodyDatas"
           ref="trRef"
-          :key="value.id"
+          :key="index+Math.random()"
           :class="[{ 'is-scroll-y': isScrollY }, {'checkbox': checkbox}, {'disabled': value.checkedDisabled}]"
           :style="[
             { 'cursor': bodyTrStyle.cursor },
