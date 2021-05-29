@@ -1,6 +1,6 @@
 <template>
-	<el-button class="public-button" :style="[{'background-color': backgroundColor}, {'border': border}]" :type="type" :disabled="disabled" :size="size" @click="buttonClick">
-		<i v-if="showIcon" :class="icon" :style="[{ 'width': iconWidth }, { 'height': iconHeight }, {'margin': iconMargin}]"></i>
+	<el-button class="public-button flex-align-center" :style="[{'background-color': backgroundColor}, {'border': border}]" :type="type" :disabled="disabled" :size="size" @click="buttonClick">
+		<i v-if="showIcon" :class="['icon',icon]" :style="[{ 'width': iconWidth }, { 'height': iconHeight }, {'margin': iconMargin}, {'margin-right': title ? '5px' : ''}]"></i>
 		<span :style="[{'font-size': fontSize}, {'color': color}]">{{ title }}</span>
 	</el-button>
 </template>
@@ -40,7 +40,7 @@ export default {
 		fontSize: {
 			type: String,
 			default: () => {
-				return '14px'
+				return ''
 			}
 		},
 		// 标题
@@ -115,16 +115,15 @@ export default {
 <style lang="scss" scoped>
 	.public-button {
 		// padding: 10px 6.5%;
-		i {
-			display: inline-block;
-			margin-right: 5px;
-			vertical-align: top;
-			background-repeat: no-repeat;
-			background-size: 100% 100%;
-		}
+		font-size: 14px;
 	}
 	.dtqwBg76 {
 		background: var(--dtqwBg76);
+	}
+	.icon {
+		display: inline-block;
+		vertical-align: top;
+		background-repeat: no-repeat;
 		background-size: 100% 100%;
 	}
 </style>

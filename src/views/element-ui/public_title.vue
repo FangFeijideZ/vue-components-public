@@ -1,5 +1,5 @@
 <template>
-  <div :class="['public-title', 'flex-align-center', img]" :style="[{ 'width': width }, { 'height': height }]">
+  <div :class="['public-title', 'flex-align-center', 'img-bg', img]" :style="[{ 'width': width }, { 'height': height }]">
     <div v-if="showIcon" :class="['icon', icon]" :style="[{ 'width': iconWidth }, { 'height': iconHeight }, { 'padding': iconPadding }, { 'margin': iconMargin }]"></div>
     <div class="title" :style="[{ color: color }, { 'padding': padding }, { 'font-size': fontSize }, { 'margin': margin }]">{{ title }}</div>
   </div>
@@ -68,14 +68,14 @@ export default {
     fontSize: {
       type: String,
       default: () => {
-        return "16px";
+        return "";
       },
     },
     // 整体高度
     height: {
       type: String,
       default: () => {
-        return "5%";
+        return "";
       },
     },
     // 整体宽度
@@ -103,7 +103,7 @@ export default {
     color: {
       type: String,
       default: () => {
-        return "var(--fontColor01)";
+        return "";
       },
     },
   },
@@ -116,9 +116,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .public-title {
-  height: 100%;
+  height: 5%;
   width: 100%;
+  font-size: 16px;
   box-sizing: border-box;
+  color: var(--fontColor01);
   .icon {
     margin-right: 5px;
     background-repeat: no-repeat;
@@ -131,6 +133,10 @@ export default {
 }
 .dtqwBg02 {
   background: var(--dtqwBg02);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.img-bg {
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }

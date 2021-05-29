@@ -61,7 +61,7 @@
         <tr
           v-for="(value, index) in bodyDatas"
           ref="trRef"
-          :key="index+Math.random()"
+          :key="index+Math.random() * 100"
           :class="[{ 'is-scroll-y': isScrollY }, {'checkbox': checkbox}, {'disabled': value.checkedDisabled}]"
           :style="[
             { 'cursor': bodyTrStyle.cursor },
@@ -91,8 +91,8 @@
           </td>
           <td
             @click="checkbox ? itemClick(value,index) : ''"
-            v-for="item in headDatas"
-            :key="item.id"
+            v-for="(item,n) in headDatas"
+            :key="n+Math.random() * 10"
             :style="[
               { 'width': item.width || bodyTdStyle.width },
               { 'height': item.height || bodyTdStyle.height },
@@ -164,7 +164,7 @@
                   }"
                 >
                   <!-- 文本在左侧，图标在右侧 -->
-                  <div v-if="icon.right && icon.title_show" class="left-title" :style="{ color: icon.color }">{{ icon.title }}</div>
+                  <div v-if="icon.right && icon.title_show" class="left-title" :style="{ color: icon.color }">{{ icon.title || icon.title == 0 ? icon.title : "--" }}</div>
                   <div
                     v-if="icon.icon_show"
                     :title="icon.title"
@@ -178,7 +178,7 @@
                     }"
                   ></div>
                   <!-- 文本在右侧，图标在左侧 -->
-                  <div v-if="!icon.right && icon.title_show" class="right-title" :style="{ color: icon.color }">{{ icon.title }}</div>
+                  <div v-if="!icon.right && icon.title_show" class="right-title" :style="{ color: icon.color }">{{ icon.title || icon.title == 0 ? icon.title : "--" }}</div>
                 </div>
               </div>
             </div>
@@ -228,8 +228,8 @@
             <!-- 普通文本 -->
             <div v-else :class="{'ellipsis': item.ellipsis == 'tooltip'}" 
               :style="{ 'color': item.colors == true ? value.color : '' }"
-              @mouseover="mouseOverText($event)"
-              @mouseleave="mouseLeaveText($event)"
+              @mouseover="mouseOverText($event,item)"
+              @mouseleave="mouseLeaveText($event,item)"
             >
               <el-tooltip placement="top" v-if="ellipsis">
                 <template #content><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></template>
@@ -386,13 +386,13 @@ export default {
       this.scrollBodyX = true;
     },
     // 鼠标移入
-    mouseOverText(e) {
+    mouseOverText(e,item) {
       // console.log(e);
       let paddingLeft = window.getComputedStyle(e.target.offsetParent).paddingLeft.split("px")[0];
       let paddingRight = window.getComputedStyle(e.target.offsetParent).paddingRight.split("px")[0];
       let tdWidth = e.target.offsetParent.offsetWidth - paddingLeft - paddingRight;
       let offsetWidth = e.target.offsetWidth;
-      if (offsetWidth > tdWidth) {
+      if (offsetWidth > tdWidth && item.ellipsis == "tooltip") {
         this.ellipsis = true;
         this.ellipsisText = e.target.innerText;
       } else {
