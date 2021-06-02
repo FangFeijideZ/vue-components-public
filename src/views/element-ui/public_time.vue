@@ -241,13 +241,13 @@ export default {
   methods: {
     // 鼠标移入
     mouseOver() {
-      if (this.timeObj.defaultTime && !this.disabled) {
+      if (this.timeObj.defaultTime && !this.disabled && this.clearable) {
         this.suffixIconShow = false
       }
     },
     // 鼠标移出
     mouseLeave() {
-      if (this.timeObj.defaultTime && !this.disabled) {
+      if (this.timeObj.defaultTime && !this.disabled && this.clearable) {
         this.suffixIconShow = true
       }
     },
