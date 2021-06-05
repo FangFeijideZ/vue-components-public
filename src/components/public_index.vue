@@ -940,8 +940,12 @@ export default {
     },
     // 防抖和节流
     throttleAndDebounce() {
+      let date = this.$date.ymd_yymmdd("2021年04月15日 10时31分04秒");
+      let aaaa = this.$date.defaultDate("2021-12-10");
+      console.log(aaaa);
+      console.log(date);
       this.throttle(1000,this.getThrottleInfo);
-      this.debounce(1000,this.getThrottleInfo);
+      this.debounce(1000,this.getDebounceInfo);
     },
     // 防抖
     throttle(tiem,fn) {

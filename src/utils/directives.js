@@ -1,7 +1,9 @@
 import Vue from 'vue'
 const directives = {
-  update(el, binding, vnode) {
-    console.log(el, binding, vnode);
+  update: {
+    bind(el, binding, vnode) {
+      console.log(el, binding, vnode);
+    }
   },
   del: {
     inserted(el, binding, vnode) { // 被绑定元素插入父节点时调用

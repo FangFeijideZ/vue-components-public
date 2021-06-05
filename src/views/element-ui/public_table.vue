@@ -224,6 +224,11 @@
                 </el-button>
               </div>
             </div>
+
+            <!-- 带作用域插槽的 -->
+            <div v-else-if="item.slot" class="slot">
+              <slot :name="item.name" :row="value"></slot>
+            </div>
             
             <!-- 普通文本 -->
             <div v-else :class="{'ellipsis': item.ellipsis == 'tooltip'}" 
