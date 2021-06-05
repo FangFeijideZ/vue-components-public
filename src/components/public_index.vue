@@ -222,6 +222,26 @@
         :checkbox="true"
         @iconClick="iconClick"
       ></public-table>
+      <div class="button flex">
+        <public-button
+          icon="dtqwBg76"
+          type="primary"
+          title="getters方法"
+          @click="vuexGettersClick"
+        ></public-button>
+        <public-button
+          icon="dtqwBg76"
+          type="primary"
+          title="actions方法"
+          @click="vuexActionshClick"
+        ></public-button>
+        <public-button
+          icon="dtqwBg76"
+          type="primary"
+          title="mutations方法"
+          @click="vuexMutationsClick"
+        ></public-button>
+      </div>
       <el-public-input :input-obj="gdmcObj">
         <!-- 具名插槽 -->
         <div class="iconfont" slot="left">
@@ -243,6 +263,7 @@
 </template>
 <script>
 import elPublicInput from "../views/common-ui/public_input";
+import { mapState,mapActions,mapGetters,mapMutations } from "vuex";
 export default {
   name: "public_index",
   components: {
@@ -831,7 +852,104 @@ export default {
     this.getLineCharts();
     this.getPieCharts();
   },
+  computed: {
+    // 接收 state 写法一
+    ...mapState({
+      cameraList: state => {
+        return state.monitor.cameraList
+      },
+      policeList: state => {
+        return state.monitor.policeList
+      },
+    }),
+
+    // 接收 state 写法二
+    cameraList2() {
+      return this.$store.state.monitor.cameraList;
+    },
+    policeList2() {
+      return this.$store.state.monitor.policeList;
+    },
+
+    // 接收 getters 写法一
+    ...mapGetters(['keepAlives','cacheList']),
+    // 接收 getters 写法二
+    keepAlives2() {
+      return this.$store.getters.keepAlives;
+    },
+    cacheList2() {
+      return this.$store.getters.cacheList;
+    }
+  },
   methods: {
+    // 调用 actions 写法一，调用并且传值的写法。 this.getCameraList(["vuex里面存储的防抖和节流"])，这是调用并传值。 this.getPoliceList(["vuex里面存储的防抖和节流"])，这是调用并传值
+    ...mapActions(['getCameraList','getPoliceList']),
+    // actions 写法三，不传值只调用的写法。 vuexGettersClick 是调用的触发的函数，getCameraList 是vuex actions里面定义的方法名。
+    ...mapActions({
+      vuexActionshClick: "getPoliceList",
+    }),
+
+    // 调用 mutations 写法一，调用并且传值的写法
+    ...mapMutations(['SET_CAMERA','SET_POLICE']),
+    // mutations 写法三，不传值只调用的写法。 vuexMutationsClick 是调用的触发的函数，SET_CAMERA 是vuex mutations里面定义的方法名
+    ...mapMutations({
+      vuexMutationsClick: "SET_CAMERA",
+    }),
+    vuexGettersClick() {
+      // 计算属性 getters 调用写法
+      this.$store.commit("SET_CACHE_LIST", "test vuex存储的计算属性值，传入字符串，返回数组");
+      this.$store.commit("SET_KEEP_ALIVE", "test vuex存储的计算属性值，传入字符串，返回数组");
+      // 计算属性 getters 接收写法一
+      console.log(this.keepAlives);
+      console.log(this.cacheList);
+      // 计算属性 getters 接收写法二
+      console.log(this.keepAlives2);
+      console.log(this.cacheList2);
+      // 计算属性 getters 接收写法三
+      console.log(this.$store.getters.keepAlives);
+      console.log(this.$store.getters.cacheList);
+    },
+    async vuexActionshClick() {
+      // 异步方法 actions 调用写法一
+      this.getCameraList(["vuex里面存储的异步调用接口返回数据 cameraList"]);
+      this.getPoliceList(["vuex里面存储的异步调用接口返回数据 policeList"]);
+      // 异步方法 actions 调用写法二 ！！！this.$store.dispatch 只能用来执行调用异步 actions 的方法
+      this.$store.dispatch("getCameraList", ["vuex里面存储的异步调用接口返回数据 cameraList2"]);
+      this.$store.dispatch("getPoliceList", ["vuex里面存储的异步调用接口返回数据 policeList2"]);
+      // 异步方法 actions 调用写法四
+      let cameraList = await this.getCameraList(["vuex里面存储的异步调用接口返回数据 cameraList"]);
+      let policeList = await this.getPoliceList(["vuex里面存储的异步调用接口返回数据 policeList"]);
+      // let cameraList = await this.$store.dispatch("getCameraList", ["vuex里面存储的异步调用接口返回数据 cameraList2"]);
+      // let policeList = await this.$store.dispatch("getPoliceList", ["vuex里面存储的异步调用接口返回数据 policeList2"]);
+      console.log(cameraList,policeList);
+      // 异步方法 actions 接收写法一
+      console.log(this.cameraList);
+      console.log(this.policeList);
+      // 异步方法 actions 接收写法二
+      console.log(this.cameraList2);
+      console.log(this.policeList2);
+      // 异步方法 actions 接收写法三
+      console.log(this.$store.state.monitor.cameraList);
+      console.log(this.$store.state.monitor.policeList);
+    },
+    vuexMutationsClick() {
+      // 方法 mutations 调用写法一
+      this.SET_CAMERA(["vuex里面的方法 cameraList"]);
+      this.SET_POLICE(["vuex里面的方法 policeList"]);
+      // 方法 mutations 调用写法二
+      this.$store.commit("SET_CAMERA", ["vuex里面的方法 cameraList2"]);
+      this.$store.commit("SET_POLICE", ["vuex里面的方法 policeList2"]);
+      // 方法 mutations 接收写法一
+      console.log(this.cameraList);
+      console.log(this.policeList);
+      // 方法 mutations 接收写法二
+      console.log(this.cameraList2);
+      console.log(this.policeList2);
+      // 方法 mutations 接收写法三
+      console.log(this.$store.state.monitor.cameraList);
+      console.log(this.$store.state.monitor.policeList);
+    },
+
     // 柱状图数据
     getBarCharts() {
       let seriesData = [];
