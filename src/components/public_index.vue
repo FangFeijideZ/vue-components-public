@@ -192,17 +192,20 @@
         :ref="jssjObj.ref"
         @change="selectDateJssj"
       ></public-time>
-      <public-button
-        icon="dtqwBg76"
-        title="保存"
-        @click="btnBcClick"
-      ></public-button>
-      <public-button
-        v-del="['zd']"
-        icon="dtqwBg76"
-        title="防抖和节流"
-        @click="btnBcClick"
-      ></public-button>
+      <div class="button flex">
+        <public-button
+          icon="dtqwBg76"
+          title="保存"
+          @click="btnBcClick"
+        ></public-button>
+        <public-button
+          v-del="['zd']"
+          icon="dtqwBg76"
+          type="primary"
+          title="防抖和节流"
+          @click="throttleAndDebounce"
+        ></public-button>
+      </div>
       <public-bar-charts :bar-charts="barObj"></public-bar-charts>
       <public-line-charts :line-charts="lineObj"></public-line-charts>
     </div>
@@ -813,7 +816,10 @@ export default {
           graphicColor: "#00dcf5",
           graphicFontSize: 12,
         },
-      }
+      },
+
+      timeObj: undefined,
+      validBol: true,
     };
   },
   mounted() {
@@ -931,7 +937,42 @@ export default {
       if (flag) {
         console.log(flag);
       }
-    }
+    },
+    // 防抖和节流
+    throttleAndDebounce() {
+      this.throttle(1000,this.getThrottleInfo);
+      this.debounce(1000,this.getThrottleInfo);
+    },
+    // 防抖
+    throttle(tiem,fn) {
+      // console.log(tiem,fn);
+      if (this.timeObj) {
+        clearTimeout(this.timeObj)
+      }
+      this.timeObj = setTimeout(() => {
+        // this.getThrottleInfo();
+        fn(); // 等于调用了this.getThrottleInfo()方法
+      }, tiem);
+    },
+    // 节流
+    debounce(tiem,fn) {
+      // console.log(tiem,fn);
+      if (!this.validBol) {
+        return false
+      }
+      this.validBol = false;
+      setTimeout(() => {
+        // this.getDebounceInfo();
+        fn(); // 等于调用了this.getDebounceInfo()方法
+        this.validBol = true;
+      }, tiem);
+    },
+    getThrottleInfo() {
+      console.log('我是防抖，多次点击只会触发一次');
+    },
+    getDebounceInfo() {
+      console.log('我是节流，多次点击会依据间隔时间来执行次数')
+    },
   }
 };
 </script>
