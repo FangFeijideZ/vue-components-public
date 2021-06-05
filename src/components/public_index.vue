@@ -205,6 +205,12 @@
           title="防抖和节流"
           @click="throttleAndDebounce"
         ></public-button>
+        <public-button
+          icon="dtqwBg76"
+          type="primary"
+          title="格式化日期"
+          @click="dateFormatClick"
+        ></public-button>
       </div>
       <public-bar-charts :bar-charts="barObj"></public-bar-charts>
       <public-line-charts :line-charts="lineObj"></public-line-charts>
@@ -250,7 +256,7 @@
         <!-- 作用域插槽，核心理念就是在父组件拿到子组件数据来在父组件渲染 -->
         <template slot="item" slot-scope="scope">
           <ul>
-            <li><b>{{scope.row}}</b></li>
+            <li v-for="(item,index) in scope.row" :key="index" :class="item.date | y_m_d"><b>{{item.date | y_m_d}}</b></li>
           </ul>
         </template>
       </el-public-input>
@@ -296,9 +302,9 @@ export default {
         defaultType: "", // 下拉选择框绑定的值
         typeOptions: [ // 下拉选择框的每一项
           // { code: "", label: "全部" },
-          { code: "work", label: "工作日" },
-          { code: "rest", label: "休息日" },
-          { code: "holiday", label: "节假日" },
+          { code: "0", label: "工作日", date: new Date() },
+          { code: "1", label: "休息日", date: new Date() },
+          { code: "2", label: "节假日", date: new Date() },
         ],
 
         // title: "岗点名称", // 左侧标题
@@ -1041,6 +1047,13 @@ export default {
       let { currentPage,pageSize } = val;
       console.log(currentPage,pageSize);
     },
+    // 格式化日期按钮
+    dateFormatClick() {
+      let date = this.$date.ymd_yymmdd("2021年04月15日 10时31分04秒");
+      let aaaa = this.$date.defaultDate("2021-12-10");
+      console.log(aaaa);
+      console.log(date);
+    },
     // 保存按钮
     btnBcClick() {
       // debugger;
@@ -1058,36 +1071,8 @@ export default {
     },
     // 防抖和节流
     throttleAndDebounce() {
-      let date = this.$date.ymd_yymmdd("2021年04月15日 10时31分04秒");
-      let aaaa = this.$date.defaultDate("2021-12-10");
-      console.log(aaaa);
-      console.log(date);
-      this.throttle(1000,this.getThrottleInfo);
-      this.debounce(1000,this.getDebounceInfo);
-    },
-    // 防抖
-    throttle(tiem,fn) {
-      // console.log(tiem,fn);
-      if (this.timeObj) {
-        clearTimeout(this.timeObj)
-      }
-      this.timeObj = setTimeout(() => {
-        // this.getThrottleInfo();
-        fn(); // 等于调用了this.getThrottleInfo()方法
-      }, tiem);
-    },
-    // 节流
-    debounce(tiem,fn) {
-      // console.log(tiem,fn);
-      if (!this.validBol) {
-        return false
-      }
-      this.validBol = false;
-      setTimeout(() => {
-        // this.getDebounceInfo();
-        fn(); // 等于调用了this.getDebounceInfo()方法
-        this.validBol = true;
-      }, tiem);
+      this.$methods.throttle(this.getThrottleInfo,1000);
+      this.$methods.debounce(this.getDebounceInfo,1000);
     },
     getThrottleInfo() {
       console.log('我是防抖，多次点击只会触发一次');

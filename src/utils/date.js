@@ -1,5 +1,5 @@
 import Vue from 'vue'
-var date = {
+const date = {
 	// 格式化日期时间
 	dateFormat(value) {
 		let date = value ? new Date(value) : new Date();
