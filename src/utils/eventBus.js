@@ -1,2 +1,4 @@
 import Vue from 'vue';
-export default new Vue();
+let bus =  new Vue();
+Vue.prototype.$bus = bus; // 注册全局方法
+export default bus

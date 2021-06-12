@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="hello-world">
     <!-- <public-input
       v-model="gdmcObj.inputValue"
       placeholder="请输入岗点名称"
@@ -25,6 +25,48 @@
       :date-obj="ksrqObj"
       @change="selectDateKsrq"
     ></public-date>
+    <el-button type="primary" @click="dragOpen" style="position: absolute; z-index: 9999;">{{dragTitle}}</el-button>
+    <public-drag v-if="dragShow"></public-drag>
+    <!-- <el-tree
+      id="tree"
+      ref="tree"
+      :props="defaultProps"
+      :data="departmentList"
+      show-checkbox
+      @node-click="handleNodeClick"
+      :check-strictly="true"
+      :default-expanded-keys="[1,4]"
+      :default-checked-keys="[4]"
+      node-key="id"
+    >
+      <div  slot-scope="{ node, data }">
+        {{ node.label }}
+      </div>
+    </el-tree> -->
+
+    <!-- <div class="table-box">
+      <el-table
+        border
+        height="250"
+        ref="table"
+        :data="tableData"
+        style="width: 100%">
+        <el-table-column
+          prop="date"
+          label="日期"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="姓名"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址">
+        </el-table-column>
+      </el-table>
+    </div> -->
 
     <!-- <el-image
       style="width: 100px; height: 100px"
@@ -53,6 +95,8 @@ export default {
   },
   data() {
     return {
+      dragTitle: "打开",
+      dragShow: false,
       // url: require("../views/element-ui/img/riqibb.png"),
       gdmcObj: {
         inputValue: "测试v-model", // 输入框绑定的值
@@ -113,9 +157,111 @@ export default {
         ref: "ksrq", // 用于触发表单验证的方法
         icon: "dtqwBg76", // 输入框外左侧标题的图标
       },
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
+      departmentList: [{
+          id: 1,
+          label: '一级 1',
+          children: [
+            {
+            id: 4,
+            label: '二级 1-1',
+            children: [{
+              id: 9,
+              label: '三级 1-1-1'
+            },
+            {
+              id: 10,
+              label: '三级 1-1-2'
+            }]
+          }]
+        },
+        {
+          id: 2,
+          label: '一级 2',
+          children: [
+            {
+            id: 5,
+            label: '二级 2-1'
+            }, 
+            {
+            id: 6,
+            label: '二级 2-2'
+          }]
+        },
+        {
+          id: 3,
+          label: '一级 3',
+          children: [{
+            id: 7,
+            label: '二级 3-1'
+          }, {
+            id: 8,
+            label: '二级 3-2'
+          }]
+      }],
+
+      tableData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄'
+      }, 
+      {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, 
+      {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, 
+      {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, 
+      {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, 
+      {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }]
     }
   },
+  mounted() {
+    // this.$bus.on("dragClose",data=>{
+    //   console.log(data);
+    // })
+  },
+  // beforeDestroy() {
+  //   this.$bus.off("dragClose");
+  // },
+  updated() {
+    // let table = this.$refs.table.$refs;
+    // let tableHeight = this.$refs.table.height;
+    // let thead = table && table.headerWrapper ? table.headerWrapper : {};
+    // let tbody = table && table.bodyWrapper ? table.bodyWrapper : {};
+    // let tbodyHeight = thead && thead.clientHeight ? tableHeight - thead.clientHeight - 2 : 0;
+    // let isScrollY = tbody.scrollHeight > tbodyHeight ? true : false; // 判断tbody是否出现了Y轴滚动条
+    // let str = isScrollY ? "出现" : "没出现";
+    // console.log(isScrollY,`===========>Y轴${str}滚动条`);
+  },
   methods: {
+    dragOpen() {
+      this.dragShow = !this.dragShow;
+      this.dragTitle = this.dragShow ? "关闭" : "打开";
+    },
     getInputObj(val) {
       console.log(val);
     },
@@ -126,12 +272,29 @@ export default {
     selectDateKsrq(val) {
       console.log(val);
     },
+    handleNodeClick(node) {
+      console.log(node);
+    }
   }
 }
 </script>
 
-<style scoped>
-  .public-date {
-    width: 100%;
+<style lang="scss" scoped>
+  .hello-world {
+    position: relative;
+    height: 100%;
+    .public-date {
+      width: 100%;
+    }
+    .table-box {
+      padding: 10%;
+      margin-top: 100px;
+    }
+    .public-drag {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      bottom: 0;
+    }
   }
 </style>

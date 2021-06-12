@@ -6,6 +6,7 @@ import publicTable from "./element-ui/public_table.vue"; // 导入组件
 import publicTitle from "./element-ui/public_title.vue"; // 导入组件
 import publicTime from "./element-ui/public_time.vue"; // 导入组件
 import publicPagination from "./element-ui/public_pagination.vue"; // 导入组件
+import publicDrag from "./common-ui/public_drag.vue"; // 导入组件
 import publicLineCharts from "./echarts/line_charts.vue"; // 引入公共折线图
 import publicBarCharts from "./echarts/bar_charts.vue"; // 引入公共柱状图
 import publicPeiCharts from "./echarts/pei_charts.vue"; // 引入公共柱状图
@@ -22,6 +23,7 @@ const components = [
   publicLineCharts,
   publicBarCharts,
   publicPeiCharts,
+  publicDrag,
 ];
 // 安装组件
 components.map(item => item.install = function(Vue) {
