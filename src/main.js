@@ -10,6 +10,7 @@ import "./utils/date"; // 全局格式化日期
 import "./utils/directives"; // 自定义全局指令
 import "./utils/filters"; // 自定义全局过滤器
 import "./utils/methods"; // 自定义全局方法
+import "./utils/validate"; // 自定义全局表单验证
 import "./utils/eventBus"; // 自定义全局事件总线
 
 Vue.use(ElementUi);

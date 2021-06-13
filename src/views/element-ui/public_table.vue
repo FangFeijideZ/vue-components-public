@@ -83,11 +83,13 @@
               { 'border-right': bodyTdStyle.border ? bodyTdStyle.border : bodyTdStyle.border_right },
             ]"
           >
-            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-              <el-checkbox :label="value" :checked="value.checked" :disabled="value.checkedDisabled">
-                <span style="display: none;"></span>
-              </el-checkbox>
-            </el-checkbox-group>
+          {{value.checked}}
+          <!-- <el-checkbox-group v-model="bodyDatas" @change="handleCheckedCitiesChange">
+            <el-checkbox v-for="(checkedItem, cities) in checkedCities" :key="cities" :label="checkedItem" :checked="checkedItem.checked"  :disabled="checkedItem.checkedDisabled">
+            <el-checkbox :disabled="value.checkedDisabled" >
+              <span style="display: none;"></span>
+            </el-checkbox>
+          </el-checkbox-group> -->
           </td>
           <td
             @click="checkbox ? itemClick(value,index) : ''"
@@ -118,7 +120,9 @@
                   { 'border': item.div_border || value.div_border },
                 ]"
               >
+                <!-- 数字补0 -->
                 <span v-if="item.div_two">{{pageNumber + index + 1 > 9 ? pageNumber + index + 1 : `0${pageNumber + index + 1}`}}</span>
+                <!-- 数字不补0 -->
                 <span v-else>{{pageNumber + index + 1}}</span>
               </div>
             </div>
@@ -231,16 +235,16 @@
             </div>
             
             <!-- 普通文本 -->
-            <div v-else :class="{'ellipsis': item.ellipsis == 'tooltip'}" 
+            <div v-else :class="{'ellipsis': item.ellipsis}" 
               :style="{ 'color': item.colors == true ? value.color : '' }"
               @mouseover="mouseOverText($event,item)"
               @mouseleave="mouseLeaveText($event,item)"
             >
               <el-tooltip placement="top" v-if="ellipsis">
                 <template #content><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></template>
-                <div class="ellipsis"><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
+                <div class="ellipsis"><span @click.stop="tdClick($event,value,item)">{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
               </el-tooltip>
-              <div class="ellipsis" v-if="!ellipsis"><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
+              <div class="ellipsis" v-if="!ellipsis"><span @click.stop="tdClick($event,value,item)">{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
             </div>
           </td>
         </tr>
@@ -355,7 +359,9 @@ export default {
     return {
       headDatas: [],
       bodyDatas: [],
-      checkedCities: [],
+      checkedCities: [
+        {id: 5, description: '123', spotName: '123333222', details: false, del: true, edit: true, sort: 7, checked: true},
+      ],
       checkedCitiesList: [],
       checkAll: false,
       isIndeterminate: false,
@@ -369,6 +375,8 @@ export default {
     };
   },
   mounted() {
+    // console.log(this.checkedCities);
+    // this.checkedCitiesList = this.checkedCities;
     let tbody = this.$refs.tbodyRef; // 获取tbody
     let thead = this.$refs.theadRef; // 获取thead
     this.isScrollY = tbody.scrollHeight > tbody.clientHeight ? true : false; // 判断tbody是否出现了Y轴滚动条
@@ -393,11 +401,17 @@ export default {
     // 鼠标移入
     mouseOverText(e,item) {
       // console.log(e);
-      let paddingLeft = window.getComputedStyle(e.target.offsetParent).paddingLeft.split("px")[0];
-      let paddingRight = window.getComputedStyle(e.target.offsetParent).paddingRight.split("px")[0];
-      let tdWidth = e.target.offsetParent.offsetWidth - paddingLeft - paddingRight;
-      let offsetWidth = e.target.offsetWidth;
-      if (offsetWidth > tdWidth && item.ellipsis == "tooltip") {
+      let p_w = e.target.offsetParent.getBoundingClientRect().width.toFixed(2) - 0;
+      let e_l = e.target.offsetParent.style.paddingLeft;
+      let e_r = e.target.offsetParent.style.paddingRight;
+      let p_l = window.getComputedStyle(e.target.offsetParent).paddingLeft;
+      let p_r = window.getComputedStyle(e.target.offsetParent).paddingRight;
+      let paddingLeft = e_l ? p_l.split("px")[0] : 0;
+      let paddingRight = e_r ? p_r.split("px")[0] : 0;
+      let tdWidth = p_w - paddingLeft - paddingRight;
+      let offsetWidth = e.target.getBoundingClientRect().width.toFixed(2) - 0;
+      let falg = (offsetWidth > tdWidth) && item.ellipsis;
+      if (falg) {
         this.ellipsis = true;
         this.ellipsisText = e.target.innerText;
       } else {
@@ -451,24 +465,30 @@ export default {
     iconClick(value,icon) {
       this.$emit("iconClick", value,icon);
     },
+    tdClick(e,value,item) {
+      let obj = { e,value,item };
+      console.log(obj);
+      this.$emit("tdClick", obj);
+    },
     itemClick(value,index) {
-      this.$emit("click", value);
+      console.log(456);
+      this.$emit("click", value,index);
 
       
-      if (this.checkbox && !value.checkedDisabled) {
-        let i = this.checkedCities.findIndex(item=>{
-          return item.id == value.id
-        })
-        if (i == -1) {
-          this.checkedCities.push(value);
-        } else {
-          this.checkedCities.splice(i,1);
-        }
-        let checkedCount = this.checkedCities.length;
-        let bodyDataCount = this.bodyDatas.length;
-        this.checkAll = checkedCount === bodyDataCount;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < bodyDataCount
-      }
+      // if (this.checkbox && !value.checkedDisabled) {
+      //   let i = this.checkedCities.findIndex(item=>{
+      //     return item.id == value.id
+      //   })
+      //   if (i == -1) {
+      //     this.checkedCities.push(value);
+      //   } else {
+      //     this.checkedCities.splice(i,1);
+      //   }
+      //   let checkedCount = this.checkedCities.length;
+      //   let bodyDataCount = this.bodyDatas.length;
+      //   this.checkAll = checkedCount === bodyDataCount;
+      //   this.isIndeterminate = checkedCount > 0 && checkedCount < bodyDataCount
+      // }
     },
 
     handleCheckAllChange(val) {

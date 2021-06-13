@@ -25,8 +25,15 @@
       :date-obj="ksrqObj"
       @change="selectDateKsrq"
     ></public-date>
-    <el-button type="primary" @click="dragOpen" style="position: absolute; z-index: 9999;">{{dragTitle}}</el-button>
+    <el-button type="primary" @click="dragOpen" style="position: absolute; z-index: 2001;">{{dragTitle}}</el-button>
     <public-drag v-if="dragShow"></public-drag>
+
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form-item label="手机号码" prop="name">
+        <el-input v-model="ruleForm.name"></el-input>
+      </el-form-item>
+    </el-form>
+
     <!-- <el-tree
       id="tree"
       ref="tree"
@@ -73,17 +80,6 @@
       :src="url">
     </el-image> -->
     <!-- <img style="width: 100px; height: 100px" :src="url" alt=""> -->
-
-    <!-- <public-select
-      :clearable="true"
-      :prop="false"
-      :show-title="false"
-      :placeholder="true"
-      :filterable="true"
-      :ref="ssdwObj.ref"
-      :select-obj="ssdwObj"
-      @change="getSelectSsdwObj"
-    ></public-select> -->
   </div>
 </template>
 
@@ -119,22 +115,6 @@ export default {
         //   { code: "rest", label: "休息日" },
         //   { code: "holiday", label: "节假日" },
         // ],
-      },
-      ssdwObj: {
-        typeOptions: [
-          { code: "0", label: "全部" },
-          { code: "work", label: "工作日" },
-          { code: "rest", label: "休息日" },
-          { code: "holiday", label: "节假日" },
-        ],
-        defaultType: "",
-        title: "所属单位",
-        // size: "medium", // 选择框大小
-        ref: "ssdw", // 用于触发表单验证的方法
-        icon: "dtqwBg76", // 输入框外左侧标题的图标
-        placeholder: "请选择岗点名称", // 输入框提示文字
-        // label_position: "left", // 标题显示的位置
-        // label_width: "150px",
       },
       ksrqObj: {
         type: "date",
@@ -236,7 +216,16 @@ export default {
         date: '2016-05-03',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      }],
+
+      ruleForm: {
+        name: '',
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入活动名称', validator: this.$validate.checkPhone, trigger: 'blur' },
+        ],
+      }
     }
   },
   mounted() {

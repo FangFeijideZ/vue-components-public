@@ -132,6 +132,8 @@
         placeholder="请输入岗点名称"
         title="岗点名称"
         prop
+        style="margin-bottom: 20px"
+        :validator="this.$validate.checkPhone"
         show-suffix-button
         :ref="gdmcObj.ref"
         :input-obj="gdmcObj"
@@ -280,11 +282,11 @@ export default {
       url: require("../views/element-ui/img/riqibb.png"),
       url3: require("../views/element-ui/img/4e10662af608.png"),
       pageInfo: {
-        pageSize: 20,
-        pageSizes: [20, 30, 50, 100],
+        pageSize: 10,
+        pageSizes: [10, 30, 50, 100],
         currentPage: 1,
         pagerCount: 5,
-        total: 10,
+        total: 0,
         hideOnSinglePage: false,
         showRight: false,
         disabled: false,
@@ -602,7 +604,7 @@ export default {
         {id: 5, description: '123', spotName: '123333222', details: false, del: true, edit: true, sort: 7},
         {id: 6, description: '额为强倒萨大苏强问问sassas去', spotName: '大萨达', details: false, del: true, edit: true, sort: 5, checked: true, checkedDisabled: true},
         {id: 7, description: '222', spotName: '额为强强s大苏打ssas去', details: true, del: false, edit: true, sort: 3, checked: true},
-        {id: 8, description: '113', spotName: '113', details: true, del: true, edit: true, sort: 2},
+        {id: 8, description: '113', spotName: '113', details: true, del: true, edit: true, sort: 2, checked: true},
         // {id: 9, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2},
         // {id: 11, description: '122', spotName: '122', details: true, del: true, edit: true, sort: 5},
         // {id: 22, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
@@ -853,6 +855,9 @@ export default {
     // console.log(process);
     // console.log(process.env);
     // console.log(process.env.NODE_ENV)
+    this.publicTablebodys = this.publicTablebody;
+    this.publicTablebody = this.publicTablebodys.slice(0, this.pageInfo.pageSize);
+    this.pageInfo.total = this.publicTablebodys.length;
     this.getPageList();
     this.getBarCharts();
     this.getLineCharts();
@@ -1042,10 +1047,12 @@ export default {
       // this.gdmcObj.defaultValue = val.replace(/[^\d]/g, "");
       console.log(val)
     },
-    // 分页信息
+    // 分页信息--前端分页
     handlePageChange(val) {
       let { currentPage,pageSize } = val;
-      console.log(currentPage,pageSize);
+      let strat = (currentPage-1) * pageSize;
+      let end = currentPage * pageSize;
+      this.publicTablebody = this.publicTablebodys.slice(strat, end)
     },
     // 格式化日期按钮
     dateFormatClick() {

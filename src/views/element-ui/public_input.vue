@@ -282,6 +282,13 @@ export default {
         return undefined;
       },
     },
+    // 表单验证方式
+    validator: {
+      type: undefined,
+      default: () => {
+        return undefined
+      },
+    },
   },
   model: {
     prop: 'defaultValue',
@@ -306,7 +313,7 @@ export default {
       inputHeight: undefined,
       inputInnerHeight: undefined,
       formRules: {
-        defaultValue: [{ required: true, message: this.placeholder, trigger: "change" }],
+        defaultValue: [{ required: true, message: this.validator ? '' : this.placeholder, validator: this.validator, trigger: "change" }],
       }
     };
   },
