@@ -222,14 +222,37 @@
       <public-table
         :head-data="publicTableHead"
         :head-style="headStyleObj"
+        :head-th-style="headThStyle"
+        :head-img-style="headImgStyle"
         :body-data="publicTablebody"
         :body-style="bodyStyleObj"
         :body-tr-style="bodyTrStyleObj"
         :body-td-style="bodyTdStyleObj"
         :page-info="pageInfo"
-        :checkbox="true"
-        @iconClick="iconClick"
-      ></public-table>
+        @click="iconClick"
+      >
+        <!-- 表头背景图插槽 -->
+        <!-- <div class="head-img" slot="head-img"></div> -->
+        
+        <!-- 作用域插槽，核心理念就是在父组件拿到子组件数据来在父组件渲染 -->
+        <template slot="operation" slot-scope="scope">
+          <div class="flex-align-center">
+            <div @click.stop="getEditInfo(scope.row)">
+              <i :class="{'el-icon-edit': scope.row.edit}"></i>
+              <span v-if="scope.row.edit">编辑</span>
+            </div>
+            <div>
+              <i :class="{'el-icon-view': scope.row.details}"></i>
+              <span v-if="scope.row.details">详情</span>
+            </div>
+            <div>
+              <i :class="{'el-icon-error': scope.row.del}"></i>
+              <span v-if="scope.row.del">删除</span>
+            </div>
+            <!-- <el-button type="primary" size="mini">新增</el-button> -->
+          </div>
+        </template>
+      </public-table>
       <div class="button flex">
         <public-button
           icon="dtqwBg76"
@@ -454,15 +477,16 @@ export default {
         // ],
       },
       // publicTableHead: [
-      //   { id: "1", title: "序号", name: "numbers", ellipsis: "", width: "50px", color: "var(--dyqwColor23)" },
+      //   { id: "0", title: "", name: "checkbox", width: "50px" },
+      //   { id: "1", title: "序号", name: "numbers", ellipsis: "", width: "50px", color: "var(--dyqwColor23)", divStyle: {background: '#ccc'} },
       //   {
       //     id: "2",
       //     title: "岗点名称",
       //     name: "spotName",
       //     width: "100px",
       //     color: "var(--dyqwColor26)",
-      //     // div_background: "var(--bgColor11)",
-      //     // text_align: 'left',
+      //     // 'background': "#ccc",
+      //     // 'text-align': 'left',
       //     ellipsis: "tooltip",
       //   },
       //   {
@@ -560,15 +584,15 @@ export default {
       //   },
       // ],
       publicTableHead: [
-        { id: "1", title: "序号", name: "numbers", ellipsis: "", width: "15%", color: "var(--dyqwColor23)",div_width: "20px",div_height: "20px",div_background: "#fff" },
+        { id: "0", title: "", name: "checkbox", width: "30px" },
+        { id: "0", title: "单选框", name: "radio", width: "30px" },
+        { id: "1", title: "序号", name: "numbers", ellipsis: "", width: "15%", color: "var(--dyqwColor23)"},
         {
           id: "2",
           title: "岗点名称",
           name: "spotName",
           width: "15%",
           color: "var(--dyqwColor26)",
-          // div_background: "var(--bgColor11)",
-          // text_align: 'left',
           ellipsis: "tooltip",
         },
         {
@@ -585,15 +609,24 @@ export default {
           name: "description",
           width: "20%",
           color: "var(--dyqwColor23)",
-          ellipsis: "tooltip",
+          ellipsis: "popover",
         },
         {
           id: "5",
           title: "岗点描述",
           name: "description",
-          width: "35%",
+          width: "25%",
           color: "var(--dyqwColor23)",
           ellipsis: "tooltip",
+        },
+        {
+          id: "100",
+          title: "操作",
+          name: "operation",
+          width: "35%",
+          color: "var(--dyqwColor23)",
+          slot: true,
+          // ellipsis: "tooltip",
         },
       ],
       publicTablebody: [
@@ -602,36 +635,48 @@ export default {
         {id: 3, description: '额嗡飒ddede飒飒嗡嗡', spotName: '额为强AaA打算萨达问问去', details: false, del: false, edit: true, sort: 4},
         {id: 4, description: '1233332223', spotName: '123', details: true, del: true, edit: true, sort: 3},
         {id: 5, description: '123', spotName: '123333222', details: false, del: true, edit: true, sort: 7},
-        {id: 6, description: '额为强倒萨大苏强问问sassas去', spotName: '大萨达', details: false, del: true, edit: true, sort: 5, checked: true, checkedDisabled: true},
+        {id: 6, description: '额为强倒萨大苏强问问sassas去', spotName: '大萨达', details: false, del: true, edit: true, sort: 5, checked: true, checkedDisabled: true, radioDisabled: true},
         {id: 7, description: '222', spotName: '额为强强s大苏打ssas去', details: true, del: false, edit: true, sort: 3, checked: true},
         {id: 8, description: '113', spotName: '113', details: true, del: true, edit: true, sort: 2, checked: true},
-        // {id: 9, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2},
-        // {id: 11, description: '122', spotName: '122', details: true, del: true, edit: true, sort: 5},
-        // {id: 22, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
-        // {id: 33, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 5},
-        // {id: 44, description: '123', spotName: '123', details: true, del: false, edit: false, sort: 5},
-        // {id: 55, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 3},
-        // {id: 66, description: '123', spotName: '123', details: true, del: true, edit: true, sort: 2},
-        // {id: 77, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2},
-        // {id: 88, description: '123', spotName: '123', details: true, del: true, edit: true, sort: 5},
-        // {id: 56, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
-        // {id: 34, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 5},
-        // {id: 12, description: '123', spotName: '123', details: true, del: false, edit: false, sort: 5},
-        // {id: 31, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 3},
+        {id: 9, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2, divStyle: {background: 'pink'}},
+        {id: 11, description: '122', spotName: '122', details: true, del: true, edit: true, sort: 5},
+        {id: 22, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
+        {id: 33, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 5},
+        {id: 44, description: '123', spotName: '123', details: true, del: false, edit: false, sort: 5},
+        {id: 55, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 3},
+        {id: 66, description: '123', spotName: '123', details: true, del: true, edit: true, sort: 2},
+        {id: 77, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2},
+        {id: 88, description: '123', spotName: '123', details: true, del: true, edit: true, sort: 5},
+        {id: 56, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
+        {id: 34, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 5},
+        {id: 12, description: '123', spotName: '123', details: true, del: false, edit: false, sort: 5},
+        {id: 31, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 3},
       ],
       headStyleObj: {
-        // height: "0px",
-        // border: "none",
-        // border: '1px solid var(--elBorderColor13)',
+        'border': '1px solid #ccc',
+        'border-bottom': 'none',
+        'img_height': '100px',
+        // 'margin': '0 0 20px 0',4
+      },
+      headThStyle: {
+        background: '#ccc',
+        // 'border-right': '1px solid #ccc',
+        // 'width': '200px',
+      },
+      headImgStyle: {
+        // 'height': "50px",
+        // 'background': 'pink',
       },
       bodyStyleObj: {
-
+        'border': '1px solid #ccc',
       },
       bodyTrStyleObj: {
-        
+        'border-bottom': '1px solid #ccc',
+        'stripe': true
       },
       bodyTdStyleObj: {
-        border: '1px solid var(--elBorderColor16)',
+        'border-right': '1px solid #ccc',
+        // 'border-right': '1px solid var(--elBorderColor16)',
       },
 
 
@@ -1061,6 +1106,9 @@ export default {
       console.log(aaaa);
       console.log(date);
     },
+    getEditInfo(val) {
+      console.log(val);
+    },
     // 保存按钮
     btnBcClick() {
       // debugger;
@@ -1162,6 +1210,13 @@ export default {
       .public-table {
         flex: 1;
         // height: 95%;
+        .head-img {
+          height: 50px;
+          background-color: pink;
+          left: -10px;
+          right: -10px;
+          // position: static;
+        }
       }
       .public-pagination {
         height: 5%;

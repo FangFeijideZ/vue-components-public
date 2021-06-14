@@ -23,6 +23,16 @@ const methods = {
       return fn();
     }, tiem);
   },
+  // 对象转数组
+  objToArr(obj) {
+    let arr = []
+    for (let i in obj) {
+      let o = {};
+      o[i] = obj[i];
+      arr.push(o)
+    }
+    return arr;
+  }
 }
 Vue.prototype.$methods = methods; // 注册全局方法
 export default methods

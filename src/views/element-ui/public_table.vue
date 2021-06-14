@@ -2,230 +2,62 @@
   <div class="public-table">
     <table border="0">
       <!-- 表头背景图片 -->
-      <div 
-        :class="['bg-img', headStyle.img]" 
-        :style="[
-          { 'left': headStyle.img_left }, 
-          { 'right': headStyle.img_right },
-          { 'height': headStyle.img_height },
-        ]"
-      ></div>
-      <thead ref="theadRef"
-        @mouseover="mouseOverStart"
-        @mouseleave="mouseLeaveStart"
-        :style="[
-          { 'color': headStyle.color },
-          { 'margin': headStyle.margin },
-          { 'height': headStyle.height },
-          { 'font-size': headStyle.font_size },
-          { 'border-bottom': !headStyle.margin ? 'none' : headStyle.border ? headStyle.border : headStyle.border_bottom },
-          { 'border-top': headStyle.border ? headStyle.border : headStyle.border_top },
-          { 'border-left': headStyle.border ? headStyle.border : headStyle.border_left },
-          { 'border-right': headStyle.border ? headStyle.border : headStyle.border_right },
-          { 'background': headStyle.background },
-          { 'opacity': headStyle.opacity },
-        ]"
-      >
-        <tr id="theadBox">
-          <th
-            v-if="checkbox"
-            :style="[
-              { 'width': '50px' },
-              { 'border-right': headStyle.border ? headStyle.border : headStyle.border_right },
-            ]"
-          >
-            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
+      <slot name="head-img">
+        <div :class="['head-img', headStyle.background]" :style="headImgStyle"></div>
+      </slot>
+      <thead ref="theadRef" @mouseover="mouseOverStart"  @mouseleave="mouseLeaveStart" :style="headStyle">
+        <tr>
+          <th v-if="isCheckbox" :style="[isCheckbox,headThStyle]">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" v-if="!isCheckbox.title"></el-checkbox>
+            <span v-else>{{isCheckbox.title}}</span>
+          </th>
+          <th v-if="isRadiobox" :style="[isRadiobox,headThStyle]">
+            <span>{{isRadiobox.title}}</span>
           </th>
           <th
             v-for="(item,index) in headDatas"
             :key="index+Math.random()"
-            :style="[
-              { 'width': item.width || headStyle.width },
-              { 'padding': item.padding || headStyle.padding },
-              { 'text-align': item.text_align_head || headStyle.text_align },
-              { 'border-right': headStyle.border ? headStyle.border : headStyle.border_right },
-            ]"
-          >
-            {{ item.title }}
+            :style="[{ 'width': item.width,'padding': item.padding,'text-align': item.text_align_head },headThStyle]">
+            <span>{{ item.title }}</span>
           </th>
           <th v-if="isScrollY" class="is-scroll-y" ></th>
         </tr>
       </thead>
-      <tbody ref="tbodyRef"
-        :style="[
-          { 'border-top': bodyStyle.border ? bodyStyle.border : bodyStyle.border_top },
-          { 'border-left': bodyStyle.border ? bodyStyle.border : bodyStyle.border_left },
-          { 'border-bottom': bodyStyle.border ? bodyStyle.border : bodyStyle.border_bottom },
-          { 'border-right': bodyStyle.border ? bodyStyle.border : bodyStyle.border_right },
-        ]">
+      <tbody ref="tbodyRef" :style="[bodyStyle]">
         <tr
-          v-for="(value, index) in bodyDatas"
           ref="trRef"
+          v-for="(value, index) in bodyDatas"
           :key="index+Math.random() * 100"
-          :class="[{ 'is-scroll-y': isScrollY }, {'checkbox': checkbox}, {'disabled': value.checkedDisabled}]"
-          :style="[
-            { 'cursor': bodyTrStyle.cursor },
-            { 'color': bodyTrStyle.color },
-            { 'padding': bodyTrStyle.padding },
-            { 'border-bottom': bodyTrStyle.border },
-            { 'text-align': bodyTrStyle.text_align },
-            { 'font-weight': bodyTrStyle.font_weight },
-            { 'font-size': bodyTrStyle.font_size },
-            { 'height': bodyTrStyle.height },
-            { 'background': !bodyTrStyle.stripe ? bodyTrStyle.background : index % 2 == 0 ? bodyTrStyle.background : '' },
-          ]"
-          @click="checkbox ? '' : itemClick(value,index)"
-        >
-          <td
-            v-if="checkbox"
-            :style="[
-              { 'width': '50px' },
-              { 'border-right': bodyTdStyle.border ? bodyTdStyle.border : bodyTdStyle.border_right },
-            ]"
-          >
-          {{value.checked}}
-          <!-- <el-checkbox-group v-model="bodyDatas" @change="handleCheckedCitiesChange">
-            <el-checkbox v-for="(checkedItem, cities) in checkedCities" :key="cities" :label="checkedItem" :checked="checkedItem.checked"  :disabled="checkedItem.checkedDisabled">
-            <el-checkbox :disabled="value.checkedDisabled" >
-              <span style="display: none;"></span>
-            </el-checkbox>
-          </el-checkbox-group> -->
-          </td>
-          <td
-            @click="checkbox ? itemClick(value,index) : ''"
-            v-for="(item,n) in headDatas"
-            :key="n+Math.random() * 10"
-            :style="[
-              { 'width': item.width || bodyTdStyle.width },
-              { 'height': item.height || bodyTdStyle.height },
-              { 'color': item.color|| bodyTdStyle.color },
-              { 'text-align': item.text_align || bodyTdStyle.text_align },
-              { 'font-weight': item.font_weight || bodyTdStyle.font_weight },
-              { 'background': item.background || bodyTdStyle.background },
-              { 'padding': item.padding || bodyTdStyle.padding },
-              { 'border-right': item.border || bodyTdStyle.border },
-            ]"
-          >
+          :class="[{ 'is-scroll-y': isScrollY }, {'checkbox': isCheckbox}, {'disabled': value.checkedDisabled || value.radioDisabled}]"
+          :style="[{ 'background': !bodyTrStyle.stripe ? bodyTrStyle.background : index % 2 == 0 ? bodyTrStyle.background : '' },bodyTrStyle]"
+          @click="isCheckbox || isRadiobox  ? '' : itemClick(value,index)">
+          <!-- 复选框 -->
+          <slot name="checkbox">
+            <td v-if="isCheckbox" :style="[isCheckbox,bodyTdStyle]">
+              <el-checkbox v-model="value.checked" :label="value" :disabled="value.checkedDisabled" @change="handleCheckedCitiesChange(value,index)">
+                <span style="display: none;"></span>
+              </el-checkbox>
+            </td>
+          </slot>
+          <!-- 单选框 -->
+          <slot name="radio">
+            <td v-if="isRadiobox" :style="[isRadiobox,bodyTdStyle]" @change="getRadioChange(radioValue,index)">
+              <el-radio-group v-model="radioValue">
+                <el-radio :label="value" :disabled="value.radioDisabled"><span style="display: none;"></span></el-radio>
+              </el-radio-group>
+            </td>
+          </slot>
+          <td  @click="isCheckbox || isRadiobox ? itemClick(value,index) : ''" v-for="(item,n) in headDatas" :key="n+Math.random() * 10" :style="[item,bodyTdStyle]">
             <!-- 普通序号或者带边框或者带背景颜色或者带背景图的序号 -->
             <div v-if="item.name == 'numbers'" class="numbers">
               <div 
-                :class="['numbers-box', value.div_background || item.div_background]"
-                :style="[
-                  { 'width': item.div_width },
-                  { 'height': item.div_height },
-                  { 'border-radius': item.div_radius },
-                  { 'font-family': item.div_font_family },
-                  { 'background': item.div_background },
-                  { 'color': item.div_color || value.div_color },
-                  { 'border': item.div_border || value.div_border },
-                ]"
+                :class="['numbers-box', value.divStyle ? value.divStyle.background : '' || item.divStyle ? item.divStyle.background : '']"
+                :style="[item.divStyle, value.divStyle]"
               >
                 <!-- 数字补0 -->
                 <span v-if="item.div_two">{{pageNumber + index + 1 > 9 ? pageNumber + index + 1 : `0${pageNumber + index + 1}`}}</span>
                 <!-- 数字不补0 -->
                 <span v-else>{{pageNumber + index + 1}}</span>
-              </div>
-            </div>
-
-            <!-- 带popover气泡可点击的 -->
-            <el-popover
-              v-else-if="value[item.name] && item.ellipsis == 'popover'"
-              placement="top"
-              trigger="hover"
-            >
-              <ul class="file-list">
-                <li
-                  @click="getViewFilesUrl(file)"
-                  v-for="file in value[item.name]"
-                  :key="file.file_id"
-                >
-                  <span>{{ file.file_realname || file.file_name}}</span>
-                  <span>{{ `（${file.file_time}）` }}</span>
-                </li>
-              </ul>
-              <span
-                class="ellipsis"
-                slot="reference"
-                v-if="value[item.name] && value[item.name].length > 0"
-                >{{value[item.name][0].file_realname ||value[item.name][0].file_name }}</span
-              >
-            </el-popover>
-
-            <!-- 带icon图标的 -->
-            <div v-else-if="item.name == 'operations' || item.name == 'operation'" class="operation">
-              <div class="operation-box" :style="[{ 'justify-content': item.justify_content }]">
-                <!-- 值为operation时代表每条数据的图标都一样，为operations时代表每条数据的图标都不一样-->
-                <div
-                  v-for="icon in item.name == 'operation' ? item.operation: value.operations"
-                  :key="icon.code"
-                  class="operation-item"
-                  @click="iconClick(value, icon)"
-                  :style="{ 
-                    'cursor': icon.cursor,
-                    'width': icon.div_width,
-                    'margin': icon.div_margin,
-                    'justify-content': icon.justify_content,
-                  }"
-                >
-                  <!-- 文本在左侧，图标在右侧 -->
-                  <div v-if="icon.right && icon.title_show" class="left-title" :style="{ color: icon.color }">{{ icon.title || icon.title == 0 ? icon.title : "--" }}</div>
-                  <div
-                    v-if="icon.icon_show"
-                    :title="icon.title"
-                    :class="['icon', icon.icon_font, icon.icon, {'icon-margin': icon.right }]"
-                    :style="{ 
-                      'width': icon.width,
-                      'color': icon.color,
-                      'height': icon.height,
-                      'margin': icon.margin,
-                      'font-size': icon.font_size,
-                    }"
-                  ></div>
-                  <!-- 文本在右侧，图标在左侧 -->
-                  <div v-if="!icon.right && icon.title_show" class="right-title" :style="{ color: icon.color }">{{ icon.title || icon.title == 0 ? icon.title : "--" }}</div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- 带按钮的 -->
-            <div v-else-if="item.name == 'buttoms' || item.name == 'buttom'" class="operation">
-              <div class="operation-box" :style="[{ 'justify-content': item.justify_content }]">
-                <!-- 值为buttom时代表每条数据的按钮都一样，为buttoms时代表每条数据的按钮都不一样-->
-                <el-button
-                  v-for="buttom in item.name == 'buttom' ? item.buttom : value.buttoms"
-                  @click="iconClick(value, buttom)"
-                  class="operation-item"
-                  :key="buttom.code"
-                  :type="buttom.button_type"
-                  :size="buttom.button_size ? icon.button_size : 'mini'"
-                  :style="{
-                    'cursor': buttom.buttom_cursor,
-                    'width': buttom.buttom_width,
-                    'height': buttom.buttom_height,
-                    'margin': buttom.buttom_margin,
-                    'padding': buttom.buttom_padding,
-                    'justify-content': buttom.justify_content
-                  }"
-                >
-                  <div class="buttom-box">
-                    <!-- 文本在左侧，图标在右侧 -->
-                    <div v-if="buttom.right && buttom.title_show" class="left-title" :style="{ color: buttom.color }">{{ buttom.title }}</div>
-                    <div
-                      v-if="buttom.icon_show"
-                      :title="buttom.title"
-                      :class="['icon', buttom.icon_font, buttom.icon, {'icon-margin': buttom.right }]"
-                      :style="{ 
-                        'width': buttom.width,
-                        'color': buttom.color,
-                        'height': buttom.height,
-                        'margin': buttom.margin,
-                        'font-size': buttom.font_size,
-                      }"
-                    ></div>
-                    <!-- 文本在右侧，图标在左侧 -->
-                    <div v-if="!buttom.right && buttom.title_show" class="right-title" :style="{ color: buttom.color }">{{ buttom.title }}</div>
-                  </div>
-                </el-button>
               </div>
             </div>
 
@@ -235,16 +67,25 @@
             </div>
             
             <!-- 普通文本 -->
-            <div v-else :class="{'ellipsis': item.ellipsis}" 
-              :style="{ 'color': item.colors == true ? value.color : '' }"
+            <div v-else :style="{ 'color': item.colors == true ? value.color : '' }"
               @mouseover="mouseOverText($event,item)"
               @mouseleave="mouseLeaveText($event,item)"
             >
-              <el-tooltip placement="top" v-if="ellipsis">
-                <template #content><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></template>
-                <div class="ellipsis"><span @click.stop="tdClick($event,value,item)">{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
-              </el-tooltip>
-              <div class="ellipsis" v-if="!ellipsis"><span @click.stop="tdClick($event,value,item)">{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
+              <div class="tooltip-popover" v-if="isEllipsis">
+                <div class="tooltip" v-if="item.ellipsis == 'tooltip'">
+                  <el-tooltip placement="top">
+                    <template #content><span>{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></template>
+                    <div class="ellipsis"><span @click.stop="tdClick($event,value,item)">{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
+                  </el-tooltip>
+                </div>
+                <div class="popover" v-if="item.ellipsis == 'popover'">
+                  <el-popover placement="top" trigger="hover" :content="value[item.name] || value[item.name] == 0 ? value[item.name] : '--'">
+                    <div slot="reference" class="ellipsis"><span @click.stop="tdClick($event,value,item)">{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
+                  </el-popover>
+                </div>
+                <div class="ellipsis" v-if="!item.ellipsis"><span @click.stop="tdClick($event,value,item)">{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
+              </div>
+              <div class="ellipsis" v-if="!isEllipsis"><span @click.stop="tdClick($event,value,item)">{{value[item.name] || value[item.name] == 0 ? value[item.name] : "--" }}</span></div>
             </div>
           </td>
         </tr>
@@ -266,6 +107,20 @@ export default {
     },
     headStyle: {
       // 表头样式
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+    headThStyle: {
+      // 表头单元格样式
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+    headImgStyle: {
+      // 表头背景图样式
       type: Object,
       default: () => {
         return {};
@@ -299,6 +154,13 @@ export default {
         return {};
       },
     },
+    radioModel: {
+      //单选框绑定的值
+      type: undefined,
+      default: () => {
+        return undefined;
+      },
+    },
     // 分页信息
     pageInfo: {
       type: Object,
@@ -309,18 +171,26 @@ export default {
         };
       },
     },
-    checkbox: {
-      // 复选框
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    }
   },
   watch: {
     headData: {
       handler(newVal) {
-        this.headDatas = newVal;
+        // 去掉有单选框或复选框的那一列
+        let arr = newVal.filter(item=>{
+          return item.name != "checkbox" && item.name != "radio";
+        })
+        this.headDatas = arr;
+
+        // 判断是否有复选框
+        let obj = newVal.find(item=>{
+          return item.name == "checkbox"
+        })
+        this.isCheckbox = obj;
+        // 判断是否有单选框
+        let val = newVal.find(item=>{
+          return item.name == "radio"
+        })
+        this.isRadiobox = val;
       },
       deep: true,
       immediate: true,
@@ -328,28 +198,23 @@ export default {
     bodyData: {
       handler(newVal) {
         this.bodyDatas = newVal;
-
         // 判断复选框是否全选
-        let flag = true;
-        newVal.forEach(item => {
-          if (item.checked) {
-            this.isIndeterminate = true
-          } else {
-            flag = false;
-          }
-        });
-        if (flag) {
-          this.isIndeterminate = false
-        }
-        this.checkAll = flag;
+        this.handleDefaultChecIskAll(newVal);
       },
       deep: true,
       immediate: true,
     },
     pageInfo: {
       handler(newVal) {
-        let { currentPage, pageSize } = newVal;
-        this.pageNumber = pageSize * (currentPage - 1);
+        // 页码递增
+        this.pageNumber = newVal.pageSize * (newVal.currentPage - 1);
+      },
+      deep: true,
+      immediate: true,
+    },
+    radioModel: {
+      handler(newVal) {
+        this.radioValue = newVal;
       },
       deep: true,
       immediate: true,
@@ -357,26 +222,23 @@ export default {
   },
   data() {
     return {
-      headDatas: [],
-      bodyDatas: [],
-      checkedCities: [
-        {id: 5, description: '123', spotName: '123333222', details: false, del: true, edit: true, sort: 7, checked: true},
-      ],
-      checkedCitiesList: [],
-      checkAll: false,
-      isIndeterminate: false,
+      headDatas: [], // 表格表头数据
+      bodyDatas: [], // 表格内容数据
+      checkedCities: [], // 复选框选择到的数据
+      checkAll: false, // 复选框是否全部选中
+      isCheckbox: undefined, // 是否有复选框
+      isRadiobox: undefined, // 是否有单选框
+      radioValue: undefined, // 单选框选择到的数据
+      isIndeterminate: false, // 复选框是否至少有一个被选中
       isScrollY: false, // 是否出现Y轴滚动条
       isScrollX: false, // 是否出现X轴滚动条
-      scrollHeadX: false,
-      scrollBodyX: true,
-      pageNumber: 1,
-      ellipsis: false,
-      ellipsisText: "",
+      scrollHeadX: false, // 鼠标是否在thead里面
+      scrollBodyX: true, // 鼠标是否在tobdy里面
+      isEllipsis: false, // 文字是否溢出隐藏
+      pageNumber: 1, // 初始化页码递增
     };
   },
   mounted() {
-    // console.log(this.checkedCities);
-    // this.checkedCitiesList = this.checkedCities;
     let tbody = this.$refs.tbodyRef; // 获取tbody
     let thead = this.$refs.theadRef; // 获取thead
     this.isScrollY = tbody.scrollHeight > tbody.clientHeight ? true : false; // 判断tbody是否出现了Y轴滚动条
@@ -388,17 +250,17 @@ export default {
     this.isScrollY = tbody.scrollHeight > tbody.clientHeight ? true : false; // 判断tbody是否出现了Y轴滚动条
   },
   methods: {
-    // 鼠标移入
+    // 鼠标移入表头操作
     mouseOverStart() {
       this.scrollHeadX = true;
       this.scrollBodyX = false;
     },
-    // 鼠标移出
+    // 鼠标移出表头操作
     mouseLeaveStart() {
       this.scrollHeadX = false;
       this.scrollBodyX = true;
     },
-    // 鼠标移入
+    // 鼠标移入单元格操作
     mouseOverText(e,item) {
       // console.log(e);
       let p_w = e.target.offsetParent.getBoundingClientRect().width.toFixed(2) - 0;
@@ -412,19 +274,14 @@ export default {
       let offsetWidth = e.target.getBoundingClientRect().width.toFixed(2) - 0;
       let falg = (offsetWidth > tdWidth) && item.ellipsis;
       if (falg) {
-        this.ellipsis = true;
-        this.ellipsisText = e.target.innerText;
+        this.isEllipsis = true;
       } else {
-        this.ellipsis = false;
-        this.ellipsisText = ""
-        // console.log(this.ellipsisText);
+        this.isEllipsis = false;
       }
     },
-    // 鼠标移出
+    // 鼠标移出单元格操作
     mouseLeaveText(e) {
-      // this.ellipsis = false;
-      // this.ellipsisText = ""
-      // console.log(e.target.className,'===============');
+      
     },
     // 监听thead横向滚动条滚动事件
     handleScrollHeadX() {
@@ -456,55 +313,84 @@ export default {
         }
       })
     },
+    // 通过ref给表格内容赋值（不常用）
     getTableData(data) {
       this.bodyDatas = data;
     },
-    getViewFilesUrl() {
-      
-    },
-    iconClick(value,icon) {
-      this.$emit("iconClick", value,icon);
-    },
+    // 单元格文本点击
     tdClick(e,value,item) {
       let obj = { e,value,item };
-      console.log(obj);
       this.$emit("tdClick", obj);
     },
+    // 单元格或行点击
     itemClick(value,index) {
-      console.log(456);
       this.$emit("click", value,index);
-
-      
-      // if (this.checkbox && !value.checkedDisabled) {
-      //   let i = this.checkedCities.findIndex(item=>{
-      //     return item.id == value.id
-      //   })
-      //   if (i == -1) {
-      //     this.checkedCities.push(value);
-      //   } else {
-      //     this.checkedCities.splice(i,1);
-      //   }
-      //   let checkedCount = this.checkedCities.length;
-      //   let bodyDataCount = this.bodyDatas.length;
-      //   this.checkAll = checkedCount === bodyDataCount;
-      //   this.isIndeterminate = checkedCount > 0 && checkedCount < bodyDataCount
-      // }
+      this.handleCheckedCitiesChange(value,index);
+      this.getRadioChange(value,index);
     },
-
-    handleCheckAllChange(val) {
-      let bodyDatas = [];
-      this.bodyDatas.forEach(item=>{
-        bodyDatas.push(item);
+    // 单选框点击操作
+    getRadioChange(value,index) {
+      if (!value.radioDisabled) {
+        this.radioValue = value;
+        this.$emit("radio", value,index);
+      }
+    },
+    // 复选框点击操作
+    handleCheckedCitiesChange(value,index) {
+      if (this.isCheckbox && !value.checkedDisabled) {
+        let i = this.checkedCities.findIndex(item=>{
+          return item == value
+        })
+        if (i == -1) {
+          this.checkedCities.push(value);
+          this.bodyDatas[index].checked = true;
+        } else {
+          this.checkedCities.splice(i,1);
+          this.bodyDatas[index].checked = false;
+        }
+        this.$forceUpdate();
+        let checkedCount = this.checkedCities.length;
+        let bodyDataCount = this.bodyDatas.length;
+        this.checkAll = checkedCount === bodyDataCount;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < bodyDataCount;
+        this.$emit("checkbox", this.checkedCities,index);
+      }
+    },
+    // 默认回显复选框勾选状态。或全选状态
+    handleDefaultChecIskAll(newVal) {
+      let flag = false;
+      newVal.forEach(item => {
+        if (item.checked) {
+          this.isIndeterminate = true;
+          flag = true;
+        } else {
+          flag = false;
+        }
+      });
+      if (flag) {
+        this.isIndeterminate = false
+      }
+      this.checkAll = flag;
+      this.checkedCities = newVal.filter(item=>{
+        return item.checked
       })
-      this.checkedCities = val ? bodyDatas : [];
-      this.isIndeterminate = false;
     },
-    handleCheckedCitiesChange(val) {
-      console.log(val);
-      let checkedCount = val.length;
-      let bodyDataCount = this.bodyDatas.length;
-      this.checkAll = checkedCount === bodyDataCount;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < bodyDataCount
+    // 复选框全选点击
+    handleCheckAllChange(val) {
+      if (val) {
+        let bodyDatas = [];
+        this.bodyDatas.forEach(item=>{
+          item.checked = true;
+          bodyDatas.push(item);
+        })
+        this.checkedCities = bodyDatas;
+        this.isIndeterminate = false;
+      } else {
+        this.bodyDatas.forEach(item=>{
+          item.checked = false;
+        })
+        this.checkedCities = [];
+      }
     },
   },
 };
@@ -573,80 +459,19 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        // 序号背景图
+        .dtqwBg11 {
+          background: var(--dtqwBg11);
+        }
+        .dtqwBg12 {
+          background: var(--dtqwBg12);
+        }
         .numbers-box {
           display: flex;
           justify-content: center;
           align-items: center;
-          // width: 23px;
-          height: 23px;
-          border-radius: 50%;
-          font-size: 14px;
-          // font-family: "shuma";
-          // border: 1px solid var(--bgColor11);
-          // background: var(--bgColor11);
-          // color: var(--fontColor01);
-        }
-        // 序号背景图
-        .dtqwBg11 {
-          background: var(--dtqwBg11);
           background-repeat: no-repeat;
           background-size: 100% 100%;
-        }
-        .dtqwBg12 {
-          background: var(--dtqwBg12);
-          background-repeat: no-repeat;
-          background-size: 100% 100%;
-        }
-      }
-      // 操作列样式
-      .operation {
-        .operation-box {
-          display: flex;
-          .operation-item {
-            display: flex;
-            align-items: center;
-            margin-right: 5px;
-            .buttom-box {
-              display: flex;
-              align-items: center;
-            }
-            .icon {
-              margin-right: 5px;
-              font-size: 12px;
-            }
-            .icon:last-child {
-              margin-right: 0px;
-            }
-            .icon-margin {
-              margin-left: 5px;
-              margin-right: 0px;
-            }
-            .left-title,
-            .right-title {
-              font-size: 12px;
-            }
-            .dtqwBg74 {
-              background: var(--dtqwBg74);
-              background-repeat: no-repeat;
-              background-size: 100% 100%;
-            }
-          }
-          .operation-item:last-child {
-            margin-right: 0px;
-          }
-        }
-      }
-      .file-list {
-        padding: 0;
-        margin: 0;
-        li {
-          height: 40px;
-          line-height: 40px;
-          list-style: none;
-        }
-        li:hover {
-          background-color: var(--hoveBgColor01);
-          color: var(--elInnerColor13);
         }
       }
       .ellipsis {
@@ -679,37 +504,54 @@ export default {
     th {
       box-sizing: border-box;
     }
+    .dtqwBg31 {
+      height: 40px;
+      background: var(--dtqwBg31);
+    }
     // 设置表头背景图片
-    .bg-img {
+    .head-img {
       position: absolute;
       top: 0;
       left: -0.6%;
       right: -0.6%;
-    }
-    .dtqwBg31 {
-      height: 40px;
-      background: var(--dtqwBg31);
       background-repeat: no-repeat;
       background-size: 100% 100%;
     }
-    ::v-deep.el-checkbox-group {
-      .el-checkbox {
-         .el-checkbox__label {
-          padding-left: 0;
+    ::v-deep.el-checkbox {
+        .el-checkbox__label {
+        padding-left: 0;
+      }
+      .el-checkbox__input.is-disabled {
+        .el-checkbox__inner {
+          background: #ccc;
+          border-color: #ccc;
         }
-        .el-checkbox__input.is-disabled {
-          .el-checkbox__inner {
-            background: #555;
-            border-color: #555;
-          }
+      }
+      .el-checkbox__input.is-checked.is-disabled {
+        .el-checkbox__inner {
+          background: #ccc !important;
         }
-        .el-checkbox__input.is-checked.is-disabled {
-          .el-checkbox__inner {
-            background: #555 !important;
-          }
-          .el-checkbox__inner::after {
-            border-color: #999;
-          }
+        .el-checkbox__inner::after {
+          border-color: #666;
+        }
+      }
+    }
+    ::v-deep.el-radio {
+      .el-radio__label {
+        padding-left: 0;
+      }
+      .el-radio__input.is-disabled {
+        .el-radio__inner {
+          background: #ccc;
+          border-color: #ccc;
+        }
+      }
+      .el-radio__input.is-checked.is-disabled {
+        .el-radio__inner {
+          background: #ccc !important;
+        }
+        .el-radio__inner::after {
+          border-color: #666;
         }
       }
     }
@@ -734,26 +576,11 @@ export default {
       border-radius: 3px;
     }
 
-    
-
     // 设置动画淡入
     @keyframes fadenum { 
       0% { opacity: 0; }
       100% { opacity: 1; }
     }
-    // // 设置字体
-    // @font-face {
-    //   font-family: "shuma";
-    //   src: url("./font/accidental_presidency.ttf");
-    // }
-    // @font-face {
-    //   font-family: "shuma1";
-    //   src: url("./font/digital-7.ttf");
-    // }
-    // @font-face {
-    //   font-family: "shuma2";
-    //   src: url("./font/LESLIE.ttf");
-    // }
   }
 }
 </style>
