@@ -225,6 +225,7 @@ export default {
       headDatas: [], // 表格表头数据
       bodyDatas: [], // 表格内容数据
       checkedCities: [], // 复选框选择到的数据
+      checkedCitiesList: [], // 复选框选择到的数据
       checkAll: false, // 复选框是否全部选中
       isCheckbox: undefined, // 是否有复选框
       isRadiobox: undefined, // 是否有单选框
@@ -353,24 +354,18 @@ export default {
         let bodyDataCount = this.bodyDatas.length;
         this.checkAll = checkedCount === bodyDataCount;
         this.isIndeterminate = checkedCount > 0 && checkedCount < bodyDataCount;
-        this.$emit("checkbox", this.checkedCities,index);
+        let checkedCities = [...this.checkedCities,...this.checkedCitiesList];
+        this.$emit("checkbox", checkedCities,index);
       }
     },
     // 默认回显复选框勾选状态。或全选状态
     handleDefaultChecIskAll(newVal) {
-      let flag = false;
-      newVal.forEach(item => {
-        if (item.checked) {
-          this.isIndeterminate = true;
-          flag = true;
-        } else {
-          flag = false;
-        }
-      });
-      if (flag) {
-        this.isIndeterminate = false
-      }
-      this.checkAll = flag;
+      let flag = newVal.some(item=>{
+        return !item.checked
+      })
+      this.isIndeterminate = flag;
+      this.checkAll = !flag;
+      this.checkedCitiesList = !flag ? [] : this.checkedCities;
       this.checkedCities = newVal.filter(item=>{
         return item.checked
       })
@@ -391,6 +386,7 @@ export default {
         })
         this.checkedCities = [];
       }
+      this.$emit("checkboxAll", this.checkedCities);
     },
   },
 };

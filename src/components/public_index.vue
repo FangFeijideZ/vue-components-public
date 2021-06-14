@@ -230,6 +230,8 @@
         :body-td-style="bodyTdStyleObj"
         :page-info="pageInfo"
         @click="iconClick"
+        @checkbox="checkbox"
+        @checkboxAll="checkboxAll"
       >
         <!-- 表头背景图插槽 -->
         <!-- <div class="head-img" slot="head-img"></div> -->
@@ -585,7 +587,7 @@ export default {
       // ],
       publicTableHead: [
         { id: "0", title: "", name: "checkbox", width: "30px" },
-        { id: "0", title: "单选框", name: "radio", width: "30px" },
+        // { id: "0", title: "单选框", name: "radio", width: "30px" },
         { id: "1", title: "序号", name: "numbers", ellipsis: "", width: "15%", color: "var(--dyqwColor23)"},
         {
           id: "2",
@@ -630,27 +632,7 @@ export default {
         },
       ],
       publicTablebody: [
-        {id: 1, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 1},
-        {id: 2, description: '大大大飒飒大苏打萨达', spotName: '额嗡飒ddedsdsde飒飒嗡嗡', details: true, del: false, edit: true, sort: 2},
-        {id: 3, description: '额嗡飒ddede飒飒嗡嗡', spotName: '额为强AaA打算萨达问问去', details: false, del: false, edit: true, sort: 4},
-        {id: 4, description: '1233332223', spotName: '123', details: true, del: true, edit: true, sort: 3},
-        {id: 5, description: '123', spotName: '123333222', details: false, del: true, edit: true, sort: 7},
-        {id: 6, description: '额为强倒萨大苏强问问sassas去', spotName: '大萨达', details: false, del: true, edit: true, sort: 5, checked: true, checkedDisabled: true, radioDisabled: true},
-        {id: 7, description: '222', spotName: '额为强强s大苏打ssas去', details: true, del: false, edit: true, sort: 3, checked: true},
-        {id: 8, description: '113', spotName: '113', details: true, del: true, edit: true, sort: 2, checked: true},
-        {id: 9, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2, divStyle: {background: 'pink'}},
-        {id: 11, description: '122', spotName: '122', details: true, del: true, edit: true, sort: 5},
-        {id: 22, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
-        {id: 33, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 5},
-        {id: 44, description: '123', spotName: '123', details: true, del: false, edit: false, sort: 5},
-        {id: 55, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 3},
-        {id: 66, description: '123', spotName: '123', details: true, del: true, edit: true, sort: 2},
-        {id: 77, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2},
-        {id: 88, description: '123', spotName: '123', details: true, del: true, edit: true, sort: 5},
-        {id: 56, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
-        {id: 34, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 5},
-        {id: 12, description: '123', spotName: '123', details: true, del: false, edit: false, sort: 5},
-        {id: 31, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 3},
+        
       ],
       headStyleObj: {
         'border': '1px solid #ccc',
@@ -900,7 +882,30 @@ export default {
     // console.log(process);
     // console.log(process.env);
     // console.log(process.env.NODE_ENV)
-    this.publicTablebodys = this.publicTablebody;
+    let publicTablebody = [
+      {id: 1, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 1},
+      {id: 2, description: '大大大飒飒大苏打萨达', spotName: '额嗡飒ddedsdsde飒飒嗡嗡', details: true, del: false, edit: true, sort: 2},
+      {id: 3, description: '额嗡飒ddede飒飒嗡嗡', spotName: '额为强AaA打算萨达问问去', details: false, del: false, edit: true, sort: 4},
+      {id: 4, description: '1233332223', spotName: '123', details: true, del: true, edit: true, sort: 3},
+      {id: 5, description: '123', spotName: '123333222', details: false, del: true, edit: true, sort: 7},
+      {id: 6, description: '额为强倒萨大苏强问问sassas去', spotName: '大萨达', details: false, del: true, edit: true, sort: 5, checked: true, checkedDisabled: true, radioDisabled: true},
+      {id: 7, description: '222', spotName: '额为强强s大苏打ssas去', details: true, del: false, edit: true, sort: 3, checked: true},
+      {id: 8, description: '113', spotName: '113', details: true, del: true, edit: true, sort: 2, checked: true},
+      {id: 9, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2, divStyle: {background: 'pink'}},
+      {id: 11, description: '122', spotName: '122', details: true, del: true, edit: true, sort: 5},
+      {id: 22, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
+      {id: 33, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 5},
+      {id: 44, description: '123', spotName: '123', details: true, del: false, edit: false, sort: 5},
+      {id: 55, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 3},
+      {id: 66, description: '123', spotName: '123', details: true, del: true, edit: true, sort: 2},
+      {id: 77, description: '123', spotName: '123', details: true, del: true, edit: false, sort: 2},
+      {id: 88, description: '123', spotName: '123', details: true, del: true, edit: true, sort: 5},
+      {id: 56, description: '123', spotName: '123', details: false, del: true, edit: true, sort: 6},
+      {id: 34, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 5},
+      {id: 12, description: '123', spotName: '123', details: true, del: false, edit: false, sort: 5},
+      {id: 31, description: '123', spotName: '123', details: true, del: false, edit: true, sort: 3},
+    ]
+    this.publicTablebodys = publicTablebody;
     this.publicTablebody = this.publicTablebodys.slice(0, this.pageInfo.pageSize);
     this.pageInfo.total = this.publicTablebodys.length;
     this.getPageList();
@@ -1081,7 +1086,13 @@ export default {
     },
     // 列表按钮点击
     iconClick(val,icon) {
-      console.log(val,icon);
+      // console.log(val,icon);
+    },
+    checkbox(val) {
+      console.log(val);
+    },
+    checkboxAll(val) {
+      console.log(val);
     },
     // 获取所属单位
     getSelectSsdwObj(val) {

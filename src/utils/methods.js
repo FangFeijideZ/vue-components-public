@@ -32,6 +32,32 @@ const methods = {
       arr.push(o)
     }
     return arr;
+  },
+  //数组去重  第一个参数要进行去重的数组  第二个参数去重的字段名
+	arrRemoval(list, type) {
+		let result = [];
+		let obj = {};
+		for (var i = 0; i < list.length; i++) {
+			if (!obj[list[i][type]]) {
+				result.push(list[i]);
+				obj[list[i][type]] = true;
+			}
+		}
+		return result;
+	},
+	// 递归深拷贝，传入数组或对象
+	assignData(valve) {
+    let o = Array.isArray(valve) ? [] : {};
+    if (valve && typeof valve === "object") {
+      for (let k in valve) {
+        if (valve[k] && typeof valve[k] === "object") {
+          o[k] = this.assignData(valve[k])
+        } else {
+          o[k] = valve[k]
+        }
+      }
+    }
+    return o
   }
 }
 Vue.prototype.$methods = methods; // 注册全局方法
