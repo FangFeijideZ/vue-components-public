@@ -9,8 +9,8 @@
         <div class="operation flex-align flex-end">
           <i class="el-icon-minus" v-drag-min="dragId"></i>
           <i class="el-icon-border" v-drag-max="dragId"></i>
-          <i class="el-icon-close" v-drag-close="dragClose"></i>
-          <!-- <i class="el-icon-close" v-drag-close="dragId"></i> -->
+          <i class="el-icon-close" v-drag-close="dragId"></i>
+          <!-- <i class="el-icon-close" v-drag-close="dragClose"></i> -->
           <!-- <i class="el-icon-border" v-drag-max="dragMax"></i> -->
         </div>
       </div>

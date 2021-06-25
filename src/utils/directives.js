@@ -888,6 +888,7 @@ const directives = {
   dragClose: {
     inserted(el, binding, vnode) { // 被绑定元素插入父节点时调用
       // console.log(el, binding, vnode);
+      let fun = '[object Function]';
       el.style = `cursor: pointer;`
       el.onclick = (event) => {
         moveValue = undefined;
@@ -895,11 +896,13 @@ const directives = {
         dragBoxHeight = undefined;  
         dragBoxLeft = undefined;
         dragBoxTop = undefined;
-        // vnode.context.$el.removeChild(dragBox)
         // 判断指令中是否绑定了函数
-        if (binding.expression) {
+        let type = Object.prototype.toString.call(binding.value);
+        if (type == fun) {
           // 如果绑定了函数 则调用那个函数，此处binding.value就是那个函数
           binding.value(el, binding, vnode, event)
+        } else {
+          vnode.context.$el.removeChild(dragBox)
         }
       }
     }

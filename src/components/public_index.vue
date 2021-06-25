@@ -133,7 +133,7 @@
         title="岗点名称"
         prop
         style="margin-bottom: 20px"
-        :validator="this.$validate.checkPhone"
+        :validator="this.$validator.checkPhone"
         show-suffix-button
         :ref="gdmcObj.ref"
         :input-obj="gdmcObj"

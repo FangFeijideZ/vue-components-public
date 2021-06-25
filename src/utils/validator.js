@@ -1,5 +1,5 @@
 import Vue from 'vue'
-let validate = {
+let validator = {
   checkPhone(rule,value,callback) {
     const reg = /^1[3456789]\d{9}$/;
     if(reg.test(value)){
@@ -91,5 +91,5 @@ let validate = {
     }
   },
 }
-Vue.prototype.$validate = validate; // 注册全局方法
-export default validate
+Vue.prototype.$validator = validator; // 注册全局方法
+export default validator

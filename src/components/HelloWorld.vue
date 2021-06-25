@@ -223,7 +223,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入活动名称', validator: this.$validate.checkPhone, trigger: 'blur' },
+          { required: true, message: '请输入活动名称', validator: this.$validator.checkPhone, trigger: 'blur' },
         ],
       }
     }
