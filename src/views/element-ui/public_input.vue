@@ -383,7 +383,7 @@ export default {
       this.$emit("clear", null);
     },
     handleSelect(val) {
-      this.$emit("select", val.value);
+      this.$emit("select", val);
     },
     // 下拉选择框选择到的数据
     getSelect(val) {
