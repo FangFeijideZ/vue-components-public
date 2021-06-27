@@ -34,6 +34,20 @@
       </el-form-item>
     </el-form>
 
+    <ul class="img-group flex" ref='ulRef'>
+      <li :class="['img-box', {active: index == 2}]" draggable v-for="(item,index) in dragstartList" :key="index" 
+        @dragstart="getDragstart($event,item)"
+        @drag="getDrag($event,item)"
+        @dragenter="getDragenter($event,item)"
+        @dragover="getDragover($event,item)"
+        @dragleave="getDragleave($event,item)"
+        @drop="getDrop($event,item)"
+        @dragend="getDragend($event,item)"
+      >
+      {{item.code}}--{{item.label}}
+      </li>
+    </ul>
+
     <!-- <el-tree
       id="tree"
       ref="tree"
@@ -225,7 +239,21 @@ export default {
         name: [
           { required: true, message: '请输入活动名称', validator: this.$validator.checkPhone, trigger: 'blur' },
         ],
-      }
+      },
+      
+      dragstartList: [
+        { code: 1, label: "我是第一个，拖动我试试" },
+        { code: 2, label: "我是第二个，拖动我试试" },
+        { code: 3, label: "我是第三个，拖动我试试" },
+        { code: 4, label: "我是第四个，拖动我试试" },
+        { code: 5, label: "我是第五个，拖动我试试" },
+      ],
+      moveDom: '',
+      changeDom: '',
+      startY: 0,
+      startX: 0,
+      endY: 0,
+      endX: 0,
     }
   },
   mounted() {
@@ -247,7 +275,75 @@ export default {
     // console.log(isScrollY,`===========>Y轴${str}滚动条`);
   },
   methods: {
+    // 需要注意的是,drag系列事件不能跟mousemove共存，只能取其一。
+    // 对于Safari，还必须要在CSS中对能拖拽的元素如下设置： *[draggable = true] { -khtml-user-drag: element; }
+    getDragstart(e,item) {
+      // console.log(e,"==============事件主体是被拖放元素，在开始拖放被拖放元素时触发（开始拖放）。");
+      this.moveDom = e.currentTarget;
+      this.startX = e.clientX;
+      this.startY = e.clientY;
+      e.dataTransfer.setData('text',"<span>22</span>");
+    },
+    getDrag(e,item) {
+      // console.log(e,"==============事件主体是被拖放元素，在正在拖放被拖放元素时触发。");
+    },
+    getDragenter(e,item) {
+      // console.log(e,"==============事件主体是目标元素，在被拖放元素进入某元素时触发。");
+    },
+    getDragover(e,item) {
+      // console.log(e,"==============事件主体是目标元素，在被拖放在某元素内移动时触发。");
+      e.preventDefault() // 如果不阻止默认事件，drop事件将不会触发。
+      e.dataTransfer.dropEffect = 'move'
+
+      //   this.changeDom = e.currentTarget;
+      //   this.endY = e.clientY;
+      //   this.endX = e.clientX;
+      //   if (this.endY - this.startY >= 0) {
+      //     // console.log('下')
+      //     this.$refs.ulRef.insertBefore(this.moveDom, this.changeDom.nextSibling)
+      //   } else {
+      //     // console.log('上')
+      //     this.$refs.ulRef.insertBefore(this.moveDom, this.changeDom)
+      //   }
+      //   if (this.endX - this.startX >= 0) {
+      //     // console.log('左')
+      //     this.$refs.ulRef.insertBefore(this.moveDom, this.changeDom.nextSibling)
+      //   } else {
+      //     // console.log('右')
+      //     this.$refs.ulRef.insertBefore(this.moveDom, this.changeDom)
+      //   }
+    },
+    getDragleave(e,item) {
+      // console.log(e,"==============事件主体是目标元素，在被拖放元素移出目标元素时触发。");
+    },
+    getDrop(e,item) {
+      // console.log(e,"==============事件主体是目标元素，在目标元素完全接受被拖放元素时触发（正在拖放）。");
+      e.preventDefault(); // 如果不阻止默认事件，drop事件将不会触发。
+      // console.log(e.dataTransfer.getData('text'));
+      // console.log(e.dataTransfer.types);
+      this.changeDom = e.currentTarget;
+      this.endY = e.clientY;
+      this.endX = e.clientX;
+      if (this.endY - this.startY >= 0) {
+        // console.log('下')
+        this.$refs.ulRef.insertBefore(this.moveDom, this.changeDom.nextSibling)
+      } else {
+        // console.log('上')
+        this.$refs.ulRef.insertBefore(this.moveDom, this.changeDom)
+      }
+      if (this.endX - this.startX >= 0) {
+        // console.log('左')
+        this.$refs.ulRef.insertBefore(this.moveDom, this.changeDom.nextSibling)
+      } else {
+        // console.log('右')
+        this.$refs.ulRef.insertBefore(this.moveDom, this.changeDom)
+      }
+    },
+    getDragend(e,item) {
+      // console.log(e,"==============事件主体是被拖放元素，在整个拖放操作结束时触发（结束拖放）。");
+    },
     dragOpen() {
+      // window.confirm();
       this.dragShow = !this.dragShow;
       this.dragTitle = this.dragShow ? "关闭" : "打开";
     },
@@ -284,6 +380,18 @@ export default {
       width: 100%;
       top: 0;
       bottom: 0;
+    }
+    .img-group {
+      .img-box {
+        width: 200px;
+        height: 200px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        background-color: skyblue;
+      }
+      .active {
+        background-color: pink;
+      }
     }
   }
 </style>

@@ -74,7 +74,7 @@ export default {
           // formatter: '{a} <br/>{b} : {c}个 ({d}%)',
           // type: 'cross',//默认值，可选值：'line' | 'cross' | 'shadow' | 'none'(无)，指定type后对应style生效（如下）
           formatter: function(value) {
-            return  value ? `${value.marker}${value.data ? value.data.label : ''}：${value.data.value}` : false
+            return  value && value.marker && value.data ? `${value.marker}${value.data ? value.data.label : ''}：${value.data.value}` : false
             // return `${value.marker}${value.data.label}：${value.data.value} 占比${value.percent}%`
           },
         },
