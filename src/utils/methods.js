@@ -1,3 +1,4 @@
+import { setInterval } from 'core-js';
 import Vue from 'vue'
 const that = new Vue();
 that.timeObj = undefined;
@@ -58,6 +59,20 @@ const methods = {
       }
     }
     return o
+  },
+  // promise方法
+  promise(value) {
+    return new Promise((resolve,reject)=>{
+      let o = 1;
+      setInterval(() => {
+        if (o == 1) {
+          reject(o)
+        } else {
+          o += value;
+          resolve(o)
+        }
+      }, 1000);
+    })
   }
 }
 Vue.prototype.$methods = methods; // 注册全局方法

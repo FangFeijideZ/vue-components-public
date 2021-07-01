@@ -34,7 +34,7 @@
       </el-form-item>
     </el-form>
 
-    <ul class="img-group flex" ref='ulRef'>
+    <!-- <ul class="img-group flex" ref='ulRef'>
       <li :class="['img-box', {active: index == 2}]" draggable v-for="(item,index) in dragstartList" :key="index" 
         @dragstart="getDragstart($event,item)"
         @drag="getDrag($event,item)"
@@ -46,7 +46,7 @@
       >
       {{item.code}}--{{item.label}}
       </li>
-    </ul>
+    </ul> -->
 
     <!-- <el-tree
       id="tree"
@@ -343,6 +343,11 @@ export default {
       // console.log(e,"==============事件主体是被拖放元素，在整个拖放操作结束时触发（结束拖放）。");
     },
     dragOpen() {
+      this.$methods.promise(456).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
+      })
       // window.confirm();
       this.dragShow = !this.dragShow;
       this.dragTitle = this.dragShow ? "关闭" : "打开";

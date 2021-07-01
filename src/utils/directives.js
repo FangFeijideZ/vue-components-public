@@ -921,22 +921,25 @@ const directives = {
           let flag = binding.value.some(item=>{
             return checkArray(item);
           })
-          if (!flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
+          if (flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
             el.parentNode && el.parentNode.removeChild(el)
           }
         }
         if (type == obj) {
-          let array = Object.keys(binding.value);
-          let flag = array.some(item=>{
+          let roleArr = Object.keys(binding.value);
+          let flag = roleArr.some(item=>{
             return checkArray(binding.value[item]);
           })
-          if (!flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
+          if (flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
             el.parentNode && el.parentNode.removeChild(el)
           }
         }
         if (type == str || type == num) {
-          let flag = checkArray(binding.value);
-          if (!flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
+          let roleArr = binding.value.split(",");
+          let flag = roleArr.some(item=>{
+            return checkArray(item);
+          })
+          if (flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
             el.parentNode && el.parentNode.removeChild(el)
           }
         }
@@ -947,25 +950,28 @@ const directives = {
             let flag = value.some(item=>{
               return checkArray(item);
             })
-            if (!flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
+            if (flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
               el.parentNode && el.parentNode.removeChild(el)
             }
           }
           if (type1 == obj) {
-            let array = Object.keys(value);
-            let flag = array.some(item=>{
+            let roleArr = Object.keys(value);
+            let flag = roleArr.some(item=>{
               return checkArray(value[item]);
             })
-            if (!flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
+            if (flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
               el.parentNode && el.parentNode.removeChild(el)
             }
           }
           if (type1 == str || type1 == num) {
             let flag = checkArray(value);
-            if (!flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
+            if (flag) { // 判断是否有权限，没有权限就删除元素，等同于v-if指令
               el.parentNode && el.parentNode.removeChild(el)
             }
           }
+        }
+        if (type == boo) {
+          el.parentNode && el.parentNode.removeChild(el)
         }
       } else {
         // el.style = "display: none;"
@@ -982,7 +988,7 @@ const directives = {
 function checkArray(key) {
   let arr = ['zd', 'dd'];
   let index = arr.indexOf(key);
-  return index == -1 ? false : true;
+  return index !== -1 ? true : false;
 }
 let authority = {
   install(Vue) {
