@@ -6,6 +6,7 @@ import ElementUi from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import PublicComponents from './views';
 import '../public/css/public.scss'; // 公共样式
+import "./axios/index"; // 全局api请求
 import "./utils/date"; // 全局格式化日期
 import "./utils/directives"; // 自定义全局指令
 import "./utils/filters"; // 自定义全局过滤器

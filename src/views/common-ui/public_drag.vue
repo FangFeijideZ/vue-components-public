@@ -74,7 +74,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .public-drag {
-    height: 100%;
+    // height: 100%;
     // --width: 30%;
     // --height: 40%;
     .drag-box {

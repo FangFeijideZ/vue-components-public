@@ -1,5 +1,7 @@
 <template>
   <div class="public-index">
+    <el-button type="primary" @click="dragOpen" style="position: absolute; z-index: 2001;">{{dragTitle}}</el-button>
+    <public-drag v-if="dragShow"></public-drag>
     <div class="box-left">
       <!-- <public-title
         title="研判地点"
@@ -243,6 +245,13 @@
           @click="getPromise"
         ></public-button>
       </div>
+      <div class="button flex">
+        <public-button
+          icon="dtqwBg76"
+          title="全局API"
+          @click="getRequest"
+        ></public-button>
+      </div>
       <public-bar-charts :bar-charts="barObj"></public-bar-charts>
       <public-line-charts :line-charts="lineObj"></public-line-charts>
     </div>
@@ -333,6 +342,8 @@ export default {
   },
   data() {
     return {
+      dragTitle: "打开拖拽框",
+      dragShow: false,
       url: require("../views/element-ui/img/riqibb.png"),
       url3: require("../views/element-ui/img/4e10662af608.png"),
       pageInfo: {
@@ -1164,6 +1175,12 @@ export default {
         console.log(flag);
       }
     },
+    // 拖拽框
+    dragOpen() {
+      // window.confirm();
+      this.dragShow = !this.dragShow;
+      this.dragTitle = this.dragShow ? "关闭拖拽框" : "打开拖拽框";
+    },
     // 手写一个Promise
     async getPromise() {
       // let res = await this.getPromiseRandom();
@@ -1204,12 +1221,20 @@ export default {
       console.log(is_arr_6,"=====>6.Object.getPrototypeOf(arr) === Array.prototype");
       console.log(is_arr_3,"=====>3.Object.prototype.toString.call(arr) === '[object Array]'");
     },
-    // xhr请求
+    // xhr 请求
     promiseXhr() {
       this.$methods.promiseXhr({method: "get", url: "https://www.runoob.com/try/ajax/ajax_info.txt", data: {key: 456}}).then(res=>{
         console.log(res.responseText);
       }).catch(err=>{
         console.log(err.responseText);
+      })
+    },
+    // axios 请求
+    getRequest() {
+      this.$http.get({url: this.$api.ajaxInfo, data: { key: 456 }}).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
       })
     },
     // 数组去重

@@ -25,8 +25,6 @@
       :date-obj="ksrqObj"
       @change="selectDateKsrq"
     ></public-date>
-    <el-button type="primary" @click="dragOpen" style="position: absolute; z-index: 2001;">{{dragTitle}}</el-button>
-    <public-drag v-if="dragShow"></public-drag>
 
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="手机号码" prop="name">
@@ -341,11 +339,6 @@ export default {
     },
     getDragend(e,item) {
       // console.log(e,"==============事件主体是被拖放元素，在整个拖放操作结束时触发（结束拖放）。");
-    },
-    dragOpen() {
-      // window.confirm();
-      this.dragShow = !this.dragShow;
-      this.dragTitle = this.dragShow ? "关闭" : "打开";
     },
     getInputObj(val) {
       console.log(val);
