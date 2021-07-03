@@ -5,16 +5,16 @@ that.timeObj = undefined;
 that.validBol = true;
 const methods = {
   // 防抖
-  throttle(fn,tiem) { // 第一个参数为要触发的函数，第二个参数为间隔时间
+  throttle(fn,time) { // 第一个参数为要触发的函数，第二个参数为间隔时间
     if (that.timeObj) {
       clearTimeout(that.timeObj)
     }
     that.timeObj = setTimeout(() => {
       return fn();
-    }, tiem);
+    }, time);
   },
   // 节流
-  debounce(fn,tiem) { // 第一个参数为要触发的函数，第二个参数为间隔时间
+  debounce(fn,time) { // 第一个参数为要触发的函数，第二个参数为间隔时间
     if (!that.validBol) {
       return false
     }
@@ -22,7 +22,7 @@ const methods = {
     setTimeout(() => {
       that.validBol = true;
       return fn();
-    }, tiem);
+    }, time);
   },
   // 对象转数组
   objToArr(obj) {
@@ -34,7 +34,7 @@ const methods = {
     }
     return arr;
   },
-  //数组去重  第一个参数要进行去重的数组  第二个参数去重的字段名
+  // 数组去重  第一个参数要进行去重的数组  第二个参数去重拿来比较的字段名
 	arrRemoval(list, type) {
 		let result = [];
 		let obj = {};
@@ -46,34 +46,64 @@ const methods = {
 		}
 		return result;
 	},
-	// 递归深拷贝，传入数组或对象
-	assignData(valve) {
-    let o = Array.isArray(valve) ? [] : {};
-    if (valve && typeof valve === "object") {
-      for (let k in valve) {
-        if (valve[k] && typeof valve[k] === "object") {
-          o[k] = this.assignData(valve[k])
+  // 数组去重 findIndex  第一个参数要进行去重的数组  第二个参数去重拿来比较的字段名
+	arrRemovalIndexOf(list, name) {
+		let result = [];
+    list.forEach((item,index) => {
+      let i = result.findIndex(obj=>{
+        let o = item[name] ? obj[name] == item[name] : obj == item;
+        return o;
+      });
+      if (i == -1) {
+        result.push(item)
+      }
+    });
+		return result;
+	},
+	// 递归 深拷贝，传入数组或对象(推荐使用)
+	deepCopyData(value) {
+    let o = Array.isArray(value) ? [] : {};
+    if (value && typeof value === "object") {
+      for (let k in value) {
+        if (value[k] && typeof value[k] === "object") {
+          o[k] = this.deepCopyData(value[k])
         } else {
-          o[k] = valve[k]
+          o[k] = value[k]
         }
       }
     }
     return o
   },
-  // promise方法
-  promise(value) {
+  // assign 深拷贝，只针对对象，只能深拷贝对象的第一层
+  copyDataAssign (value) {
+    let newObj = Object.assign({},value);
+    return newObj;
+  },
+  // ...解构 深拷贝，只针对对象，只能深拷贝对象的第一层
+  copyDataObj (value) {
+    let newObj = { ...value };
+    return newObj;
+  },
+  // promiseXhr 方法
+  promiseXhr(obj) {
+    let { method,url,data,async } = obj;
     return new Promise((resolve,reject)=>{
-      let o = 1;
-      setInterval(() => {
-        if (o == 1) {
-          reject(o)
-        } else {
-          o += value;
-          resolve(o)
+      let xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+          if (xhr.status == 200 ) {
+            resolve(xhr)
+          } else {
+            reject(xhr)
+          }
         }
-      }, 1000);
+      }
+      xhr.open(method, url, async ? async : true);
+      // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8')
+      xhr.send(data);
     })
-  }
+  },
 }
 Vue.prototype.$methods = methods; // 注册全局方法
 export default methods

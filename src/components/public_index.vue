@@ -201,9 +201,14 @@
           @click="btnBcClick"
         ></public-button>
         <public-button
-          v-del="['zd']"
           icon="dtqwBg76"
+          title="XHR请求"
           type="primary"
+          @click="promiseXhr"
+        ></public-button>
+        <public-button
+          v-del="[]"
+          icon="dtqwBg76"
           title="防抖和节流"
           @click="throttleAndDebounce"
         ></public-button>
@@ -212,6 +217,30 @@
           type="primary"
           title="格式化日期"
           @click="dateFormatClick"
+        ></public-button>
+      </div>
+      <div class="button flex">
+        <public-button
+          icon="dtqwBg76"
+          title="深拷贝"
+          type="primary"
+          @click="deepCopyData"
+        ></public-button>
+        <public-button
+          icon="dtqwBg76"
+          title="数组去重"
+          @click="arrRemovalIndexOf"
+        ></public-button>
+        <public-button
+          icon="dtqwBg76"
+          title="判断数组"
+          type="primary"
+          @click="isArray"
+        ></public-button>
+        <public-button
+          icon="dtqwBg76"
+          title="手写Promise"
+          @click="getPromise"
         ></public-button>
       </div>
       <public-bar-charts :bar-charts="barObj"></public-bar-charts>
@@ -1135,6 +1164,81 @@ export default {
         console.log(flag);
       }
     },
+    // 手写一个Promise
+    async getPromise() {
+      // let res = await this.getPromiseRandom();
+      // console.log(res);
+      this.getPromiseRandom().then(res=>{
+        console.log(res,"===========>正确");
+      }).catch(err=>{
+        console.log(err,"===========>错误");
+      });
+    },
+    // 手写一个Promise
+    getPromiseRandom() {
+      return new Promise((resolve,reject)=>{
+        setTimeout(() => {
+          let i = Math.random().toFixed(1);
+          if (i > 0.5) {
+            resolve(i)
+          } else {
+            reject(i)
+          }
+        }, 1000);
+      })
+    },
+    // 判断数组
+    isArray() {
+      // 判断是不是数组的方法
+      var arr = [1,2,3];
+      var is_arr_1 = arr instanceof Array;
+      var is_arr_2 = Array.isArray(arr);
+      var is_arr_4 = Array.prototype.isPrototypeOf(arr);
+      var is_arr_5 = arr.constructor === Array;
+      var is_arr_6 = Object.getPrototypeOf(arr) === Array.prototype;
+      var is_arr_3 = Object.prototype.toString.call(arr) === "[object Array]"; // 推荐使用,可用于判断所有的数据类型
+      console.log(is_arr_1,"=====>1.arr instanceof Array");
+      console.log(is_arr_2,"=====>2.Array.isArray(arr)");
+      console.log(is_arr_4,"=====>4.Array.prototype.isPrototypeOf(arr)");
+      console.log(is_arr_5,"=====>5.arr.constructor === Array");
+      console.log(is_arr_6,"=====>6.Object.getPrototypeOf(arr) === Array.prototype");
+      console.log(is_arr_3,"=====>3.Object.prototype.toString.call(arr) === '[object Array]'");
+    },
+    // xhr请求
+    promiseXhr() {
+      this.$methods.promiseXhr({method: "get", url: "https://www.runoob.com/try/ajax/ajax_info.txt", data: {key: 456}}).then(res=>{
+        console.log(res.responseText);
+      }).catch(err=>{
+        console.log(err.responseText);
+      })
+    },
+    // 数组去重
+    arrRemovalIndexOf() {
+      let arr = [{name: "原数组name", id: 1},{name: "原数组name456", id: 2},{name: "原数组name", id: 1}];
+      let arr_1 = [1,2,1];
+      let arr1 = this.$methods.arrRemovalIndexOf(arr,"id"); // findIndex  第一个参数要进行去重的数组  第二个参数去重拿来比较的字段名
+      let arr2 = this.$methods.arrRemovalIndexOf(arr_1); // findIndex  第一个参数要进行去重的数组  第二个参数不传就是去重简单的数组
+      console.log(arr,"=====>原复杂数组");
+      console.log(arr1,"=====>复杂数组去重");
+      console.log(arr_1,"=====>原简单数组");
+      console.log(arr2,"=====>简单数组去重");
+    },
+    // 深拷贝
+    deepCopyData() {
+      let arr = [{name: "原数组name", id: 1},{name: "原数组name456", id: 2},{name: "原数组name", id: 1}];
+      let obj = {name: "原对象name", id: 1, obj: {code: "2555"}};
+      let arr1 = this.$methods.deepCopyData(arr); // 递归 深拷贝, 传入数组或对象(推荐使用)
+      let obj1 = this.$methods.copyDataAssign(obj); // assign 深拷贝, 只针对对象, 只能深拷贝对象的第一层
+      let obj2 = this.$methods.copyDataObj(obj); // ...解构 深拷贝, 只针对对象, 只能深拷贝对象的第一层
+      arr1[0].name = "拷贝后数组的name";
+      obj1.name = "拷贝后对象的name";
+      obj2.name = "拷贝后对象的name2";
+      console.log(arr,"=========>原数组");
+      console.log(arr1,"=========>拷贝后的数组");
+      console.log(obj,"=========>原对象");
+      console.log(obj1,"=========>拷贝后的对象");
+      console.log(obj2,"=========>拷贝后的对象");
+    },
     // 防抖和节流
     throttleAndDebounce() {
       this.$methods.throttle(this.getThrottleInfo,1000);
@@ -1154,7 +1258,7 @@ export default {
     height: 100%;
     background: var(--bgColor08);
     .box-left {
-      padding: 2%;
+      // padding: 2%;
       width: 30%;
       .el-button {
         margin-top: 5%;
@@ -1171,7 +1275,7 @@ export default {
       // height: 30%;
     }
     .box-right {
-      padding: 2%;
+      // padding: 2%;
       width: 30%;
       .head-box {
         border: 1px solid var(--elBorderColor13);

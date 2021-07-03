@@ -914,7 +914,7 @@ const directives = {
       let fun = '[object Function]';
       let str = '[object String]';
       let num = '[object Number]';
-      // let boo = '[object Boolean]';
+      let boo = '[object Boolean]';
       if (binding.value) {
         let type = Object.prototype.toString.call(binding.value);
         if (type == arr) {
