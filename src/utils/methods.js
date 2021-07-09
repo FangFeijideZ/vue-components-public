@@ -87,9 +87,11 @@ const methods = {
   // promiseXhr 方法
   promiseXhr(obj) {
     let { method,url,data,async } = obj;
+    let asyncNew = async ? async : true;
     return new Promise((resolve,reject)=>{
       let xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
+      // xhr.onreadystatechange = function() { // 每当 readyState 属性改变时，就会调用该函数，会执行4次
+      xhr.onload = function() { // 只执行一次 readyState 0: 请求未初始化 1: 服务器连接已建立 2: 请求已接收 3: 请求处理中 4: 请求已完成，且响应已就绪
         if (xhr.readyState == 4) {
           if (xhr.status == 200 ) {
             resolve(xhr)
@@ -98,10 +100,10 @@ const methods = {
           }
         }
       }
-      xhr.open(method, url, async ? async : true);
+      xhr.open(method, url, asyncNew);
       // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
       xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8')
-      xhr.send(data);
+      xhr.send(data); // 发送 ajax 请求
     })
   },
 }

@@ -251,6 +251,12 @@
           title="全局API"
           @click="getRequest"
         ></public-button>
+        <public-button
+          icon="dtqwBg76"
+          title="下载文件"
+          type="primary"
+          @click="download"
+        ></public-button>
       </div>
       <public-bar-charts :bar-charts="barObj"></public-bar-charts>
       <public-line-charts :line-charts="lineObj"></public-line-charts>
@@ -1232,6 +1238,14 @@ export default {
     // axios 请求
     getRequest() {
       this.$http.get({url: this.$api.ajaxInfo, data: { key: 456 }}).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    // 下载文件
+    download() {
+      this.$http.download({url: this.$api.download, fileName: '456789'}).then(res=>{
         console.log(res);
       }).catch(err=>{
         console.log(err);

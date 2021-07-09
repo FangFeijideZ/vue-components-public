@@ -117,6 +117,45 @@ let request = {
       Message.error({ message: error })
       return Promise.reject(error)
     })
+  },
+  download(obj) {
+    // console.log(obj);
+    let { url, fileName, method, data, contentType } = obj;
+    let requestMethod = method ? method : 'post';
+    let async = async ? async : true;
+    return new Promise((resolve,reject)=>{
+      let xhr = new XMLHttpRequest();
+      // xhr.onreadystatechange = function() { // 每当 readyState 属性改变时，就会调用该函数，会执行4次
+      xhr.onload = function() { // 只执行一次 readyState 0: 请求未初始化 1: 服务器连接已建立 2: 请求已接收 3: 请求处理中 4: 请求已完成，且响应已就绪
+        if (xhr.readyState == 4) {
+          if (xhr.status == 200 ) {
+            let blob = new Blob([xhr.response]);
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) { // IE 浏览器
+              window.navigator.msSaveOrOpenBlob(blob, fileName)
+            } else { // for No-IE (chrome, firefox etc.)
+              let urlObj = URL.createObjectURL(blob);
+              let link = document.createElement("a");
+              link.style.display = "none";
+              link.href = urlObj;
+              link.download = fileName;
+              document.body.appendChild(link);
+              link.click();
+              URL.revokeObjectURL(urlObj);
+              document.body.removeChild(link);
+            }
+            resolve(xhr)
+          } else {
+            reject(xhr)
+          }
+        }
+      }
+      xhr.open(requestMethod, url, async);
+      xhr.responseType = "blob";
+      // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      // xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
+      xhr.setRequestHeader('Content-Type', 'application/octet-stream;charset=utf-8');
+      xhr.send(); // 发送 ajax 请求
+    })
   }
 }
 Vue.prototype.$http = request; // 注册全局方法
