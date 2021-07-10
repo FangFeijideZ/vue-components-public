@@ -3,7 +3,8 @@ import axios from 'axios';
 import api from './api';
 import { Message } from 'element-ui';
 
-axios.defaults.timeout = 30000; // 设置请求超时时间（ms）不超过半分钟 
+let time = 1000 * 30;
+axios.defaults.timeout = time; // 设置请求超时时间（ms）不超过半分钟 
 axios.defaults.baseURL = 'https://www.runoob.com/';
 
 // 请求拦截器
@@ -120,10 +121,10 @@ let request = {
   },
   download(obj) {
     // console.log(obj);
-    let { url, fileName, method, data, contentType } = obj;
+    let { url, fileName, method, data } = obj;
     let requestMethod = method ? method : 'post';
     let async = async ? async : true;
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve,reject) => {
       let xhr = new XMLHttpRequest();
       // xhr.onreadystatechange = function() { // 每当 readyState 属性改变时，就会调用该函数，会执行4次
       xhr.onload = function() { // 只执行一次 readyState 0: 请求未初始化 1: 服务器连接已建立 2: 请求已接收 3: 请求处理中 4: 请求已完成，且响应已就绪
@@ -149,11 +150,16 @@ let request = {
           }
         }
       }
-      xhr.open(requestMethod, url, async);
+      xhr.ontimeout = function(error) { // 请求超时后执行
+        Message.error({ message: "加载超时" })
+        reject(error);
+      }
+      xhr.open(requestMethod, url, async); // requestMethod: 请求方式; url: 请求地址; async: 是否开启异步请求，默认开启
+      xhr.timeout = time; // 设置请求超时时间
       xhr.responseType = "blob";
       // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-      // xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
-      xhr.setRequestHeader('Content-Type', 'application/octet-stream;charset=utf-8');
+      // xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      xhr.setRequestHeader('Content-Type', 'application/octet-stream;'); // 设置请求头为二进制流
       xhr.send(); // 发送 ajax 请求
     })
   }
