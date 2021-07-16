@@ -46,7 +46,7 @@ const methods = {
 		}
 		return result;
 	},
-  // 数组去重 findIndex  第一个参数要进行去重的数组  第二个参数去重拿来比较的字段名
+  // 数组去重 findIndex  第一个参数要进行去重的数组  第二个参数去重拿来比较的字段名 [1,2] 和 [{code: 1},{code: 2}]
 	arrRemovalIndexOf(list, name) {
 		let result = [];
     list.forEach((item,index) => {

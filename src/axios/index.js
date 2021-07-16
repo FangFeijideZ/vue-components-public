@@ -127,7 +127,7 @@ let request = {
     return new Promise((resolve,reject) => {
       let xhr = new XMLHttpRequest();
       // xhr.onreadystatechange = function() { // 每当 readyState 属性改变时，就会调用该函数，会执行4次
-      xhr.onload = function() { // 只执行一次 readyState 0: 请求未初始化 1: 服务器连接已建立 2: 请求已接收 3: 请求处理中 4: 请求已完成，且响应已就绪
+      xhr.onload = function() { // 请求成功后 只执行一次 readyState 0: 请求未初始化 1: 服务器连接已建立 2: 请求已接收 3: 请求处理中 4: 请求已完成，且响应已就绪
         if (xhr.readyState == 4) {
           if (xhr.status == 200 ) {
             let blob = new Blob([xhr.response]);
@@ -150,8 +150,12 @@ let request = {
           }
         }
       }
-      xhr.ontimeout = function(error) { // 请求超时后执行
+      xhr.ontimeout = function(timeout) { // 请求超时后执行
         Message.error({ message: "加载超时" })
+        reject(timeout);
+      }
+      xhr.onerror = function(error) { // 请求错误后执行
+        Message.error({ message: "请求错误" })
         reject(error);
       }
       xhr.open(requestMethod, url, async); // requestMethod: 请求方式; url: 请求地址; async: 是否开启异步请求，默认开启
@@ -159,6 +163,7 @@ let request = {
       xhr.responseType = "blob";
       // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
       // xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      // xhr.setRequestHeader('token', 'fdddddd26sa56aaasas'); // 设置 token
       xhr.setRequestHeader('Content-Type', 'application/octet-stream;'); // 设置请求头为二进制流
       xhr.send(); // 发送 ajax 请求
     })

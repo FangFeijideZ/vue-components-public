@@ -1,30 +1,17 @@
-import publicInput from "./element-ui/public_input.vue"; // 导入组件
-import publicSelect from "./element-ui/public_select.vue"; // 导入组件
-import publicButton from "./element-ui/public_button.vue"; // 导入组件
-import publicDate from "./element-ui/public_date.vue"; // 导入组件
-import publicTable from "./element-ui/public_table.vue"; // 导入组件
-import publicTitle from "./element-ui/public_title.vue"; // 导入组件
-import publicTime from "./element-ui/public_time.vue"; // 导入组件
-import publicPagination from "./element-ui/public_pagination.vue"; // 导入组件
-import publicDrag from "./common-ui/public_drag.vue"; // 导入组件
-import publicLineCharts from "./echarts/line_charts.vue"; // 引入公共折线图
-import publicBarCharts from "./echarts/bar_charts.vue"; // 引入公共柱状图
-import publicPeiCharts from "./echarts/pei_charts.vue"; // 引入公共柱状图
-// 存储组件列表
-const components = [
-  publicInput,
-  publicTable,
-  publicSelect,
-  publicTitle,
-  publicTime,
-  publicButton,
-  publicDate,
-  publicPagination,
-  publicLineCharts,
-  publicBarCharts,
-  publicPeiCharts,
-  publicDrag,
-];
+let elementFiles = require.context('./element-ui', true, /\.vue$/); // 引入 element-ui 文件夹下的所有 .vue 文件
+let echartsFiles = require.context('./echarts', true, /\.vue$/); // 引入 echarts 文件夹下的所有 .vue 文件
+let components = [];
+
+elementFiles.keys().forEach((item) => { // 循环出组件
+  let moduleName = elementFiles(item);
+  components.push(moduleName.default);
+})
+
+echartsFiles.keys().forEach((item) => { // 循环出组件
+  let moduleName = echartsFiles(item);
+  components.push(moduleName.default);
+})
+
 // 安装组件
 components.map(item => item.install = function(Vue) {
   Vue.component(item.name, item);

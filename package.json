@@ -1,8 +1,8 @@
 {
   "name": "vue-components-public",
-  "version": "0.3.26",
+  "version": "0.3.27",
   "private": false,
-  "main": "dist/vue-components-public.umd.min.js",
+  "main": "lib/vue-components-public.umd.min.js",
   "keyword": "二次封装",
   "description": "自定义二次封装element-ui组件",
   "author": "fangfeijidez",
@@ -10,7 +10,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "bli": "vue-cli-service build --target lib --name vue-components-public --dest dist src/views/index.js"
+    "dist": "vue-cli-service build --target lib --name vue-components-public --dest lib src/views/index.js"
   },
   "dependencies": {
     "axios": "^0.21.1",

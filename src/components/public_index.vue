@@ -1229,11 +1229,25 @@ export default {
     },
     // xhr 请求
     promiseXhr() {
-      this.$methods.promiseXhr({method: "get", url: "https://www.runoob.com/try/ajax/ajax_info.txt", data: {key: 456}}).then(res=>{
-        console.log(res.responseText);
+      // let url = 'http://127.0.0.1:8081/listUsers'; // 本地 node 服务
+      let url = 'https://www.runoob.com/try/ajax/ajax_info.txt';
+      this.$methods.promiseXhr({method: "get", url, data: {key: 456}}).then(res=>{
+        console.log(res.response);
+        console.log(JSON.parse(res.response));
       }).catch(err=>{
         console.log(err.responseText);
       })
+      function Zhang(first) {
+        this.firstName = first;
+      }
+      Zhang.prototype.$zhang = {
+        y_m(val) {
+          return val + 50
+        }
+      }
+      var myFather = new Zhang("John");
+      let a = myFather.$zhang.y_m(20);
+      console.log(a+"=====>prototype");
     },
     // axios 请求
     getRequest() {
