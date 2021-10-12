@@ -58,6 +58,7 @@ export default {
         },
         legend: {
           data: [], // 顶部图例显示的内容
+          show: obj.legendStyle && obj.legendStyle.show == false ? false : true, // 是否显示图例
           itemGap: obj.legendStyle && obj.itemGap !== undefined && obj.legendStyle.itemGap ? obj.legendStyle.itemGap : 10, // 各个item之间的间隔，单位px，默认为10
           // itemWidth: 12, // 图例的宽度
           // itemHeight: 12, // 图例的高度
@@ -192,6 +193,20 @@ export default {
         if (obj.itemStyle[i] && obj.itemStyle[i].symbol) {
           option.series[i].symbol = obj.itemStyle[i].symbol; // 显示拐点图形的类型 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
         };
+        if (obj.itemStyle[i] && obj.itemStyle[i].areaGradient) {
+          option.series[i].areaStyle = {
+            pacity:  obj.itemStyle[i] && obj.itemStyle[i].pacity ? obj.itemStyle[i].pacity : 0.8, // 透明度
+            color: obj.itemStyle[i] && obj.itemStyle[i].areaGradient ? 
+            new echarts.graphic.LinearGradient( // 设置面积渐变色
+              0, 0, 0, 1,
+              [
+                  {offset: 0, color: obj.itemStyle[i].color[0]},
+                  {offset: 1, color: obj.itemStyle[i].color[1]}
+              ]
+            ) :
+            obj.itemStyle[i] && obj.itemStyle[i].color[0] // 图形颜色
+          };
+        }
         option.legend.data.push(
           obj.legendData[i]
         )
@@ -225,6 +240,7 @@ export default {
       let echarts = require('echarts');
       let myChart = echarts.init(document.getElementById(echartsId));
       myChart.setOption(option);
+      window.addEventListener("resize", () => { myChart.resize()});
     }
   }
 };

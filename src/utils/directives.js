@@ -13,6 +13,18 @@ const directives = {
   updateData: {
     bind(el, binding, vnode) {
       console.log(el, binding, vnode);
+    },
+    inserted(el, binding, vnode) { // 被绑定元素插入父节点时调用
+      
+    },
+    update (el, binding, vnode) { // 被绑定元素更新时调用
+      
+    },
+    componentUpdated (el, binding, vnode) { // 被绑定组件更新时调用
+      
+    },
+    unbind(el, binding, vnode) { // 被绑定元素解绑时调用
+
     }
   },
   dragMove: {

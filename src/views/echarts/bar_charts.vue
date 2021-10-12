@@ -314,6 +314,7 @@ export default {
       let echarts = require('echarts');
       let myChart = echarts.init(document.getElementById(echartsId));
       myChart.setOption(option);
+      window.addEventListener("resize", () => { myChart.resize()});
     }
   }
 };

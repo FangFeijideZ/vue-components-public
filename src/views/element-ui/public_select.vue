@@ -150,6 +150,16 @@ export default {
       deep: true,
       // immediate: true,
     },
+    defaultType: {
+      handler(newVal, onload) {
+        if (newVal) {
+          this.selectObj.defaultType = newVal
+          // console.log(newVal);
+        }
+      },
+      deep: true,
+      // immediate: true,
+    },
   },
   data() {
     return {
@@ -159,7 +169,7 @@ export default {
     };
   },
   mounted() {
-    this.selectObj.defaultType = this.defaultType;
+    // this.selectObj.defaultType = this.defaultType;
   },
   methods: {
     // 鼠标移入
@@ -192,9 +202,23 @@ export default {
     },
     // 改变事件
     getSelect(val) {
-      let item = this.selectObj.typeOptions.find(item=>{
-        return item.code === val;
-      })
+      let item = undefined;
+      let flag = Object.prototype.toString.call(val) == '[object Array]';
+      if (flag) {
+        let arr = [];
+        val.forEach(objs=>{
+          this.selectObj.typeOptions.forEach(obj=>{
+            if (obj.code == objs) {
+              arr.push(obj)
+            }
+          })
+        })
+        item = arr;
+      } else {
+        item = this.selectObj.typeOptions.find(obj=>{
+          return obj.code === val;
+        })
+      }
       this.$emit("change", val, item);
     },
     // 触发表单验证

@@ -220,6 +220,16 @@ export default {
       deep: true,
       // immediate: true,
     },
+    defaultTime: {
+      handler(newVal, onload) {
+        if (newVal) {
+          this.timeObj.defaultTime = newVal
+          // console.log(newVal);
+        }
+      },
+      deep: true,
+      // immediate: true,
+    },
   },
   data() {
     return {
@@ -232,7 +242,7 @@ export default {
     };
   },
   mounted() {
-    this.timeObj.defaultTime = this.defaultTime;
+    // this.timeObj.defaultTime = this.defaultTime;
     let skin = localStorage.getItem("skin");
     this.skin = skin ? skin : "black";
     // let prevBtn = document.querySelector('.el-range-editor');

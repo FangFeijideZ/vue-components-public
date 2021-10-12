@@ -304,6 +304,16 @@ export default {
       deep: true,
       // immediate: true,
     },
+    defaultValue: {
+      handler(newVal, onload) {
+        if (newVal) {
+          this.inputObj.defaultValue = newVal
+          // console.log(newVal);
+        }
+      },
+      deep: true,
+      // immediate: true,
+    },
   },
   data() {
     return {
@@ -318,7 +328,7 @@ export default {
     };
   },
   mounted() {
-    this.inputObj.defaultValue = this.defaultValue;
+    // this.inputObj.defaultValue = this.defaultValue;
     let skin = localStorage.getItem("skin");
     this.skin = skin ? skin : "black";
     this.$nextTick(()=>{

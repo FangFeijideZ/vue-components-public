@@ -241,6 +241,16 @@ export default {
       deep: true,
       // immediate: true,
     },
+    defaultDate: {
+      handler(newVal, onload) {
+        if (newVal) {
+          this.dateObj.defaultDate = newVal
+          // console.log(newVal);
+        }
+      },
+      deep: true,
+      // immediate: true,
+    },
   },
   data() {
     return {
@@ -278,7 +288,7 @@ export default {
     };
   },
   mounted() {
-    this.dateObj.defaultDate = this.defaultDate;
+    // this.dateObj.defaultDate = this.defaultDate;
     let skin = localStorage.getItem("skin");
     this.skin = skin ? skin : "black";
   },

@@ -1,0 +1,14 @@
+:root {
+  --publicTableColor01: #017785;
+  --publicTableColor02: #c7fff0;
+  --publicTableColor03: #013e52;
+  --publicTableColor04: #02ffff;
+  --publicTableColor05: #026674;
+
+  /* 暂无数据 */
+  --fontColorNoData: #777777;
+
+  /* 滚动条颜色 */
+  --scrollbarColor01: #051c2e;
+  --scrollbarColor02: #019aa1;
+}

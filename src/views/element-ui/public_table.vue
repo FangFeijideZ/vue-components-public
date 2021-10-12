@@ -63,7 +63,7 @@
 
             <!-- 带作用域插槽的 -->
             <div v-else-if="item.slot" class="slot">
-              <slot :name="item.name" :row="value"></slot>
+              <slot :name="item.name" :row="{value,index}"></slot>
             </div>
             
             <!-- 普通文本 -->
@@ -407,9 +407,9 @@ export default {
       height: 40px;
       font-size: 13px;
       overflow-y: auto;
-      border: 1px solid var(--elBorderColor06);
-      color: var(--elInnerColor03);
-      background: var(--elBgColor13);
+      border: 1px solid var(--publicTableColor01);
+      color: var(--publicTableColor02);
+      background: var(--publicTableColor03);
       tr {
         height: 100%;
         text-align: center;
@@ -424,14 +424,14 @@ export default {
       display: block;
       flex: 1;
       overflow-y: auto;
-      border: 1px solid var(--elBorderColor06);
-      color: var(--elInnerColor13);
+      border: 1px solid var(--publicTableColor01);
+      color: var(--publicTableColor04);
       tr {
         height: 40px;
-        border-bottom: 1px solid var(--elBorderColor16);
+        border-bottom: 1px solid var(--publicTableColor05);
       }
       tr:hover {
-        background-color: var(--elBgColor13);
+        background-color: var(--publicTableColor03);
       }
       p {
         font-size: 14px;
@@ -559,23 +559,17 @@ export default {
     tbody::-webkit-scrollbar {
       width: 6px;
       height: 6px;
-      background-color: var(--elBgColor09);
+      background-color: var(--scrollbarColor01);
     }
     tbody::-webkit-scrollbar-track {
-      background-color: var(--elBgColor09);
+      background-color: var(--scrollbarColor01);
     }
     tbody::-webkit-scrollbar-corner {
-      background-color: var(--elBgColor09);
+      background-color: var(--scrollbarColor01);
     }
     tbody::-webkit-scrollbar-thumb {
-      background: var(--elInnerColor14);
+      background: var(--scrollbarColor02);
       border-radius: 3px;
-    }
-
-    // 设置动画淡入
-    @keyframes fadenum { 
-      0% { opacity: 0; }
-      100% { opacity: 1; }
     }
   }
 }

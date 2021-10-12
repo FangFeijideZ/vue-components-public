@@ -13,6 +13,7 @@ import "./utils/filters"; // 自定义全局过滤器
 import "./utils/methods"; // 自定义全局方法
 import "./utils/validator"; // 自定义全局表单验证
 import "./utils/eventBus"; // 自定义全局事件总线
+import "./utils/alert"; // 自定义全局alert
 
 Vue.use(ElementUi);
 Vue.use(PublicComponents);

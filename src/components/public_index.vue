@@ -279,21 +279,32 @@
       >
         <!-- 表头背景图插槽 -->
         <!-- <div class="head-img" slot="head-img"></div> -->
+
+        <!-- 具名插槽
+        <div class="iconfont" slot="left">
+          <span class="left">1232</span>
+        </div>
+        全局过滤器
+        <template slot="item" slot-scope="scope">
+          <ul>
+            <li v-for="(item,index) in scope.row" :key="index" :class="item.date | y_m_d"><b>{{item.date | y_m_d}}</b></li>
+          </ul>
+        </template> -->
         
         <!-- 作用域插槽，核心理念就是在父组件拿到子组件数据来在父组件渲染 -->
-        <template slot="operation" slot-scope="scope">
+        <template slot="operation" slot-scope="{row: {value, index}}">
           <div class="flex-align-center">
-            <div @click.stop="getEditInfo(scope.row)">
-              <i :class="{'el-icon-edit': scope.row.edit}"></i>
-              <span v-if="scope.row.edit">编辑</span>
+            <div @click.stop="getEditInfo(value)">
+              <i :class="{'el-icon-edit': value.edit}"></i>
+              <span v-if="value.edit">编辑</span>
             </div>
             <div>
-              <i :class="{'el-icon-view': scope.row.details}"></i>
-              <span v-if="scope.row.details">详情</span>
+              <i :class="{'el-icon-view': value.details}"></i>
+              <span v-if="value.details">详情</span>
             </div>
             <div>
-              <i :class="{'el-icon-error': scope.row.del}"></i>
-              <span v-if="scope.row.del">删除</span>
+              <i :class="{'el-icon-error': value.del}"></i>
+              <span v-if="value.del">删除</span>
             </div>
             <!-- <el-button type="primary" size="mini">新增</el-button> -->
           </div>
@@ -319,18 +330,6 @@
           @click="vuexMutationsClick"
         ></public-button>
       </div>
-      <el-public-input :input-obj="gdmcObj">
-        <!-- 具名插槽 -->
-        <div class="iconfont" slot="left">
-          <span class="left">1232</span>
-        </div>
-        <!-- 作用域插槽，核心理念就是在父组件拿到子组件数据来在父组件渲染 -->
-        <template slot="item" slot-scope="scope">
-          <ul>
-            <li v-for="(item,index) in scope.row" :key="index" :class="item.date | y_m_d"><b>{{item.date | y_m_d}}</b></li>
-          </ul>
-        </template>
-      </el-public-input>
       <public-pagination
         :pagination-obj="pageInfo" 
         @change="handlePageChange"
@@ -339,13 +338,9 @@
   </div>
 </template>
 <script>
-import elPublicInput from "../views/common-ui/public_input";
 import { mapState,mapActions,mapGetters,mapMutations } from "vuex";
 export default {
   name: "public_index",
-  components: {
-    elPublicInput
-  },
   data() {
     return {
       dragTitle: "打开拖拽框",
@@ -524,113 +519,6 @@ export default {
         //   },
         // ],
       },
-      // publicTableHead: [
-      //   { id: "0", title: "", name: "checkbox", width: "50px" },
-      //   { id: "1", title: "序号", name: "numbers", ellipsis: "", width: "50px", color: "var(--dyqwColor23)", divStyle: {background: '#ccc'} },
-      //   {
-      //     id: "2",
-      //     title: "岗点名称",
-      //     name: "spotName",
-      //     width: "100px",
-      //     color: "var(--dyqwColor26)",
-      //     // 'background': "#ccc",
-      //     // 'text-align': 'left',
-      //     ellipsis: "tooltip",
-      //   },
-      //   {
-      //     id: "3",
-      //     title: "岗点类型",
-      //     name: "gdlx",
-      //     width: "200px",
-      //     color: "var(--dyqwColor23)",
-      //     ellipsis: "",
-      //   },
-      //   {
-      //     id: "4",
-      //     title: "岗点描述",
-      //     name: "description",
-      //     width: "100px",
-      //     color: "var(--dyqwColor23)",
-      //     ellipsis: "tooltip",
-      //   },
-      //   {
-      //     id: "5",
-      //     title: "日期类型",
-      //     name: "rqlx",
-      //     width: "500px",
-      //     color: "var(--dyqwColor23)",
-      //     ellipsis: "",
-      //   },
-      //   {
-      //     id: "6",
-      //     title: "所属单位",
-      //     name: "deptName",
-      //     width: "500px",
-      //     color: "var(--dyqwColor23)",
-      //     ellipsis: "",
-      //   },
-      //   {
-      //     id: "100",
-      //     title: "操作",
-      //     name: "operation",
-      //     width: "300px",
-      //     padding: "0 5px",
-      //     // ellipsis: "tooltip",
-      //     // justify_content: 'space-between',
-      //     // justify_content: 'space-around',
-      //     justify_content: 'center',
-      //     operation: [
-      //       {
-      //         // div_width: "100%", // 文本分散对齐
-      //         cursor: "pointer",
-      //         icon_show: true,
-      //         title_show: true,
-      //         item_show: false,
-      //         code: "edit",
-      //         icon: "dtqwBg74",
-      //         name: "gdlx",
-      //         title: "编辑",
-      //         color: "var(--dyqwColor23)",
-      //         width: "14px",
-      //         height: "14px",
-      //         div_margin: "0 10px 0 0",
-      //         // right: true,
-      //       },
-      //       {
-      //         code: "details",
-      //         cursor: "pointer",
-      //         icon_show: true,
-      //         title_show: true,
-      //         item_show: false,
-      //         name: "rqlx",
-      //         title: "详情",
-      //         color: "var(--dyqwColor17)",
-      //         // icon: "dtqwBg74",
-      //         icon_font: "el-icon-view",
-      //         font_size: "16px",
-      //         width: "14px",
-      //         height: "14px",
-      //         div_margin: "0 10px 0 0",
-      //       },
-      //       {
-      //         code: "del",
-      //         cursor: "pointer",
-      //         icon_show: true,
-      //         title_show: true,
-      //         item_show: false,
-      //         name: "rqlx",
-      //         title: "删除",
-      //         color: "var(--dyqwColor09)",
-      //         // icon: "dtqwBg74",
-      //         icon_font: "el-icon-error",
-      //         font_size: "16px",
-      //         width: "14px",
-      //         height: "14px",
-      //         div_margin: "0 10px 0 0",
-      //       },
-      //     ],
-      //   },
-      // ],
       publicTableHead: [
         { id: "0", title: "", name: "checkbox", width: "30px" },
         // { id: "0", title: "单选框", name: "radio", width: "30px" },
@@ -1189,13 +1077,13 @@ export default {
     },
     // 手写一个Promise
     async getPromise() {
-      // let res = await this.getPromiseRandom();
-      // console.log(res);
-      this.getPromiseRandom().then(res=>{
-        console.log(res,"===========>正确");
-      }).catch(err=>{
-        console.log(err,"===========>错误");
-      });
+      let res = await this.getPromiseRandom();
+      console.log(res);
+      // this.getPromiseRandom().then(res=>{
+      //   console.log(res,"===========>正确");
+      // }).catch(err=>{
+      //   console.log(err,"===========>错误");
+      // });
     },
     // 手写一个Promise
     getPromiseRandom() {
@@ -1205,10 +1093,15 @@ export default {
           if (i > 0.5) {
             resolve(i)
           } else {
-            reject(i)
+            return reject(i)
           }
-        }, 1000);
+        }, 500);
       })
+      // .then(res=>{
+      //   return res
+      // }).catch(err=>{
+      //   return new Error(err)
+      // })
     },
     // 判断数组
     isArray() {

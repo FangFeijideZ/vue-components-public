@@ -31,6 +31,7 @@
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
     </el-form>
+    <el-button @click="click">123</el-button>
 
     <ul class="img-group flex" ref='ulRef'>
       <li :class="['img-box', {active: index == 2}]" draggable v-for="(item,index) in dragstartList" :key="index" 
@@ -352,6 +353,16 @@ export default {
     },
     handleNodeClick(node) {
       console.log(node);
+    },
+
+    click() {
+      this.$alerts('自定义','<span style="color: red">123</span>',{
+        dangerouslyUseHTMLString: true
+      }).then(res=>{
+        console.log('confirm');
+      }).catch(err=>{
+        console.log('cancel');
+      })
     }
   }
 }

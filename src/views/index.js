@@ -1,3 +1,11 @@
+let sessionStorage = window.sessionStorage.getItem("skin");
+let skin = sessionStorage ? sessionStorage : "white";
+if (skin == "white") {
+  require('../../public/css/public-white.css') // 引入白色版颜色
+} else {
+  require('../../public/css/public-black.css') // 引入黑色版颜色
+}
+
 let elementFiles = require.context('./element-ui', true, /\.vue$/); // 引入 element-ui 文件夹下的所有 .vue 文件
 let echartsFiles = require.context('./echarts', true, /\.vue$/); // 引入 echarts 文件夹下的所有 .vue 文件
 let components = [];
