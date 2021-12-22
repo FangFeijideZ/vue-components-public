@@ -1,84 +1,39 @@
 <template>
-  <div :class="['public-pagination',{'page-flex': paginationObj.showRight}]">
+  <div class="public-pagination">
     <el-pagination
-      :style="{'text-align': paginationObj.text_align}"
-      :total="paginationObj.total"
-      :small="paginationObj.small"
-      :disabled="paginationObj.disabled"
-      :pager-count="paginationObj.pagerCount"
-      :page-size.sync="paginationObj.pageSize"
-      :page-sizes.sync="paginationObj.pageSizes"
-      :current-page.sync="paginationObj.currentPage"
-      :hide-on-single-page="paginationObj.hideOnSinglePage"
-      :background="paginationObj.background ? paginationObj.background : true"
-      :layout="paginationObj.layout ? paginationObj.layout : 'prev, pager, next, sizes, jumper'"
+      v-bind="$attrs"
+      v-on="$listeners"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     ></el-pagination>
-    <div v-if="paginationObj.showRight" class="right-data">
-      <span>{{`每页${paginationObj.pageSize ? paginationObj.pageSize : 0}条`}}</span>&nbsp;
-      <span>{{`共${paginationObj.total ? paginationObj.total : 0}条`}}</span>
-    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "publicPagination",
-  props: {
-    paginationObj: {
-      type: Object,
-      default: () => {},
-    },
-  },
   data() {
-    return {}
+    return {
+      pageInfo: {}
+    }
   },
   methods: {
     handleSizeChange(val) {
-      this.paginationObj.pageSize = val;
-      this.$emit("change", this.paginationObj);
-      // if (this.autoScroll) {
-      //   scrollTo(0, 800);
-      // }
+      console.log(val);
+      // this.pageInfo.pageSize = val;
+      // this.$emit("change", this.pageInfo);
     },
     handleCurrentChange(val) {
-      this.$emit("change", this.paginationObj);
-      // if (this.autoScroll) {
-      //   scrollTo(0, 800);
-      // }
+      console.log(val);
+      // this.pageInfo.currentPage = val;
+      // this.$emit("change", this.pageInfo);
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
   .public-pagination {
-    .right-data {
-      font-size: 13px;
-      color: var(--elInnerColor03);
-    }
-    ::v-deep.el-pagination {
-      padding: 0;
-      .btn-next {
-        margin-right: 0;
-      }
-      .btn-prev {
-        margin-left: 0;
-      }
-      .el-pagination__sizes {
-        margin-right: 0;
-        .el-select {
-          .el-input {
-            margin-right: 0;
-          }
-        }
-      }
-    }
-  }
-  .page-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
   }
 </style>

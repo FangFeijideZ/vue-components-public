@@ -11,4 +11,6 @@
   /* 滚动条颜色 */
   --scrollbarColor01: #051c2e;
   --scrollbarColor02: #019aa1;
+
+  --publicBg01: url(../../src/assets/img/riqibb.png)
 }

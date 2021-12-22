@@ -2,15 +2,9 @@
   <div class="hello-world">
     <el-button @click="alertsClick">alert</el-button>
     <el-button @click="getFormRules">表单验证</el-button>
+    <public-button icon="el-icon-search">搜索<i class="el-icon-upload el-icon--right"></i></public-button>
+    <public-title style="background: var(--publicBg01); background-size: 100% 100%;">标题</public-title>
     <public-form ref="publicForm">
-      <!-- <template slot="item">
-        <el-select v-model="inputValue1" slot="prepend" placeholder="请选择">
-          <el-option label="餐厅名" value="1"></el-option>
-          <el-option label="订单号" value="2"></el-option>
-          <el-option label="用户电话" value="3"></el-option>
-        </el-select>
-        <el-button slot="append" icon="el-icon-search"></el-button>
-      </template> -->
       <public-input
         v-model="inputValue1"
         label-width="80px"
@@ -74,6 +68,20 @@
         placeholder="请选择时间"
         @input="getInputValue"
       ></public-time>
+      <public-pagination
+        :total="pageInfo.total"
+        :small="pageInfo.small"
+        :disabled="pageInfo.disabled"
+        :layout="pageInfo.layout"
+        :background="true"
+        :pager-count="pageInfo.pagerCount"
+        :page-size.sync="pageInfo.pageSize"
+        :page-sizes.sync="pageInfo.pageSizes"
+        :current-page.sync="pageInfo.currentPage"
+        :hide-on-single-page="pageInfo.hideOnSinglePage"
+        :pagination-obj="pageInfo" 
+        @change="handlePageChange"
+      ></public-pagination>
     </public-form>
 
     <!-- <ul class="img-group flex" ref='ulRef'>
@@ -152,6 +160,17 @@ export default {
       inputValue1: "",
       inputValue2: "",
       selectValue1: "",
+      pageInfo: {
+        pageSize: 10,
+        pageSizes: [10, 30, 50, 100],
+        currentPage: 1,
+        pagerCount: 5,
+        total: 100,
+        hideOnSinglePage: false,
+        disabled: false,
+        small: false,
+        layout: "prev, pager, next, sizes, jumper",
+      },
       // url: require("../views/element-ui/img/riqibb.png"),
       gdmcObj: {
         inputValue: "测试v-model", // 输入框绑定的值
@@ -442,6 +461,9 @@ export default {
       let res = this.$refs.publicForm.validate();
       console.log(res);
     },
+    handlePageChange() {
+
+    }
   }
 }
 </script>
