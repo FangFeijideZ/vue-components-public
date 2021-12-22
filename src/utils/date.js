@@ -111,6 +111,12 @@ const date = {
 		return { start_date, end_date, down_start_date, down_end_date, up_start_date, up_end_date, up_days, down_days, days, y, yy, yyy , MM, MMM, MMMM }
 	},
 
+	// 获取时间戳
+	getDateTime(value) {
+		let date = value ? new Date(value) : new Date();
+		return date.getTime();
+	},
+
 	// 倒计时
 	hh_mm_djs(endTime,starTime) {
 		// let now = endTime - starTime;

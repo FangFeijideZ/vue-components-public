@@ -1,39 +1,82 @@
 <template>
   <div class="hello-world">
-    <!-- <public-input
-      v-model="gdmcObj.inputValue"
-      placeholder="请输入岗点名称"
-      type="textarea"
-      size="mini"
-      maxlength="5"
-      disabled
-      clearable
-      show-password
-      show-word-limit
-      :prop="false"
-      :show-title="false"
-      :ref="gdmcObj.ref"
-      :input-obj="gdmcObj"
-      @input="getInputObj"
-    ></public-input> -->
-    <public-date
-      :clearable="true"
-      :showTitle="true"
-      :disabled="false"
-      :readonly="false"
-      :show-icon="true"
-      :date-obj="ksrqObj"
-      @change="selectDateKsrq"
-    ></public-date>
+    <el-button @click="alertsClick">alert</el-button>
+    <el-button @click="getFormRules">表单验证</el-button>
+    <public-form ref="publicForm">
+      <!-- <template slot="item">
+        <el-select v-model="inputValue1" slot="prepend" placeholder="请选择">
+          <el-option label="餐厅名" value="1"></el-option>
+          <el-option label="订单号" value="2"></el-option>
+          <el-option label="用户电话" value="3"></el-option>
+        </el-select>
+        <el-button slot="append" icon="el-icon-search"></el-button>
+      </template> -->
+      <public-input
+        v-model="inputValue1"
+        label-width="80px"
+        label="二次封装"
+        prop
+        clearable
+        placeholder="请选择所属单位1"
+        @input="getInputValue"
+      >
+        <public-select
+          v-model="selectValue1"
+          prop
+          clearable
+          slot="append"
+          placeholder="请选择所属单位1"
+          @select="getInputValue"
+        ></public-select>
+        <!-- <i slot="prefix" class="el-input__icon el-icon-date"></i> -->
+        <i slot="suffix" class="el-input__icon el-icon-search"></i>
+      </public-input>
+      <public-input
+        v-model="inputValue2"
+        label-width="80px"
+        label="二次封装"
+        prop
+        clearable
+        suffix-icon="el-icon-date"
+        placeholder="请选择所属单位2"
+        @input="getInputValue"
+      ></public-input>
+      <public-select
+        v-model="selectValue1"
+        label-width="80px"
+        label="二次封装"
+        prop
+        clearable
+        :options="options"
+        placeholder="请选择所属单位1"
+        @select="getInputValue"
+      >
+        <!-- <template slot-scope="{row}">
+          {{row}}
+        </template> -->
+      </public-select>
+      <public-date
+        v-model="inputValue2"
+        label-width="80px"
+        label="二次封装"
+        prop
+        clearable
+        :picker-options="getPickerOptions"
+        placeholder="请选择日期"
+        @input="getInputValue"
+      ></public-date>
+      <public-time
+        v-model="inputValue2"
+        label-width="80px"
+        label="二次封装"
+        prop
+        clearable
+        placeholder="请选择时间"
+        @input="getInputValue"
+      ></public-time>
+    </public-form>
 
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="手机号码" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
-      </el-form-item>
-    </el-form>
-    <el-button @click="click">123</el-button>
-
-    <ul class="img-group flex" ref='ulRef'>
+    <!-- <ul class="img-group flex" ref='ulRef'>
       <li :class="['img-box', {active: index == 2}]" draggable v-for="(item,index) in dragstartList" :key="index" 
         @dragstart="getDragstart($event,item)"
         @drag="getDrag($event,item)"
@@ -45,7 +88,7 @@
       >
       {{item.code}}--{{item.label}}
       </li>
-    </ul>
+    </ul> -->
 
     <!-- <el-tree
       id="tree"
@@ -106,6 +149,9 @@ export default {
     return {
       dragTitle: "打开",
       dragShow: false,
+      inputValue1: "",
+      inputValue2: "",
+      selectValue1: "",
       // url: require("../views/element-ui/img/riqibb.png"),
       gdmcObj: {
         inputValue: "测试v-model", // 输入框绑定的值
@@ -247,6 +293,22 @@ export default {
         { code: 4, label: "我是第四个，拖动我试试" },
         { code: 5, label: "我是第五个，拖动我试试" },
       ],
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
       moveDom: '',
       changeDom: '',
       startY: 0,
@@ -272,6 +334,14 @@ export default {
     // let isScrollY = tbody.scrollHeight > tbodyHeight ? true : false; // 判断tbody是否出现了Y轴滚动条
     // let str = isScrollY ? "出现" : "没出现";
     // console.log(isScrollY,`===========>Y轴${str}滚动条`);
+  },
+  computed: {
+    getPickerOptions() {
+      return { disabledDate: (time) => {
+          return time.getTime() < this.$date.getDateTime(this.$date.y_m_d_zt());
+        }
+      }
+    }
   },
   methods: {
     // 需要注意的是,drag系列事件不能跟mousemove共存，只能取其一。
@@ -355,7 +425,10 @@ export default {
       console.log(node);
     },
 
-    click() {
+    getInputValue(val) {
+      console.log(val);
+    },
+    alertsClick() {
       this.$alerts('自定义','<span style="color: red">123</span>',{
         dangerouslyUseHTMLString: true
       }).then(res=>{
@@ -363,7 +436,12 @@ export default {
       }).catch(err=>{
         console.log('cancel');
       })
-    }
+    },
+    getFormRules() {
+      // let res = this.$refs.publicForm.resetFields();
+      let res = this.$refs.publicForm.validate();
+      console.log(res);
+    },
   }
 }
 </script>
