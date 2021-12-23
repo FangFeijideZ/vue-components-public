@@ -12,7 +12,7 @@
         prop
         clearable
         placeholder="请选择所属单位1"
-        @input="getInputValue"
+        @input="getInputValue1"
       >
         <public-select
           v-model="selectValue1"
@@ -20,7 +20,7 @@
           clearable
           slot="append"
           placeholder="请选择所属单位1"
-          @select="getInputValue"
+          @select="getSelectValue1"
         ></public-select>
         <!-- <i slot="prefix" class="el-input__icon el-icon-date"></i> -->
         <i slot="suffix" class="el-input__icon el-icon-search"></i>
@@ -33,40 +33,44 @@
         clearable
         suffix-icon="el-icon-date"
         placeholder="请选择所属单位2"
-        @input="getInputValue"
+        @input="getInputValue2"
       ></public-input>
       <public-select
-        v-model="selectValue1"
+        v-model="selectValue2"
         label-width="80px"
         label="二次封装"
         prop
         clearable
         :options="options"
         placeholder="请选择所属单位1"
-        @select="getInputValue"
+        @select="getSelectValue2"
       >
         <!-- <template slot-scope="{row}">
           {{row}}
         </template> -->
       </public-select>
       <public-date
-        v-model="inputValue2"
+        v-model="dateValue1"
         label-width="80px"
         label="二次封装"
         prop
         clearable
+        format="yyyy-MM-dd"
+        value-format="yyyy-MM-dd"
         :picker-options="getPickerOptions"
         placeholder="请选择日期"
-        @input="getInputValue"
+        @change="getDateValue1"
       ></public-date>
       <public-time
-        v-model="inputValue2"
+        v-model="timeValue1"
         label-width="80px"
         label="二次封装"
         prop
         clearable
+        format="hh:mm:ss"
+        value-format="hh:mm:ss"
         placeholder="请选择时间"
-        @input="getInputValue"
+        @change="getTimeValue1"
       ></public-time>
       <public-pagination
         :total="pageInfo.total"
@@ -82,6 +86,13 @@
         :pagination-obj="pageInfo" 
         @change="handlePageChange"
       ></public-pagination>
+      <public-table
+        :data="tableData"
+        :title="tableTitle"
+      >
+        <template slot="operation" slot-scope="scope">{{scope.row.name}}</template>
+        <template slot="xxx" slot-scope="scope">123</template>
+      </public-table>
     </public-form>
 
     <!-- <ul class="img-group flex" ref='ulRef'>
@@ -97,53 +108,6 @@
       {{item.code}}--{{item.label}}
       </li>
     </ul> -->
-
-    <!-- <el-tree
-      id="tree"
-      ref="tree"
-      :props="defaultProps"
-      :data="departmentList"
-      show-checkbox
-      @node-click="handleNodeClick"
-      :check-strictly="true"
-      :default-expanded-keys="[1,4]"
-      :default-checked-keys="[4]"
-      node-key="id"
-    >
-      <div  slot-scope="{ node, data }">
-        {{ node.label }}
-      </div>
-    </el-tree> -->
-
-    <!-- <div class="table-box">
-      <el-table
-        border
-        height="250"
-        ref="table"
-        :data="tableData"
-        style="width: 100%">
-        <el-table-column
-          prop="date"
-          label="日期"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="姓名"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="地址">
-        </el-table-column>
-      </el-table>
-    </div> -->
-
-    <!-- <el-image
-      style="width: 100px; height: 100px"
-      :src="url">
-    </el-image> -->
-    <!-- <img style="width: 100px; height: 100px" :src="url" alt=""> -->
   </div>
 </template>
 
@@ -157,9 +121,12 @@ export default {
     return {
       dragTitle: "打开",
       dragShow: false,
+      dateValue1: "",
+      timeValue1: "",
       inputValue1: "",
       inputValue2: "",
       selectValue1: "",
+      selectValue2: "",
       pageInfo: {
         pageSize: 10,
         pageSizes: [10, 30, 50, 100],
@@ -170,54 +137,6 @@ export default {
         disabled: false,
         small: false,
         layout: "prev, pager, next, sizes, jumper",
-      },
-      // url: require("../views/element-ui/img/riqibb.png"),
-      gdmcObj: {
-        inputValue: "测试v-model", // 输入框绑定的值
-        title: "岗点名称", // 左侧标题
-        placeholder: "请输入岗点名称", // 输入框提示文字
-        ref: "gdmc", // 用于触发表单验证的方法
-        resize: "none",// 文本域拖拽的状态
-        icon: "dtqwBg76", // 输入框外左侧标题的图标
-        button_icon: "dtqwBg04", // 输入框外按钮的图标
-        button_icon_left: "dtqwBg04", // 输入框内左侧图标
-        button_icon_right: "dtqwBg04", // 输入框内右侧图标
-        // size: "", // 输入框大小
-        // label_position: "left", // 标题显示的位置
-        // type: "textarea", // 输入框类型
-        // type: "autocomplete", // 输入框类型
-        defaultType: "", // 下拉选择框绑定的值
-        // typeOptions: [ // 下拉选择框的每一项
-        //   // { code: "", label: "全部" },
-        //   { code: "work", label: "工作日" },
-        //   { code: "rest", label: "休息日" },
-        //   { code: "holiday", label: "节假日" },
-        // ],
-      },
-      ksrqObj: {
-        type: "date",
-        // type: "datetimerange",
-        // type: "datetime",
-        // type: "dates",
-        // type: "week",
-        // type: "month",
-        // type: "year",
-        // code: "start",
-        defaultDate: "",
-        disabledDate: "",
-        // defaultTime: ["12:00:01","23:00:01"],
-        // format: "yyyy 第 WW 周",
-        // format: "yyyy-MM-dd",
-        // valueFormat: "yyyy-MM-dd HH:mm:ss", // valueFormat与format不能相同，不然会报错
-        title: "开始日期",
-        placeholder: "请选择开始日期", // 输入框提示文字
-        // size: "", // 选择框大小
-        ref: "ksrq", // 用于触发表单验证的方法
-        icon: "dtqwBg76", // 输入框外左侧标题的图标
-      },
-      defaultProps: {
-        children: "children",
-        label: "label"
       },
       departmentList: [{
           id: 1,
@@ -261,33 +180,62 @@ export default {
           }]
       }],
 
+      tableTitle: [
+        {
+          id: 1,
+          prop: "date",
+          label: "日期",
+        },
+        {
+          id: 2,
+          prop: "name",
+          label: "姓名",
+        },
+        {
+          id: 3,
+          prop: "address",
+          label: "地址",
+        },
+        {
+          id: 4,
+          // prop: "name",
+          label: "xxx",
+          slots: 'xxx',
+        },
+        {
+          id: 10,
+          // prop: "name",
+          label: "操作",
+          slots: 'operation',
+        },
+      ],
       tableData: [{
         date: '2016-05-02',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       }, {
         date: '2016-05-04',
-        name: '王小虎',
+        name: '王1虎',
         address: '上海市普陀区金沙江路 1517 弄'
       }, 
       {
         date: '2016-05-01',
-        name: '王小虎',
+        name: '王2虎',
         address: '上海市普陀区金沙江路 1519 弄'
       }, 
       {
         date: '2016-05-01',
-        name: '王小虎',
+        name: '王3虎',
         address: '上海市普陀区金沙江路 1519 弄'
       }, 
       {
         date: '2016-05-01',
-        name: '王小虎',
+        name: '王5虎',
         address: '上海市普陀区金沙江路 1519 弄'
       }, 
       {
         date: '2016-05-01',
-        name: '王小虎',
+        name: '王4虎',
         address: '上海市普陀区金沙江路 1519 弄'
       }, 
       {
@@ -295,15 +243,6 @@ export default {
         name: '王小虎',
         address: '上海市普陀区金沙江路 1516 弄'
       }],
-
-      ruleForm: {
-        name: '',
-      },
-      rules: {
-        name: [
-          { required: true, message: '请输入活动名称', validator: this.$validator.checkPhone, trigger: 'blur' },
-        ],
-      },
       
       dragstartList: [
         { code: 1, label: "我是第一个，拖动我试试" },
@@ -337,22 +276,7 @@ export default {
     }
   },
   mounted() {
-    // this.$bus.on("dragClose",data=>{
-    //   console.log(data);
-    // })
-  },
-  // beforeDestroy() {
-  //   this.$bus.off("dragClose");
-  // },
-  updated() {
-    // let table = this.$refs.table.$refs;
-    // let tableHeight = this.$refs.table.height;
-    // let thead = table && table.headerWrapper ? table.headerWrapper : {};
-    // let tbody = table && table.bodyWrapper ? table.bodyWrapper : {};
-    // let tbodyHeight = thead && thead.clientHeight ? tableHeight - thead.clientHeight - 2 : 0;
-    // let isScrollY = tbody.scrollHeight > tbodyHeight ? true : false; // 判断tbody是否出现了Y轴滚动条
-    // let str = isScrollY ? "出现" : "没出现";
-    // console.log(isScrollY,`===========>Y轴${str}滚动条`);
+    
   },
   computed: {
     getPickerOptions() {
@@ -430,22 +354,32 @@ export default {
     getDragend(e,item) {
       // console.log(e,"==============事件主体是被拖放元素，在整个拖放操作结束时触发（结束拖放）。");
     },
-    getInputObj(val) {
-      console.log(val);
-    },
-    getSelectSsdwObj(val) {
-      console.log(val)
-    },
-    // 选择的开始日期
-    selectDateKsrq(val) {
-      console.log(val);
-    },
-    handleNodeClick(node) {
-      console.log(node);
-    },
 
-    getInputValue(val) {
+    getInputValue1(val) {
       console.log(val);
+    },
+    getInputValue2(val) {
+      console.log(val);
+    },
+    getSelectValue1(val) {
+      console.log(val);
+    },
+    getSelectValue2(val) {
+      console.log(val);
+    },
+    getDateValue1(val) {
+      console.log(val);
+    },
+    getTimeValue1(val) {
+      console.log(val);
+    },
+    handlePageChange(val) {
+      console.log(val);
+    },
+    getFormRules() {
+      // let res = this.$refs.publicForm.resetFields();
+      let res = this.$refs.publicForm.validate();
+      console.log(res);
     },
     alertsClick() {
       this.$alerts('自定义','<span style="color: red">123</span>',{
@@ -456,14 +390,6 @@ export default {
         console.log('cancel');
       })
     },
-    getFormRules() {
-      // let res = this.$refs.publicForm.resetFields();
-      let res = this.$refs.publicForm.validate();
-      console.log(res);
-    },
-    handlePageChange() {
-
-    }
   }
 }
 </script>

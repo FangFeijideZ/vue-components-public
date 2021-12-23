@@ -3,73 +3,48 @@
     <el-button type="primary" @click="dragOpen" style="position: absolute; z-index: 2001;">{{dragTitle}}</el-button>
     <public-drag v-if="dragShow"></public-drag>
     <div class="box-left">
-      <public-title
-        title="研判地点"
-        img="dtqwBg02"
-        icon="dtqwBg76"
-        height="5%"
-      ></public-title>
       <div class="button flex">
         <public-button
-          icon="dtqwBg76"
-          title="保存"
           @click="btnBcClick"
-        ></public-button>
+        >保存</public-button>
         <public-button
-          icon="dtqwBg76"
-          title="XHR请求"
           type="primary"
           @click="promiseXhr"
-        ></public-button>
+        >XHR请求</public-button>
         <public-button
           v-del="[]"
-          icon="dtqwBg76"
-          title="防抖和节流"
           @click="throttleAndDebounce"
-        ></public-button>
+        >防抖和节流</public-button>
         <public-button
-          icon="dtqwBg76"
           type="primary"
-          title="格式化日期"
           @click="dateFormatClick"
-        ></public-button>
+        >格式化日期</public-button>
       </div>
       <div class="button flex">
         <public-button
-          icon="dtqwBg76"
-          title="深拷贝"
           type="primary"
           @click="deepCopyData"
-        ></public-button>
+        >深拷贝</public-button>
         <public-button
-          icon="dtqwBg76"
           title="数组去重"
           @click="arrRemovalIndexOf"
-        ></public-button>
+        >数组去重</public-button>
         <public-button
-          icon="dtqwBg76"
-          title="判断数组"
           type="primary"
           @click="isArray"
-        ></public-button>
+        >判断数组</public-button>
         <public-button
-          icon="dtqwBg76"
-          title="手写Promise"
           @click="getPromise"
-        ></public-button>
+        >手写Promise</public-button>
       </div>
       <div class="button flex">
         <public-button
-          icon="dtqwBg76"
-          title="全局API"
           @click="getRequest"
-        ></public-button>
+        >全局API</public-button>
         <public-button
-          icon="dtqwBg76"
-          title="下载文件"
           type="primary"
           @click="download"
-        ></public-button>
+        >下载文件</public-button>
       </div>
       <public-bar-charts :bar-charts="barObj"></public-bar-charts>
       <public-line-charts :line-charts="lineObj"></public-line-charts>
@@ -158,8 +133,6 @@ export default {
     return {
       dragTitle: "打开拖拽框",
       dragShow: false,
-      url: require("../views/element-ui/img/riqibb.png"),
-      url3: require("../views/element-ui/img/4e10662af608.png"),
       pageInfo: {
         pageSize: 10,
         pageSizes: [10, 30, 50, 100],
@@ -908,9 +881,5 @@ export default {
         height: 5%;
       }
     }
-  }
-  .img {
-    background: url("../views/element-ui/img/4e10662af608.png");
-    background-size: 100% 100%;
   }
 </style>
