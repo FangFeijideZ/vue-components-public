@@ -87,11 +87,28 @@
         @change="handlePageChange"
       ></public-pagination>
       <public-table
+        stripe
+        border
+        :row-class-name="tableRowClassName"
+        @selection-change="handleSelectionChange"
         :data="tableData"
         :title="tableTitle"
       >
         <template slot="operation" slot-scope="scope">{{scope.row.name}}</template>
-        <template slot="xxx" slot-scope="scope">123</template>
+        <template slot="xxx" slot-scope="scope">
+          <el-button type="danger" size="mini" round>删除</el-button>
+          <!-- {{scope}} -->
+          <!-- <public-input
+            v-model="inputValue2"
+            label-width="80px"
+            label="二次封装"
+            prop
+            clearable
+            suffix-icon="el-icon-date"
+            placeholder="请选择所属单位2"
+            @input="getInputValue2"
+          ></public-input> -->
+        </template>
       </public-table>
     </public-form>
 
@@ -182,9 +199,16 @@ export default {
 
       tableTitle: [
         {
+          type: "selection",
+        },
+        {
+          type: "index",
+        },
+        {
           id: 1,
           prop: "date",
           label: "日期",
+          sortable: true,
         },
         {
           id: 2,
@@ -201,10 +225,10 @@ export default {
           // prop: "name",
           label: "xxx",
           slots: 'xxx',
+          // type: "expand",
         },
         {
           id: 10,
-          // prop: "name",
           label: "操作",
           slots: 'operation',
         },
@@ -375,6 +399,17 @@ export default {
     },
     handlePageChange(val) {
       console.log(val);
+    },
+    handleSelectionChange(val) {
+      console.log(val);
+    },
+    tableRowClassName({row, rowIndex}) {
+      if (rowIndex === 1) {
+        return 'warning-row';
+      } else if (rowIndex === 3) {
+        return 'success-row';
+      }
+      return '';
     },
     getFormRules() {
       // let res = this.$refs.publicForm.resetFields();
